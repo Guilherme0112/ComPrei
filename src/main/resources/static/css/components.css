@@ -1,0 +1,32 @@
+@import url("globals.css");
+
+.box_product{
+    width: 200px;
+    height: 300px;
+    background-color: var(--background);
+    border-radius: 5px;
+    margin: 20px;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+.box_product_img{
+
+    background-color: var(--box-form);
+    width: 95%;
+    height: 150px;
+    border-radius: 5px;
+}
+
+.box_product_buy{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 40px;
+    background-color: var(--box-form);
+    border-radius: 5px;
+    text-decoration: none;
+}

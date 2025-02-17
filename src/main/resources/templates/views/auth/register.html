@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="https://www.thymelaef.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/globals.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <title>Criar Conta</title>
+</head>
+<body>
+    <header th:replace="components/component :: header"></header>
+    <main>
+        <div></div>
+        <div class="box-form">
+            <form action="" method="post" style="height: auto;">
+                <label for="">Nome:</label>
+                <input type="text">
+                <label for="">Email:</label>
+                <input type="email">
+                <br>
+                <label for="">Senha:</label>
+                <input type="password" name="" id="">
+                <label for="">Repita a Senha:</label>
+                <input type="password" name="" id="">
+                <a th:href="@{/auth/login}" style="margin: 20px 0 20px 50px; text-align: start; width: 100%;">Já tenho uma conta</a>
+                <button>Criar Conta</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
