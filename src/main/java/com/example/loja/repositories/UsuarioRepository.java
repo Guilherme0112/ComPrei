@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.loja.models.Usuario;
 
+
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
     
     @Query("SELECT u FROM Usuario u WHERE u.email = :email AND u.active = :active")

@@ -1,5 +1,12 @@
 @import url("globals.css");
 
+/* Estilo para exibir mensagens de erro */
+.erro_msg{
+    color: rgb(192, 53, 53);
+    margin: 20px 0;
+}
+
+/* Template da caixa dos produtos/ */
 .box_product{
     width: 200px;
     height: 300px;

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/globals.css">
+    <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/auth.css">
     <title>Login</title>
 </head>
@@ -12,12 +13,13 @@
     <main>
         <div></div>
         <div class="box-form">
-            <form action="" method="post">
+            <form action="/auth/login" method="post" th:object="${loginRequest}">
                 <label for="">Email:</label>
-                <input type="email">
+                <input type="email" th:field="*{email}">
                 <br>
                 <label for="">Senha:</label>
-                <input type="password" name="" id="">
+                <input type="password" th:field="*{senha}">
+                <p th:if="${erro}" th:text="${erro}" class="erro_msg"></p>
                 <a href="" style="margin: 20px 0 20px 50px; text-align: start; width: 100%;">Esqueceu a senha?</a>
                 <button>Enviar</button>
             </form>
