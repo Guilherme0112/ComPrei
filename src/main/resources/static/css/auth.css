@@ -32,13 +32,14 @@ form{
 label{
     width: 100%;
     color: white;
-    margin: 20px 0 20px 50px;
+    margin: 10px 0 10px 40px;
 }
 input{
     background-color: transparent;
     border-bottom: 2px solid white;
     width: 80%;
     padding: 3px;
+    margin: auto auto 20px auto;
 }
 button{
     width: 300px;

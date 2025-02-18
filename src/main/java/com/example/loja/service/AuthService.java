@@ -77,4 +77,28 @@ public class AuthService {
         }
 
     }
+
+    /***
+     * Cria o registro do usuário no banco de dados
+     * 
+     * @param usuario Objeto do usuário 
+     * @throws Exception Erros de execução e etc...
+     */
+    public void createUser(Usuario usuario) throws Exception{
+
+        try {
+            
+            // Verifica se o usuário de fato existe
+            if(usuario == null){
+                new Exception("Ocorreu algum erro. Tente novamente mais tarde");
+            }
+
+           usuarioRepository.save(usuario);
+
+        } catch (Exception e) {
+
+            System.out.println("erro_exception: " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
 }
