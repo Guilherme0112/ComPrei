@@ -20,23 +20,25 @@
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="">Nome:</label>
                     <input type="text" th:field="*{name}">
-                    <p class="erro_msg" style="margin:0;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                    <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                 </div>
+
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="">Email:</label>
                     <input type="email" th:field="*{email}">
-                    <p class="erro_msg" style="margin: 0;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+                    <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
                 </div>
-                <br>
+
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="">Senha:</label>
                     <input type="password" th:field="*{password}">
-                    <p class="erro_msg" style="margin: 0;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+                    <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
                 </div>
+
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="">Repita a Senha:</label>
                     <input type="password">
-                    <p class="erro_msg" style="margin: 0;" ></p>
+                    <p class="erro_msg" style="margin: -10px;" ></p>
                 </div>
 
                 <a th:href="@{/auth/login}" style="margin: 20px 0 20px 50px; text-align: start; width: 100%;">Já tenho

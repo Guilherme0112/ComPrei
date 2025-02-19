@@ -10,6 +10,7 @@ import com.example.loja.exceptions.SessionException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.LoginRequest;
 import com.example.loja.service.AuthService;
+import com.example.loja.service.EmailService;
 
 import jakarta.validation.Valid;
 
@@ -17,9 +18,12 @@ import jakarta.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
+    private final EmailService emailService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService,
+                          EmailService emailService) {
         this.authService = authService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/auth/login")
@@ -86,7 +90,11 @@ public class AuthController {
             // Tenta criar a conta do usuário
             authService.createUser(usuario);
 
-            // Envia o e-mail de verificãao
+            // HTML que será enviado para o usuario
+            String html = "";
+
+            // Envia o e-mail de verificação
+            emailService.sendEmail(usuario.getEmail(), "Confirmação de e-mail", html);
 
         } catch (Exception e) {
             
