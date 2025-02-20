@@ -1,5 +1,7 @@
 package com.example.loja.util;
 
+import java.util.UUID;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Util {
@@ -24,5 +26,14 @@ public class Util {
      */
     public static boolean verifyPass(String senha, String hash){
         return encoder.matches(senha, hash);
+    }
+
+    /***
+     * Gera um token aleatório
+     * 
+     * @return Retorna o token aleatório em formato de String
+     */
+    public static String generateToken(){
+        return UUID.randomUUID().toString();
     }
 }

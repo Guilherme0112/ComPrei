@@ -1,6 +1,8 @@
 package com.example.loja.service;
 
 import java.util.List;
+
+import com.example.loja.exceptions.UsuarioException;
 import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.SessionException;
@@ -50,7 +52,7 @@ public class AuthService {
             List<Usuario> existEmail = usuarioRepository.findByEmail(email, true);
 
             // Verifica o resultado do banco de dados
-            if (existEmail.size() == 0) {
+            if (existEmail.isEmpty()) {
                 throw new SessionException("As credenciais estão incorretas");
             }
 
@@ -72,7 +74,7 @@ public class AuthService {
 
         } catch (Exception e) {
 
-            System.out.println("erro_exception: " + e.getMessage());
+            System.out.println("auth_service: " + e.getMessage());
             throw new Exception(e.getMessage());
         }
 
@@ -84,21 +86,32 @@ public class AuthService {
      * @param usuario Objeto do usuário 
      * @throws Exception Erros de execução e etc...
      */
-    public void createUser(Usuario usuario) throws Exception{
+    public void createUser(Usuario usuario) throws Exception, UsuarioException {
 
         try {
-            
-            // Verifica se o usuário de fato existe
-            if(usuario == null){
-                new Exception("Ocorreu algum erro. Tente novamente mais tarde");
+
+
+            // Verifica se o e-mail está já está sendo usado
+            if (!usuarioRepository.findByEmail(usuario.getEmail(), true).isEmpty()) {
+                throw new UsuarioException("Este e-mail já está sendo usado");
             }
 
-           usuarioRepository.save(usuario);
+            // Caso o usuário já tenha o e-mail registrado, mas a conta está inativa
+            if(!usuarioRepository.findByEmail(usuario.getEmail(), false).isEmpty()){
+
+                // Lógica para fazer a ativação da conta
+            }
+
+            usuarioRepository.save(usuario);
+
+        } catch (UsuarioException e){
+
+            throw new UsuarioException(e.getMessage());
 
         } catch (Exception e) {
 
-            System.out.println("erro_exception: " + e.getMessage());
-            throw new Exception(e.getMessage());
+            System.out.println("auth_service: " + e.getMessage());
+            throw new Exception("Ocorreu algum erro. Tente novamente mais tarde");
         }
     }
 }

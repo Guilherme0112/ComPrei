@@ -20,7 +20,7 @@ public class VerificationEmail {
 
     private String token;
     
-    private LocalDateTime expire_in;
+    private LocalDateTime expire_in = LocalDateTime.now().plusMinutes(5);
 
 
     public Long getId() {
