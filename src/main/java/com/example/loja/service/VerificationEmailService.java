@@ -28,12 +28,6 @@ public class VerificationEmailService {
 
             for (VerificationEmail token : allTokens){
 
-                // Verifica se o token é válido
-                if(!this.isValidToken(token.getToken())){
-                    verificationEmailRepository.delete(token);
-                    break;
-                }
-
                 // Verifica se o token está expirado
                 if(this.isExpired(token.getToken())) {
                     verificationEmailRepository.delete(token);
@@ -47,31 +41,6 @@ public class VerificationEmailService {
         }
     }
 
-
-    /***
-     * Método que verifica o token que é passado como parametro, ele deleta caso o token esteja expirado ou inválido
-     *
-     * @param token Token que será verificado
-     * @return Retorna TRUE caso o token ainda seja válido, e false caso ele seja inválido ou expirado
-     * */
-    public boolean isValidToken(String token) throws Exception{
-
-        try {
-
-            List<VerificationEmail> tokenList = verificationEmailRepository.findByToken(token);
-
-            if(tokenList.isEmpty()){
-                return false;
-            }
-
-            return true;
-
-        } catch (Exception e) {
-
-            throw new Exception(e.getMessage());
-        }
-
-    }
 
     /***
      * Verifica se o token passado pelo parametro está expirado
