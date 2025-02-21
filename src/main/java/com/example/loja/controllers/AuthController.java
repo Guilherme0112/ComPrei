@@ -53,6 +53,8 @@ public class AuthController {
             // Chamada do service para validar e criar sessão
             authService.createSession(loginRequest);
 
+            mv.setViewName("redirect:/dashboard");
+
         } catch (SessionException e) {
 
             // Retorna o erro para a view

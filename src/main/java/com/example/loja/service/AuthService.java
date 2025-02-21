@@ -102,6 +102,9 @@ public class AuthService {
                 // Lógica para fazer a ativação da conta
             }
 
+            // Criptografa a senha do usuário
+            usuario.setPassword(Util.Bcrypt(usuario.getPassword()));
+
             usuarioRepository.save(usuario);
 
         } catch (UsuarioException e){

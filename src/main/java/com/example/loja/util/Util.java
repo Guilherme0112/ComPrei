@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class Util {
     
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
     /***
      * Criptografa a senha 
      * 
