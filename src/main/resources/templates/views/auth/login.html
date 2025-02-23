@@ -9,15 +9,15 @@
     <title>Login</title>
 </head>
 <body>
-    <header th:replace="components/component :: header"></header>
+    <header th:replace="~{components/component :: header}"></header>
     <main>
         <div></div>
         <div class="box-form">
             <form action="/auth/login" method="post" th:object="${loginRequest}">
-                <label for="">Email:</label>
+                <label for="email">Email:</label>
                 <input type="email" th:field="*{email}">
                 <br>
-                <label for="">Senha:</label>
+                <label for="senha">Senha:</label>
                 <input type="password" th:field="*{senha}">
                 <p th:if="${erro}" th:text="${erro}" class="erro_msg"></p>
                 <a href="" style="margin: 20px 0 20px 50px; text-align: start; width: 100%;">Esqueceu a senha?</a>

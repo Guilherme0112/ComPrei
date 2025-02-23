@@ -3,6 +3,7 @@ package com.example.loja.controllers;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.VerificationEmail;
 import com.example.loja.repositories.VerificationEmailRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,17 +54,18 @@ public class AuthController {
             // Chamada do service para validar e criar sessão
             authService.createSession(loginRequest);
 
-            mv.setViewName("redirect:/dashboard");
+            mv.setViewName("redirect:/profile");
 
         } catch (SessionException e) {
 
             // Retorna o erro para a view
+            System.out.println("session_exception" + e.getMessage());
             mv.addObject("erro", e.getMessage());
             mv.setViewName("/views/auth/login");
 
         } catch (Exception e) {
             // Retorna o erro para a view
-            System.out.println(e.getMessage());
+            System.out.println("exception: " + e.getMessage());
             mv.addObject("erro", "Ocorreu um erro. Tente novamente mais tarde");
             mv.setViewName("/views/auth/login");
         }
@@ -164,12 +166,13 @@ public class AuthController {
             mv.setViewName("/views/mails/send_email");
         } catch (UsuarioException e){
 
+            System.out.println("usuario_exception: " + e.getMessage());
             mv.addObject("erro", e.getMessage());
             mv.setViewName("/views/auth/register");
 
         } catch (Exception e) {
 
-            System.out.println("auth_controller: " + e.getMessage());
+            System.out.println("exception: " + e.getMessage());
             mv.addObject("erro", "Ocorreu algum erro interno. Tente novamente mais tarde");
             mv.setViewName("/views/auth/register");
         }

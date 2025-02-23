@@ -74,10 +74,12 @@ public class EmailController {
 
         } catch (TokenException e){
 
+            System.out.println("token_exception: " + e.getMessage());
             throw new TokenException(e.getMessage());
 
         } catch (Exception e) {
 
+            System.out.println("exception: " + e.getMessage());
             throw new Exception(e.getMessage());
         }
 

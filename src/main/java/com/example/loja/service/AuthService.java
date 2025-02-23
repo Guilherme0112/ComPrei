@@ -3,6 +3,7 @@ package com.example.loja.service;
 import java.util.List;
 
 import com.example.loja.exceptions.UsuarioException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.SessionException;
@@ -17,12 +18,13 @@ import jakarta.servlet.http.HttpSession;
 public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
-    private final HttpSession http;
+    private final HttpServletRequest request;
 
     public AuthService(UsuarioRepository usuarioRepository,
-                        HttpSession http) {
+                       HttpServletRequest request) {
         this.usuarioRepository = usuarioRepository;
-        this.http = http;
+
+        this.request = request;
     }
 
     /***
@@ -66,7 +68,8 @@ public class AuthService {
             }
 
             // Cria a sessão caso passe por toda a validação
-           http.setAttribute("session", email);
+            HttpSession http = request.getSession(true);
+            http.setAttribute("session", email);
 
         } catch (SessionException e) {
 
@@ -115,6 +118,44 @@ public class AuthService {
 
             System.out.println("auth_service: " + e.getMessage());
             throw new Exception("Ocorreu algum erro. Tente novamente mais tarde");
+        }
+    }
+
+    /***
+     * Método que verifica a existência de uma sessão
+     *
+     * @param http Onde será verificada se existe a sessão
+     * @return Retorna o objeto do usuário caso exista a sessão
+     * @throws SessionException Caso não exista sessão
+     */
+    public Usuario getSession(HttpSession http) throws SessionException, Exception{
+        try {
+
+            Object user = http.getAttribute("session");
+
+            // Verifica a existência da sessão
+            if(user == null){
+                throw new SessionException("O usuário não tem permissão");
+            }
+
+            // Converte o email para String e busca no banco de dados
+            String user_email = user.toString();
+            List<Usuario> userList = usuarioRepository.findByEmail(user_email, true);
+
+            // Verifica se o dono da sessão está cadastrado
+            if(userList.isEmpty()){
+                throw new SessionException("Esta sessão é inválida");
+            }
+
+            return userList.get(0);
+
+        } catch (SessionException e) {
+
+            throw new SessionException(e.getMessage());
+
+        } catch (Exception e) {
+
+            throw new Exception(e.getMessage());
         }
     }
 }
