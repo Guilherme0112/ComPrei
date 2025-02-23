@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt_BR" xmlns:th="https://www.thymelaef.org">
+<html lang="pt_BR"  xmlns:th="https://www.thymelaef.org"
+                    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,9 +12,14 @@
             <a th:href="@{/}">Início</a>
             <a href="">Produtos</a>
         </div>
-        <div th:if="${session.session}">
-            <a th:href="@{/auth/login}">Login</a>
-            <a th:href="@{/auth/register}">Criar Conta</a>
+        <div>
+            <div sec:authorize="isAuthenticated()">
+                <a href="">Sair</a>
+            </div>
+            <div sec:authorize="isAnonymous()">
+                <a th:href="@{/auth/login}">Login</a>
+                <a th:href="@{/auth/register}">Criar Conta</a>
+            </div>
         </div>
         
     </header>

@@ -1,9 +1,13 @@
 package com.example.loja.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.loja.exceptions.UsuarioException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.SessionException;
@@ -68,8 +72,11 @@ public class AuthService {
             }
 
             // Cria a sessão caso passe por toda a validação
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+            SecurityContextHolder.getContext().setAuthentication(authToken);
             HttpSession http = request.getSession(true);
-            http.setAttribute("session", email);
+            http.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
 
         } catch (SessionException e) {
 
@@ -130,32 +137,25 @@ public class AuthService {
      */
     public Usuario getSession(HttpSession http) throws SessionException, Exception{
         try {
+            // Obtém a autenticação do SecurityContextHolder
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            Object user = http.getAttribute("session");
-
-            // Verifica a existência da sessão
-            if(user == null){
+            // Verifica se o usuário está autenticado corretamente
+            if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
                 throw new SessionException("O usuário não tem permissão");
             }
 
-            // Converte o email para String e busca no banco de dados
-            String user_email = user.toString();
-            List<Usuario> userList = usuarioRepository.findByEmail(user_email, true);
+            // Obtém o objeto do usuário autenticado
+            Usuario user = (Usuario) authentication.getPrincipal();
 
-            // Verifica se o dono da sessão está cadastrado
-            if(userList.isEmpty()){
-                throw new SessionException("Esta sessão é inválida");
-            }
-
-            return userList.get(0);
+            return user;
 
         } catch (SessionException e) {
-
             throw new SessionException(e.getMessage());
 
         } catch (Exception e) {
-
-            throw new Exception(e.getMessage());
+            throw new Exception("Erro ao recuperar o usuário logado: " + e.getMessage());
         }
+
     }
 }
