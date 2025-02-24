@@ -14,7 +14,7 @@
         </div>
         <div>
             <div sec:authorize="isAuthenticated()">
-                <a href="">Sair</a>
+                <a th:href="@{/logout}">Sair</a>
             </div>
             <div sec:authorize="isAnonymous()">
                 <a th:href="@{/auth/login}">Login</a>

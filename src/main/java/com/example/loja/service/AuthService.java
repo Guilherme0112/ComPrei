@@ -135,7 +135,7 @@ public class AuthService {
      * @return Retorna o objeto do usuário caso exista a sessão
      * @throws SessionException Caso não exista sessão
      */
-    public Usuario getSession(HttpSession http) throws SessionException, Exception{
+    public Usuario getSession(HttpSession http) throws SessionException{
         try {
             // Obtém a autenticação do SecurityContextHolder
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -153,8 +153,6 @@ public class AuthService {
         } catch (SessionException e) {
             throw new SessionException(e.getMessage());
 
-        } catch (Exception e) {
-            throw new Exception("Erro ao recuperar o usuário logado: " + e.getMessage());
         }
 
     }

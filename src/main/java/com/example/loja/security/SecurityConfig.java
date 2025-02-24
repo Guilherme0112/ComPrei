@@ -23,6 +23,7 @@ public class SecurityConfig {
             .httpBasic(httpBasic -> httpBasic.disable())
             .logout(logout -> logout
                     .logoutUrl("/logout")
+                    .logoutSuccessUrl("/auth/login")
                     .invalidateHttpSession(true)
                     .deleteCookies("JSESSIONID")
             )
