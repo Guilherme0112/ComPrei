@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 
 @Configuration
 public class SecurityConfig {
@@ -18,6 +20,10 @@ public class SecurityConfig {
                 .requestMatchers("/auth/login", "/auth/register").anonymous()
                 .requestMatchers("/", "/css/**", "/js/**").permitAll()
                 .anyRequest().authenticated()
+            )
+
+            .exceptionHandling(exception -> exception
+                    .accessDeniedPage("/auth/login")
             )
             .formLogin(formLogin -> formLogin.disable())
             .httpBasic(httpBasic -> httpBasic.disable())
@@ -34,6 +40,15 @@ public class SecurityConfig {
             );
 
             return http.build();
-            
+
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+
+        AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
+        handler.setErrorPage("/auth/login");
+
+        return handler;
     }
 }
