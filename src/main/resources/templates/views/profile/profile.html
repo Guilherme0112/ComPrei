@@ -7,12 +7,39 @@
     <link rel="stylesheet" href="../css/globals.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/auth.css">
-    <title>Login</title>
+    <link rel="stylesheet" href="../css/profile.css">
+    <title>Meu Perfil</title>
 </head>
 <body>
 <header th:replace="~{components/component :: header}"></header>
 <main>
-
+    <div class="box_profile_1">
+        <h1 style="width: 100%;">Meus Dados</h1>
+        <div style="display: flex; justify-content: start; padding: 20px; width: 100%;">
+            <div>
+                <h4>Nome:</h4>
+                <p>Guilherme</p>
+                <br>
+                <h4>E-mail:</h4>
+                <p>gfnsad@gmail.com</p>
+                <br>
+                <a href="">Alterar senha</a>
+            </div>
+            <div>
+                <h4>Cidade:</h4>
+                <p>Cidade tal</p>
+                <br>
+                <h4>Bairro:</h4>
+                <p>Bairro Tal</p>
+                <br>
+                <h4>Rua:</h4>
+                <p>Rua tal</p>
+                <br>
+                <h4>CEP:</h4>
+                <p>54698424</p>
+            </div>
+        </div>
+    </div>
 </main>
 </body>
 </html>

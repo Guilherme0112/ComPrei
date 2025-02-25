@@ -8,9 +8,12 @@
 </head>
 <body>
     <header th:fragment="header">
-        <div>
+        <div style="display: flex;"> 
             <a th:href="@{/}">Início</a>
-            <a href="">Produtos</a>
+            <div sec:authorize="isAuthenticated()">
+                <a th:href="@{/profile/carrinho}">Carrinho</a>
+                <a th:href="@{/profile/favoritos}">Favoritos</a>
+            </div>
         </div>
         <div>
             <div sec:authorize="isAuthenticated()">

@@ -3,7 +3,6 @@ package com.example.loja.controllers;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.VerificationEmail;
 import com.example.loja.repositories.VerificationEmailRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

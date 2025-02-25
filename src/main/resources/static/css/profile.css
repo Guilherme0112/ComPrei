@@ -1,0 +1,21 @@
+@import url("../css/globals.css");
+
+
+main{
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.box_profile_1{
+    width: 90%;
+    height: auto;
+    background-color: var(--box-form);
+    border-radius: 10px;
+    padding: 10px;
+
+    display: flex;
+    flex-wrap: wrap;
+}
+.box_profile_1 div div{
+    width: auto;
+    margin: 0 10px;
+}

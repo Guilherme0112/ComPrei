@@ -1,12 +1,10 @@
 package com.example.loja.controllers;
 
 import com.example.loja.exceptions.TokenException;
-import com.example.loja.models.Usuario;
 import com.example.loja.models.VerificationEmail;
 import com.example.loja.repositories.UsuarioRepository;
 import com.example.loja.repositories.VerificationEmailRepository;
 import com.example.loja.service.VerificationEmailService;
-import jakarta.validation.constraints.Email;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
