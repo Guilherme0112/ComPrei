@@ -2,23 +2,50 @@ package com.example.loja.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.example.loja.exceptions.ProdutoException;
+import com.example.loja.models.Produto;
+import com.example.loja.repositories.ProdutoRepository;
+import com.example.loja.service.ProdutoService;
 
 @Controller
 public class ProdutoController {
     
-    @GetMapping("/profile/carrinho")
-    public ModelAndView Carrinho(){
+    private final ProdutoService produtoService;
+
+    public ProdutoController(ProdutoService produtoService){
+        this.produtoService = produtoService;
+    }
+
+
+    @GetMapping("/produto/{id}")
+    public ModelAndView Produto(@PathVariable("id") String id) throws Exception, ProdutoException{
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/profile/carrinho/carrinho");
+
+        try {
+            
+            Long id_long = Long.parseLong(id);
+
+            Produto produto = produtoService.getProduct(id_long);
+
+            mv.addObject(produto);
+            
+        } catch (ProdutoException e){
+
+            mv.addObject("erro", e.getMessage());
+    
+        } catch (Exception e) {
+
+    
+            System.out.println(e.getMessage());
+            mv.addObject("erro", "Ocorreu um erro. Tente novamente mais tarde");
+        }
+        
+        mv.setViewName("/views/produto/produto");
         return mv;
     }
 
-    @GetMapping("/profile/favoritos")
-    public ModelAndView Favoritos(){
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/profile/favoritos/favoritos");
-        return mv;
-    }
 }

@@ -43,4 +43,19 @@ public class ProfileController {
 
         return mv;
     }
+
+    @GetMapping("/profile/carrinho")
+    public ModelAndView Carrinho(){
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/profile/carrinho/carrinho");
+        return mv;
+    }
+
+    @GetMapping("/profile/favoritos")
+    public ModelAndView Favoritos(){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/profile/favoritos/favoritos");
+        return mv;
+    }
 }

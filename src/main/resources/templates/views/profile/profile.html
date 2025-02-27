@@ -15,7 +15,7 @@
 <main>
     <div class="box_profile_1">
         <h1 style="width: 100%;">Meus Dados</h1>
-        <div style="display: flex; justify-content: start; padding: 20px; width: 100%;">
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; padding: 20px; width: 100%;">
             <div>
                 <h4>Nome:</h4>
                 <p>Guilherme</p>
@@ -23,7 +23,8 @@
                 <h4>E-mail:</h4>
                 <p>gfnsad@gmail.com</p>
                 <br>
-                <a href="">Alterar senha</a>
+                <a href="" style="display: flex; width: 100%;">Alterar senha</a>
+                <button class="btn_del" style="margin-top: 20px;">Apagar Conta</button>
             </div>
             <div>
                 <h4>Cidade:</h4>
@@ -37,8 +38,23 @@
                 <br>
                 <h4>CEP:</h4>
                 <p>54698424</p>
+                <br>
+                <a href="">Editar Endereço</a>
             </div>
         </div>
+    </div>
+
+    <div class="box_profile_1">
+        <h1 style="width: 100%;">Produtos</h1>
+        <div style="width: 100%; display: flex; justify-content: space-around; padding: 10px;">
+            <a href="">
+                <img src="../icons/cart-shopping-solid.png"  width="50" class="img_profile" title="Carrinho">
+            </a>
+            <a href="">
+                <img src="../icons/star-solid.png"  width="50" class="img_profile" title="Favoritos">
+            </a>
+        </div>
+            
     </div>
 </main>
 </body>

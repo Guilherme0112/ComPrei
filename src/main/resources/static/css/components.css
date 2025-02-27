@@ -6,6 +6,16 @@
     margin: 20px 0;
 }
 
+.btn_del{
+    width: 200px;
+    background-color: brown;
+    margin: 10px 0;
+    transition: .3s;
+}
+.btn_del:focus, .btn_del:hover{
+    background-color: rgb(97, 5, 5);
+}
+
 /* Template da caixa dos produtos/ */
 .box_product{
     width: 200px;

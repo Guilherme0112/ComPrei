@@ -6,11 +6,12 @@ main{
     justify-content: center;
 }
 .box_profile_1{
-    width: 90%;
+    width: auto;
     height: auto;
     background-color: var(--box-form);
     border-radius: 10px;
     padding: 10px;
+    margin: 20px;
 
     display: flex;
     flex-wrap: wrap;
@@ -18,4 +19,17 @@ main{
 .box_profile_1 div div{
     width: auto;
     margin: 0 10px;
+}
+.img_profile{
+    transition: .3s;
+}
+.img_profile:hover{
+    transform: scale(1.1);
+}
+p{
+    font-size: 14px;
+}
+
+img{
+    filter: invert();
 }
