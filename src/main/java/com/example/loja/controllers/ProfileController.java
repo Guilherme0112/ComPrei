@@ -44,6 +44,14 @@ public class ProfileController {
         return mv;
     }
 
+
+    @GetMapping("/profile/settings")
+    public ModelAndView Config(){
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("views/profile/config");
+        return mv;
+    }
     @GetMapping("/profile/carrinho")
     public ModelAndView Carrinho(){
 

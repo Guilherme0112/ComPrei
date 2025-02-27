@@ -47,3 +47,18 @@
     border-radius: 5px;
     text-decoration: none;
 }
+
+.form{
+    position: absolute;
+    top: 0;
+    right: 0;
+    max-width: 600px;
+    height: 100vh;   
+    background-color: var(--box-form);
+    padding: 10px;
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+}

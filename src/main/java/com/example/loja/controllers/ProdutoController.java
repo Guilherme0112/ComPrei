@@ -7,7 +7,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.loja.exceptions.ProdutoException;
 import com.example.loja.models.Produto;
-import com.example.loja.repositories.ProdutoRepository;
 import com.example.loja.service.ProdutoService;
 
 @Controller

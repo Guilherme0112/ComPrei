@@ -5,13 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/globals.css">
     <link rel="stylesheet" href="../css/components.css">
-    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/profile.css">
     <title>Login</title>
 </head>
 <body>
 <header th:replace="~{components/component :: header}"></header>
 <main>
 
+    <form action="" method="post" class="form">
+        <h1>Endereço</h1>
+
+        <div>
+            <label for="">Cidade:</label>
+            <input type="text">
+        </div>
+        <div>
+            <label for="">Bairro:</label>
+            <input type="text">
+        </div>
+        <div>
+            <label for="">Rua:</label>
+            <input type="text">
+        </div>
+        <div>
+            <label for="">CEP:</label>
+            <input type="text">
+        </div>
+        <button>Enviar</button>
+    </form>
 
 </main>
 </body>
