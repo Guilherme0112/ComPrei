@@ -43,7 +43,7 @@ public class AuthController {
         return mv;
     }
 
-    @PostMapping("auth/login")
+    @PostMapping("/auth/login")
     public ModelAndView LoginPOST(LoginRequest loginRequest) throws Exception, SessionException {
 
         ModelAndView mv = new ModelAndView();

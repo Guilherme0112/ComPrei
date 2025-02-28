@@ -73,8 +73,9 @@ public class ProfileController {
         try {
             
             if(br.hasErrors()){
+                System.out.println(br.getFieldErrors());
+                mv.setViewName("/views/profile/address");
                 mv.addObject("address", usuarioAddress);
-                mv.setViewName("views/profile/address");
                 return mv;
             }
 
