@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -16,20 +16,20 @@ public class UsuarioAddress {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank(message = "A cidade é obrigatório")
-    @Size(min = 2, max = 100, message = "O nome deve ter entre 2 e 100 caracteres")
+    @NotNull(message = "A cidade é obrigatório")
+    @Size(min = 2, max = 100, message = "O nome da cidade deve ter entre 2 e 100 caracteres")
     private String cidade;
     
-    @NotBlank(message = "O bairro e é obrigatório")
-    @Size(min = 2, max = 100, message = "O nome deve ter entre 2 e 100 caracteres")
+    @NotNull(message = "O bairro e é obrigatório")
+    @Size(min = 2, max = 100, message = "O nome do bairro deve ter entre 2 e 100 caracteres")
     private String bairro;
     
-    @NotBlank(message = "A rua é obrigatório")
-    @Size(min = 2, max = 100, message = "O nome deve ter entre 2 e 100 caracteres")
+    @NotNull(message = "A rua é obrigatório")
+    @Size(min = 2, max = 100, message = "O nome da rua deve ter entre 2 e 100 caracteres")
     private String rua;
     
-    @NotBlank(message = "O CEP é obrigatório")
-    @Size(max = 9, min = 9, message = "O CEP deve ter 9 números")
+    @NotNull(message = "O CEP é obrigatório")
+    @Size(max = 8, min = 8, message = "O CEP deve ter 8 números")
     private String cep;
 
     private String user_email;

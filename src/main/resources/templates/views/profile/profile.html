@@ -18,26 +18,26 @@
         <div style="display: flex; justify-content: space-around; flex-wrap: wrap; padding: 20px; width: 100%;">
             <div>
                 <h4>Nome:</h4>
-                <p>Guilherme</p>
+                <p sec:authentication="principal.name"></p>
                 <br>
                 <h4>E-mail:</h4>
-                <p>gfnsad@gmail.com</p>
+                <p sec:authentication="principal.email"></p>
                 <br>
                 <a href="" style="display: flex; width: 100%;">Alterar senha</a>
                 <button class="btn_del" style="margin-top: 20px;">Apagar Conta</button>
             </div>
             <div>
                 <h4>Cidade:</h4>
-                <p>Cidade tal</p>
+                <p th:text="${address.cidade ?: '-'}"></p>
                 <br>
                 <h4>Bairro:</h4>
-                <p>Bairro Tal</p>
+                <p th:text="${address.bairro ?: '-'}"></p>
                 <br>
                 <h4>Rua:</h4>
-                <p>Rua tal</p>
+                <p th:text="${address.rua ?: '-'}"></p>
                 <br>
                 <h4>CEP:</h4>
-                <p>54698424</p>
+                <p th:text="${address.cep ?: '-'}"></p>
                 <br>
                 <a th:href="@{/profile/edit/address}">Editar Endereço</a>
             </div>

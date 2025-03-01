@@ -3,11 +3,14 @@ package com.example.loja.controllers;
 import com.example.loja.exceptions.SessionException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.UsuarioAddress;
+import com.example.loja.repositories.UsuarioAddressRepository;
 import com.example.loja.service.AuthService;
 import com.example.loja.service.UsuarioAddressService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -20,11 +23,14 @@ public class ProfileController {
 
     private final AuthService authService;
     private final UsuarioAddressService usuarioAddressService;
+    private final UsuarioAddressRepository usuarioAddressRepository;
 
     public ProfileController(AuthService authService,
-                             UsuarioAddressService usuarioAddressService){
+                             UsuarioAddressService usuarioAddressService,
+                             UsuarioAddressRepository usuarioAddressRepository){
         this.authService = authService;
         this.usuarioAddressService = usuarioAddressService;
+        this.usuarioAddressRepository = usuarioAddressRepository;
     }
 
     @GetMapping("/profile")
@@ -37,7 +43,10 @@ public class ProfileController {
             // Tenta buscar o usuário da sessão
             Usuario user = authService.getSession(httpSession);
 
-            mv.addObject(user);
+
+            List<UsuarioAddress> verifyUserAddress = usuarioAddressRepository.findByEmail(user.getEmail());
+
+            mv.addObject("address", verifyUserAddress.get(0));
             mv.setViewName("/views/profile/profile");
 
         } catch (SessionException e) {
@@ -55,12 +64,31 @@ public class ProfileController {
     }
 
     @GetMapping("/profile/edit/address")
-    public ModelAndView Config(){
+    public ModelAndView Config(HttpSession http){
 
         ModelAndView mv = new ModelAndView();
 
-        mv.addObject("address", new UsuarioAddress());
-        mv.setViewName("views/profile/address");
+        try {
+
+            Usuario user = authService.getSession(http);
+
+            if(usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
+
+                mv.addObject(new UsuarioAddress());
+                mv.setViewName("views/profile/edit/address");
+                return mv;
+            }
+            
+
+
+            mv.addObject("usuarioAddress", usuarioAddressRepository.findByEmail(user.getEmail()).get(0));
+            mv.setViewName("views/profile/edit/address");
+            
+        } catch (Exception e) {
+
+            mv.setViewName("views/profile/address");
+            mv.addObject("erro", "Ocorreu algum erro interno. Tente novamente mais tarde");
+        }
 
         return mv;
     }
@@ -71,11 +99,12 @@ public class ProfileController {
         ModelAndView mv = new ModelAndView();
 
         try {
+
             
             if(br.hasErrors()){
-                System.out.println(br.getFieldErrors());
-                mv.setViewName("/views/profile/address");
-                mv.addObject("address", usuarioAddress);
+
+                mv.setViewName("/views/profile/edit/address");
+                mv.addObject(usuarioAddress);
                 return mv;
             }
 
@@ -87,7 +116,7 @@ public class ProfileController {
         } catch (Exception e) {
             
             System.out.println("exception: " + e.getMessage());
-            mv.setViewName("views/profile/address");
+            mv.setViewName("views/profile/edit/address");
             mv.addObject("erro", "Ocorreu algum erro interno. Tente novamente mais tarde");
         }
 

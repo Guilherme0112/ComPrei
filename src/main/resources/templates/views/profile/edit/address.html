@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css/globals.css">
-    <link rel="stylesheet" href="../../css/components.css">
-    <link rel="stylesheet" href="../../css/profile.css">
-    <link rel="stylesheet" href="../../css/auth.css">
+    <link rel="stylesheet" href="../../../css/globals.css">
+    <link rel="stylesheet" href="../../../css/components.css">
+    <link rel="stylesheet" href="../../../css/profile.css">
+    <link rel="stylesheet" href="../../../css/auth.css">
     <title>Editar Endereço</title>
 </head>
 <body>
@@ -14,7 +14,7 @@
 <main>
     <div></div>
     <div class="box-form">
-        <form action="/profile/edit/address" method="post" th:object="${address}" style="margin-top: -150px;">
+        <form action="/profile/edit/address" method="post" th:object="${usuarioAddress}" style="margin-top: -150px;">
             <h1>Endereço</h1>
 
             <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
@@ -37,7 +37,7 @@
 
             <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                 <label for="cep">CEP:</label>
-                <input type="text">
+                <input type="text" th:field="*{cep}" maxlength="8">
                 <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('cep')}" th:errors="*{cep}"></p>
             </div>
 
@@ -47,5 +47,7 @@
         </form>
     </div>
 </main>
+
+<script src="../../../js/validationAddress.js"></script>
 </body>
 </html>

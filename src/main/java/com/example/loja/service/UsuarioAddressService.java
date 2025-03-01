@@ -1,5 +1,7 @@
 package com.example.loja.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.loja.models.UsuarioAddress;
@@ -25,6 +27,17 @@ public class UsuarioAddressService {
     public void saveAddress(UsuarioAddress usuarioAddress, String email) throws Exception{
 
         try {     
+
+            // Busca algum registro desse usuário
+            List<UsuarioAddress> verifyUserAddress = usuarioAddressRepository.findByEmail(email);
+
+            // Verifica se já existe um registro
+            if(!verifyUserAddress.isEmpty()){
+
+                // Quando já existe um registro, basta ter o mesmo id que o spring atualiza os valores
+                usuarioAddress.setId(verifyUserAddress.get(0).getId());
+                usuarioAddressRepository.save(usuarioAddress);                
+            }
 
             // Salva no banco de dados com o email do usuario
             usuarioAddress.setUser_email(email);
