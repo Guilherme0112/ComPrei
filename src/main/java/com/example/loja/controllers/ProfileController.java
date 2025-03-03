@@ -10,8 +10,6 @@ import com.example.loja.service.UsuarioAddressService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +41,14 @@ public class ProfileController {
             // Tenta buscar o usuário da sessão
             Usuario user = authService.getSession(httpSession);
 
+            if(!usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
 
-            List<UsuarioAddress> verifyUserAddress = usuarioAddressRepository.findByEmail(user.getEmail());
-
-            mv.addObject("address", verifyUserAddress.get(0));
-            mv.setViewName("/views/profile/profile");
+                UsuarioAddress verifyUserAddress = usuarioAddressRepository.findByEmail(user.getEmail()).get(0);
+                mv.addObject("address", verifyUserAddress);
+            }
+            
+            mv.addObject("address", new UsuarioAddress());
+            mv.setViewName("views/profile/profile");
 
         } catch (SessionException e) {
 
