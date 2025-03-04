@@ -1,4 +1,4 @@
-package com.example.loja.controllers;
+package com.example.loja.controllers.UsuarioController;
 
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.VerificationEmail;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.loja.exceptions.SessionException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.LoginRequest;
-import com.example.loja.service.AuthService;
+import com.example.loja.service.UsuarioService.AuthService;
 import com.example.loja.service.EmailService;
 import com.example.loja.util.Util;
 

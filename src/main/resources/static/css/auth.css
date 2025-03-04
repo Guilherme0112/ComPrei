@@ -6,11 +6,6 @@ main{
     justify-content: end;
 }
 
-/* Background transparent somente na tela de login e criar conta */
-header{
-    background: transparent;
-}
-
 main div{
     width: 60%;
 }

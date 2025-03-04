@@ -1,4 +1,4 @@
-package com.example.loja.service;
+package com.example.loja.service.UsuarioService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,9 +100,15 @@ public class AuthService {
 
         try {
 
+            // V alida a senha do usuário
+            if(usuario.getPassword().length() < 6 || usuario.getPassword().length() > 10){
+
+               throw new UsuarioException("A senha deve ter entre 6 e 10 caracteres"); 
+            }
 
             // Verifica se o e-mail está já está sendo usado
             if (!usuarioRepository.findByEmail(usuario.getEmail(), true).isEmpty()) {
+
                 throw new UsuarioException("Este e-mail já está sendo usado");
             }
 

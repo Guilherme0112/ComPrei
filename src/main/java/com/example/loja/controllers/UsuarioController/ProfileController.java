@@ -1,11 +1,11 @@
-package com.example.loja.controllers;
+package com.example.loja.controllers.UsuarioController;
 
 import com.example.loja.exceptions.SessionException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.UsuarioAddress;
 import com.example.loja.repositories.UsuarioAddressRepository;
-import com.example.loja.service.AuthService;
-import com.example.loja.service.UsuarioAddressService;
+import com.example.loja.service.UsuarioService.AuthService;
+import com.example.loja.service.UsuarioService.UsuarioAddressService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -124,14 +124,6 @@ public class ProfileController {
             mv.addObject("erro", "Ocorreu algum erro interno. Tente novamente mais tarde");
         }
 
-        return mv;
-    }
-
-    @GetMapping("/profile/carrinho")
-    public ModelAndView Carrinho(){
-
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/profile/carrinho/carrinho");
         return mv;
     }
 

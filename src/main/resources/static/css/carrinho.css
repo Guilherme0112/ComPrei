@@ -4,11 +4,13 @@
 
     display: flex;
     width: 50%;
+    padding-top: 80px;
 }
 .car_2{
 
     width: 50%;
     height: 100vh;
+    padding-top: 80px;
     display: flex;
     background-color: var(--box-form);
 }

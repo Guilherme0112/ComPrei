@@ -28,6 +28,7 @@ public class Usuario {
     @NotBlank(message = "O email é obrigatório")
     private String email;
 
+    // Senha validada em AuthService.java
     @NotBlank(message = "A senha é obrigatório")
     private String password;
 

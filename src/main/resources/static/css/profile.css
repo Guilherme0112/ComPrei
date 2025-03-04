@@ -1,8 +1,5 @@
 @import url("../css/globals.css");
 
-header{
-    background-color: transparent;
-}
 main{
     flex-wrap: wrap;
     justify-content: center;
