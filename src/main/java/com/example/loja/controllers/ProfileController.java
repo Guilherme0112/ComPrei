@@ -44,7 +44,10 @@ public class ProfileController {
             if(!usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
 
                 UsuarioAddress verifyUserAddress = usuarioAddressRepository.findByEmail(user.getEmail()).get(0);
+
                 mv.addObject("address", verifyUserAddress);
+                mv.setViewName("views/profile/profile");
+                return mv;
             }
             
             mv.addObject("address", new UsuarioAddress());
