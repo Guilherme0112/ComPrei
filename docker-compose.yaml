@@ -20,6 +20,7 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: loja
     ports:
       - "3306:3306"
     volumes:
