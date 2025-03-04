@@ -11,8 +11,6 @@ services:
       - SPRING_DATASOURCE_PASSWORD=123456
     depends_on:
       - mysql
-    networks:
-      - bridge
       
 # Configurações referente ao MySQL
   mysql:
@@ -21,9 +19,3 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
       - "3306:3306"
-    networks:
-      - bridge
-
-networks:
-  bridge:
-    driver: bridge
