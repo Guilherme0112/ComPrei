@@ -1,0 +1,14 @@
+@import url("globals.css");
+
+.car_1{
+
+    display: flex;
+    width: 50%;
+}
+.car_2{
+
+    width: 50%;
+    height: 100vh;
+    display: flex;
+    background-color: var(--box-form);
+}

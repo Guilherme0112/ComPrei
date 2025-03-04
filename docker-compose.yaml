@@ -2,6 +2,7 @@
 services:
 
   loja:
+    build: .
     image: eclipse-temurin:17-jdk-focal
     ports:
       - "8080:8080"
@@ -11,6 +12,8 @@ services:
       - SPRING_DATASOURCE_PASSWORD=123456
     depends_on:
       - mysql
+    networks:
+      - app-network
       
 # Configurações referente ao MySQL
   mysql:
@@ -19,3 +22,14 @@ services:
       MYSQL_ROOT_PASSWORD: 123456
     ports:
       - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
