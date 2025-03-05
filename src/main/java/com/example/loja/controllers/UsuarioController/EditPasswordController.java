@@ -1,11 +1,11 @@
 package com.example.loja.controllers.UsuarioController;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.loja.exceptions.PasswordException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.PasswordRequest;
 import com.example.loja.service.UsuarioService.AuthService;
@@ -13,7 +13,7 @@ import com.example.loja.service.UsuarioService.ProfileService;
 import com.example.loja.util.Util;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
+
 
 @Controller
 public class EditPasswordController {
@@ -40,7 +40,7 @@ public class EditPasswordController {
     }
 
     @PostMapping("/profile/edit/password")
-    public ModelAndView TrocarSenhaPOST(@Valid PasswordRequest passwordRequest, HttpSession http, BindingResult br) throws Exception{
+    public ModelAndView TrocarSenhaPOST(PasswordRequest passwordRequest, HttpSession http) throws Exception, PasswordException{
         
         ModelAndView mv = new ModelAndView();
 
@@ -51,20 +51,15 @@ public class EditPasswordController {
 
             // Verifica a sessão do usuário
             if(user == null){
-                throw new Exception("Erro ao encontrar a sessão do usuário");
-            }
-            
-            // Verifica se existe erro de validação na senha nova
-            if(br.hasErrors()){
-
-                mv.addObject("passwordRequest", passwordRequest);
+                mv.addObject("erro", "Ocorreu algum erro. Tente novamente mais tarde");
                 mv.setViewName("views/profile/edit/password");
-                return mv;
+                return  mv;
             }
-      
+           
             // Verifica se a senha corresponde com a do banco
             if(!Util.verifyPass(passwordRequest.getSenhaAntiga(), user.getPassword())){
 
+                mv.setViewName("views/profile/edit/password");
                 mv.addObject("erro", "A senha está incorreta");
                 return mv;
             }
@@ -75,9 +70,16 @@ public class EditPasswordController {
             // Redireciona para /profile
             mv.setViewName("redirect:/profile");
 
+        } catch(PasswordException e){
+
+            System.out.println(e.getMessage());
+            mv.setViewName("views/profile/edit/password");
+            mv.addObject("erro", e.getMessage());
+
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
+            mv.setViewName("views/profile/edit/password");
             mv.addObject("erro", "Ocorreu algum erro. Tente novamente mais tarde");
         }
 
