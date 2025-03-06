@@ -38,10 +38,9 @@
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="r_password">Repita a Senha:</label>
                     <input type="password" id="r_password">
-                    <p class="erro_msg" id="erro_password" style="margin: -10px; width: 100%; text-align: center;" ></p>
                 </div>
 
-                <p th:if="${erro}" th:text="${erro}" class="erro_msg"></p>
+                <p th:if="${erro}" th:text="${erro}" class="erro_msg" id="erro_password"></p>
 
                 <a th:href="@{/auth/login}" style="margin: 20px 0 20px 50px; text-align: start; width: 100%;">Já tenho
                     uma conta</a>
@@ -51,6 +50,8 @@
     </main>
 
     <script src="../js/auth.js"></script>
+    <script src="../js/validations/validationPassword.js"></script>
+
 </body>
 
 </html>

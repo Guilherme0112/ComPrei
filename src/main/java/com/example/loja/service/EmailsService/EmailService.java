@@ -1,4 +1,4 @@
-package com.example.loja.service;
+package com.example.loja.service.EmailsService;
 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

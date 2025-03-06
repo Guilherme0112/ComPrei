@@ -23,6 +23,11 @@ public class VerificationEmail {
     private LocalDateTime expire_in = LocalDateTime.now().plusMinutes(5);
 
 
+    public VerificationEmail(String email, String token){
+        this.token = token;
+        this.email = email;
+    }
+
     public Long getId() {
         return id;
     }
