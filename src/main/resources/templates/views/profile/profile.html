@@ -24,7 +24,7 @@
                 <p sec:authentication="principal.email"></p>
                 <br>
                 <a th:href="@{/profile/edit/password}" style="display: flex; width: 100%;">Alterar senha</a>
-                <button class="btn_del" style="margin-top: 20px;">Apagar Conta</button>
+                <button class="btn_del" id="del" style="margin-top: 20px;">Apagar Conta</button>
             </div>
             <div>
                 <h4>Cidade:</h4>
@@ -57,5 +57,16 @@
             
     </div>
 </main>
+
+<div class="popup" id="popup">
+    <p id="close" style="width: 100%; margin-left: 96%; margin-top: 0px; cursor: pointer; font-size: 20px;">x</p>
+    <p style="margin: 10px 0;">Você está prestes a excluir sua conta permanentemente. Para confirmar essa ação, insira sua senha. Todos os seus dados
+    serão apagados de forma irreversível, e essa operação não poderá ser desfeita. Tem certeza de que deseja continuar?</p>
+    <input type="password" id="password" style="width: 50%;">
+    <p class="erro_msg" id="erro_password"></p>
+    <button  class="ben_del" id="submit_del" style="margin: 0;">Apagar Conta</button>
+</div>
+
+<script src="../js/profile.js"></script>
 </body>
 </html>

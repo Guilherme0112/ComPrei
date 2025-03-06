@@ -1,34 +1,40 @@
 package com.example.loja.controllers.UsuarioController;
 
 import com.example.loja.exceptions.SessionException;
+import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.UsuarioAddress;
 import com.example.loja.repositories.UsuarioAddressRepository;
 import com.example.loja.service.UsuarioService.AuthService;
-import com.example.loja.service.UsuarioService.UsuarioAddressService;
+import com.example.loja.service.UsuarioService.ProfileService;
+import com.example.loja.util.Util;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ProfileController {
 
     private final AuthService authService;
-    private final UsuarioAddressService usuarioAddressService;
     private final UsuarioAddressRepository usuarioAddressRepository;
+    private final ProfileService profileService;
 
     public ProfileController(AuthService authService,
-                             UsuarioAddressService usuarioAddressService,
-                             UsuarioAddressRepository usuarioAddressRepository){
+                             UsuarioAddressRepository usuarioAddressRepository,
+                             ProfileService profileService){
         this.authService = authService;
-        this.usuarioAddressService = usuarioAddressService;
         this.usuarioAddressRepository = usuarioAddressRepository;
+        this.profileService = profileService;
     }
 
     @GetMapping("/profile")
@@ -67,64 +73,42 @@ public class ProfileController {
         return mv;
     }
 
-    @GetMapping("/profile/edit/address")
-    public ModelAndView Config(HttpSession http){
-
-        ModelAndView mv = new ModelAndView();
+    @DeleteMapping("/profile/delete")
+    public ResponseEntity<?> ApagarUsuario(@RequestBody Map<String, String> senhaRequest, HttpSession http, HttpServletRequest request) throws Exception, UsuarioException{
 
         try {
-
+            
+            // Pega a senha do usuário
+            String senha = senhaRequest.get("senha");
+            
+            // Verifica a autenticação do usuário
             Usuario user = authService.getSession(http);
-
-            if(usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
-
-                mv.addObject(new UsuarioAddress());
-                mv.setViewName("views/profile/edit/address");
-                return mv;
-            }
-            
-
-
-            mv.addObject("usuarioAddress", usuarioAddressRepository.findByEmail(user.getEmail()).get(0));
-            mv.setViewName("views/profile/edit/address");
-            
-        } catch (Exception e) {
-
-            mv.setViewName("views/profile/address");
-            mv.addObject("erro", "Ocorreu algum erro interno. Tente novamente mais tarde");
-        }
-
-        return mv;
-    }
-
-    @PostMapping("/profile/edit/address")
-    public ModelAndView ConfigPost(@Valid UsuarioAddress usuarioAddress, BindingResult br, HttpSession http) throws Exception{
-
-        ModelAndView mv = new ModelAndView();
-
-        try {
-
-            
-            if(br.hasErrors()){
-
-                mv.setViewName("/views/profile/edit/address");
-                mv.addObject(usuarioAddress);
-                return mv;
+            if(user == null){
+                throw new UsuarioException("Ocorreu algum erro. Tente novamente mais tarde");                
             }
 
-            // Chama o service pegando o email da sessão
-            usuarioAddressService.saveAddress(usuarioAddress, authService.getSession(http).getEmail());
+            // Verifica se as senhas coencidem
+            if(!Util.verifyPass(senha, user.getPassword())){
+                throw new UsuarioException("A senha está incorreta"); 
+            }
 
-            mv.setViewName("redirect:/profile");
+            // Deleta o uusário do banco de dados
+            profileService.deleteUser(user);
 
+            // Invalida a sessão do usuário
+            request.getSession().invalidate();
+
+            // Remove a autenticação do Security
+            SecurityContextHolder.clearContext();
+
+            return ResponseEntity.ok().body(200);
+
+        } catch (UsuarioException e) {
+            return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));
+    
         } catch (Exception e) {
-            
-            System.out.println("exception: " + e.getMessage());
-            mv.setViewName("views/profile/edit/address");
-            mv.addObject("erro", "Ocorreu algum erro interno. Tente novamente mais tarde");
+            return ResponseEntity.badRequest().body(Map.of("erro", "Ocorreu algum  erro. Tente novamente mais tarde"));
         }
-
-        return mv;
     }
 
     @GetMapping("/profile/favoritos")

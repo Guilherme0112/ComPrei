@@ -115,7 +115,7 @@ public class AuthController {
 
             // Verifica se o usuário pediu um email a menos de 2 minutos
             if(!emailRequestService.verifyUserRequest(usuario)){
-                throw new EmailRequestException("Ocorreu algum erro. tente novamente mais tarde");
+                throw new EmailRequestException("Ocorreu algum erro. Tente novamente mais tarde");
             }
 
             // HTML que será enviado para o usuario

@@ -1,8 +1,11 @@
 package com.example.loja.service.UsuarioService;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.PasswordException;
+import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.PasswordRequest;
 import com.example.loja.repositories.UsuarioRepository;
@@ -53,6 +56,38 @@ public class ProfileService {
 
         } catch (Exception e) {
             
+            System.out.println("profile_service: " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    /***
+     * Deleta o registro do usuário do banco de dados
+     * 
+     * @param user Objeto do usuário que será deletado
+     * @throws UsuarioException Erros referentes ao usuário
+     * @throws Exception Erro genérico
+     */
+    public void deleteUser(Usuario user) throws Exception, UsuarioException {
+        try{
+
+            List<Usuario> userVerify = usuarioRepository.findByEmail(user.getEmail(), true);
+
+            // Verifica se a conta existe
+            if(userVerify.isEmpty()){
+                throw new UsuarioException("Erro ao apagar conta. Tente novamente mais tarde");
+            }
+
+            // Deleta a conta
+            usuarioRepository.delete(userVerify.get(0));
+
+        } catch (UsuarioException e) {
+
+            System.out.println("profile_service: " + e.getMessage());
+            throw new UsuarioException(e.getMessage());
+
+        } catch (Exception e) {
+
             System.out.println("profile_service: " + e.getMessage());
             throw new Exception(e.getMessage());
         }
