@@ -33,7 +33,7 @@ public class EmailRequestService {
             for (EmailRequests request : email_requests) {
 
                 // Pega a diferença entre as duas datas (em minutos)
-                Long diferenca = Duration.between(request.getWhen(), LocalDateTime.now()).toMinutes();
+                Long diferenca = Duration.between(request.getQuando(), LocalDateTime.now()).toMinutes();
 
                 // Se tiver mais de 2 minutos de diferença, ele apaga o registro
                 if (diferenca > 0 && diferenca <= 2) {
@@ -62,19 +62,25 @@ public class EmailRequestService {
         try {
 
             // Busca as requisições de email do usuário
-            EmailRequests emailRequests = emailRequestRepository.findByEmail(usuario.getEmail()).get(0);
+            List<EmailRequests> emailRequests = emailRequestRepository.findByEmail(usuario.getEmail());
+
+            // Se não houver requisições, o usuário pode fazer a requisição
+            if(emailRequests.isEmpty()){
+                return true;
+            }
 
             // Diferença (minutos) entre o registro da requisição e a hora atual
-            Long diferenca = Duration.between(emailRequests.getWhen(), LocalDateTime.now()).toMinutes();
+            Long diferenca = Duration.between(emailRequests.get(0).getQuando(), LocalDateTime.now()).toMinutes();
 
             // Verifica se foi de fato o usuário que fez a requisição
-            if(emailRequests.getEmail() != usuario.getEmail()){
+            if(emailRequests.get(0).getEmail() != usuario.getEmail()){
                 return false;
             }
 
             // Se tiver mais de 2 minutos de diferença, ele apaga o registro
             if (diferenca > 0 && diferenca <= 2) {
-                emailRequestRepository.delete(emailRequests);
+                System.out.println(diferenca);
+                emailRequestRepository.delete(emailRequests.get(0));
                 throw new EmailRequestException("Você já pediu um email, espere um pouco");
             }
 

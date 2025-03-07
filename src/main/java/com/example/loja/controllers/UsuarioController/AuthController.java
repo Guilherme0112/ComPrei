@@ -94,7 +94,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth/register")
-    public ModelAndView RegisterPOST(@Valid Usuario usuario, BindingResult br) throws Exception, UsuarioException, EmailRequestException {
+    public synchronized ModelAndView RegisterPOST(@Valid Usuario usuario, BindingResult br) throws Exception, UsuarioException, EmailRequestException {
 
         ModelAndView mv = new ModelAndView();
 
@@ -115,7 +115,7 @@ public class AuthController {
 
             // Verifica se o usuário pediu um email a menos de 2 minutos
             if(!emailRequestService.verifyUserRequest(usuario)){
-                throw new EmailRequestException("Ocorreu algum erro. Tente novamente mais tarde");
+                throw new EmailRequestException("Já enviamos o seu e-mail. Aguarde um pouco");
             }
 
             // HTML que será enviado para o usuario

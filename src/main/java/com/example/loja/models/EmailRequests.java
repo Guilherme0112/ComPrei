@@ -20,7 +20,7 @@ public class EmailRequests {
     private String email;
 
     @Column(updatable = false)
-    private LocalDateTime when = LocalDateTime.now();
+    private LocalDateTime quando = LocalDateTime.now();
 
 
     public Long getId() {
@@ -39,12 +39,12 @@ public class EmailRequests {
         this.email = email;
     }
 
-    public LocalDateTime getWhen() {
-        return when;
+    public LocalDateTime getQuando() {
+        return quando;
     }
 
-    public void setWhen(LocalDateTime when) {
-        this.when = when;
+    public void setQuando(LocalDateTime quando) {
+        this.quando = quando;
     }
 
     
