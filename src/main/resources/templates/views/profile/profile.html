@@ -23,6 +23,10 @@
                 <h4>E-mail:</h4>
                 <p sec:authentication="principal.email"></p>
                 <br>
+                <h4>Telefone:</h4>
+                <p sec:authentication="principal.telefone"></p>
+                <br>
+                <a href="" style="display: flex; width: 100%; margin-bottom: 15px;">Editar Dados</a>
                 <a th:href="@{/profile/edit/password}" style="display: flex; width: 100%;">Alterar senha</a>
                 <button class="btn_del" id="del" style="margin-top: 20px;">Apagar Conta</button>
             </div>
@@ -38,6 +42,9 @@
                 <br>
                 <h4>CEP:</h4>
                 <p th:text="${address.cep ?: '-'}"></p>
+                <br>
+                <h4>Número:</h4>
+                <p th:text="${address.numero ?: '-'}"></p>
                 <br>
                 <a th:href="@{/profile/edit/address}">Editar Endereço</a>
             </div>
@@ -59,7 +66,7 @@
 </main>
 
 <div class="popup" id="popup">
-    <p id="close" style="width: 100%; margin-left: 98%; margin-top: -10px; cursor: pointer; font-size: 20px;">x</p>
+    <p id="close" style="width: 100%; margin-left: 98.5%; margin-top: -10px; cursor: pointer; font-size: 20px;">x</p>
     <p style="margin: 10px 0;">Você está prestes a excluir sua conta permanentemente. Para confirmar essa ação, insira sua senha. Todos os seus dados
     serão apagados de forma irreversível, e essa operação não poderá ser desfeita. Tem certeza de que deseja continuar?</p>
     <input type="password" id="password" style="width: 50%;">

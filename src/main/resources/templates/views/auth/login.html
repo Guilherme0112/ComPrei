@@ -14,13 +14,16 @@
         <div></div>
         <div class="box-form">
             <form action="/auth/login" method="post" th:object="${loginRequest}">
+                
                 <label for="email">Email:</label>
-                <input type="email" th:field="*{email}">
+                <input type="email" th:field="*{email}" required>
                 <br>
+
                 <label for="senha">Senha:</label>
-                <input type="password" th:field="*{senha}">
+                <input type="password" th:field="*{senha}" required>
                 <p th:if="${erro}" th:text="${erro}" class="erro_msg"></p>
-                <a href="" style="margin: 20px 0 20px 50px; text-align: start; width: 100%;">Esqueceu a senha?</a>
+
+                <a th:href="@{/reset/password}" style="margin: 20px 0 20px 50px; text-align: start; width: 100%;">Esqueceu a senha?</a>
                 <button>Enviar</button>
             </form>
         </div>

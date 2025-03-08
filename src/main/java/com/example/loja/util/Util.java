@@ -1,5 +1,6 @@
 package com.example.loja.util;
 
+import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,5 +37,31 @@ public class Util {
      */
     public static String generateToken(){
         return UUID.randomUUID().toString();
+    }
+
+    /**
+     * Método que gera senhas aleatórias
+     * 
+     * @return Retorna a senha
+     */
+    public static String generateSenha(){
+
+        StringBuilder senha = new StringBuilder();
+        Random random = new Random();
+
+        String[] alfa = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
+                         "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", 
+                         "q", "r", "s", "t", "u", "v", "w", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+
+        int largura = random.nextInt(5) + 6;
+
+        for(int i = 0; i < largura; i++){
+
+            int indice = random.nextInt(alfa.length);
+            senha.append(alfa[indice]);
+        }
+        
+        return senha.toString();
+
     }
 }

@@ -5,11 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.EmailRequestException;
-import com.example.loja.exceptions.PasswordException;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.VerificationEmail;
-import com.example.loja.models.dto.PasswordRequest;
 import com.example.loja.repositories.UsuarioRepository;
 import com.example.loja.repositories.VerificationEmailRepository;
 import com.example.loja.service.EmailsService.EmailRequestService;
@@ -33,47 +31,6 @@ public class ProfileService {
         this.emailRequestService = emailRequestService;
         this.verificationEmailRepository = verificationEmailRepository;
 
-    }
-
-    /***
-     * Método que altera a senha do usuário
-     * 
-     * @param passwordRequest DTO das senhas do usuario (Senha nova e Senha antiga)
-     * @param usuario Objeto do usuário que terá a senha trocada
-     * @throws PasswordException Erro de validação da senha 
-     * @throws Exception Erro genérico
-     */
-    public void alterPassword(PasswordRequest passwordRequest, Usuario usuario) throws Exception, PasswordException{
-
-        try {
-            
-            // Senha nova do usuário
-            String antigaSenha = passwordRequest.getSenhaAntiga();
-            String novaSenha = passwordRequest.getSenhaNova();
-
-            if(antigaSenha.length() == 0){
-                throw new PasswordException("Preencha todos os campos");                
-            }
-
-            // Valida a senha nova
-            if(novaSenha.length() < 6 || novaSenha.length() > 10){
-                throw new PasswordException("A senha deve ter entre 6 e 10");
-            }
-
-            // Criptografando a senha e salvando no banco de dados
-            usuario.setPassword(Util.Bcrypt(novaSenha));
-            usuarioRepository.save(usuario);
-
-        } catch(PasswordException e){
-
-            System.out.println("profile_service: " + e.getMessage());
-            throw new PasswordException(e.getMessage());
-
-        } catch (Exception e) {
-            
-            System.out.println("profile_service: " + e.getMessage());
-            throw new Exception(e.getMessage());
-        }
     }
 
     /***
@@ -118,8 +75,6 @@ public class ProfileService {
     public synchronized void activeAccount(Usuario user) throws Exception, UsuarioException, EmailRequestException{
         
         try {
-            
-        
 
             if(user.getActive() == true){
 
@@ -127,7 +82,7 @@ public class ProfileService {
             }
 
             // Verifica as requisições do usuário
-            emailRequestService.verifyUserRequest(user);
+            emailRequestService.verifyUserRequest(user.getEmail());
 
             // Cria o token
             String token = Util.generateToken();

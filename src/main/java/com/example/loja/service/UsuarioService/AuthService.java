@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.example.loja.enums.Cargo;
 import com.example.loja.exceptions.SessionException;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.LoginRequest;
@@ -122,8 +123,10 @@ public class AuthService {
                 return;
             }
 
-            // Criptografa a senha do usuário
+            // Criptografa a senha do usuário, seta o cargo e coloca o +55 no teledone
             usuario.setPassword(Util.Bcrypt(usuario.getPassword()));
+            usuario.setTelefone("+55" + usuario.getTelefone());
+            usuario.setRole(Cargo.CLIENTE);
 
             usuarioRepository.save(usuario);
 

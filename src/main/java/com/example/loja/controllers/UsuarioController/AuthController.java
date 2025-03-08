@@ -109,7 +109,7 @@ public class AuthController {
             String token = Util.generateToken();
 
             // Verifica se o usuário pediu um email a menos de 1 minuto
-            emailRequestService.verifyUserRequest(usuario);
+            emailRequestService.verifyUserRequest(usuario.getEmail());
 
             // HTML que será enviado para o usuario
             String html = """
@@ -163,7 +163,6 @@ public class AuthController {
 
             // Envia o e-mail de verificação
             emailService.sendEmail(usuario.getEmail(), "Confirmação de e-mail", html);
-            System.out.println("----------- email enviado");
 
             // Salva a requisição no banco de dados
             emailRequestService.saveRequestEmail(usuario.getEmail());

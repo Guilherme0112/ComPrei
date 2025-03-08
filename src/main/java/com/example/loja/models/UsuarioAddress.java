@@ -32,6 +32,9 @@ public class UsuarioAddress {
     @Size(max = 8, min = 8, message = "O CEP deve ter 8 números")
     private String cep;
 
+    @NotNull(message = "O número é obrigatório")
+    private String numero;
+
     private String user_email;
 
     public Long getId() {
@@ -80,6 +83,14 @@ public class UsuarioAddress {
 
     public void setUser_email(String user_email) {
         this.user_email = user_email;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     

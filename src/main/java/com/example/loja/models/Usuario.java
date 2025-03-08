@@ -2,8 +2,12 @@ package com.example.loja.models;
 
 import java.time.LocalDate;
 
+import com.example.loja.enums.Cargo;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,15 +32,30 @@ public class Usuario {
     @NotBlank(message = "O email é obrigatório")
     private String email;
 
+    @NotBlank(message = "O número é obrigatório")
+    private String telefone;
+
     // Senha validada em AuthService.java
     @NotBlank(message = "A senha é obrigatório")
     private String password;
 
     private Boolean active = false;
 
+    @Enumerated(EnumType.STRING)
+    private Cargo role;
+
     @Column(updatable = false)
     private LocalDate create_in = LocalDate.now();
+    
 
+
+    public Cargo getRole() {
+        return role;
+    }
+
+    public void setRole(Cargo role) {
+        this.role = role;
+    }
 
     public Long getId() {
         return id;
@@ -84,6 +103,14 @@ public class Usuario {
 
     public void setCreate_in(LocalDate create_in) {
         this.create_in = create_in;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
    
