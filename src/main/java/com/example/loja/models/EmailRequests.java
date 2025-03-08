@@ -1,6 +1,7 @@
 package com.example.loja.models;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ public class EmailRequests {
     private String email;
 
     @Column(updatable = false)
-    private LocalDateTime quando = LocalDateTime.now();
+    private LocalDateTime quando = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
 
 
     public Long getId() {

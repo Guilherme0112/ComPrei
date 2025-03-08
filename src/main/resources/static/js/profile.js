@@ -2,7 +2,7 @@
 var popupStats = false;
 
 document.getElementById("del").addEventListener("click", async () => {
-    
+
     if(popupStats == false){
 
         const popup = document.getElementById("popup");
@@ -33,11 +33,14 @@ document.getElementById("submit_del").addEventListener("click", async() =>{
 
     const data = await res.json();
  
-    if(!data.ok){
+    console.log(data)
+
+    if(data.erro){
         document.getElementById("erro_password").textContent = data.erro;
         return;
     }
 
+    console.log(res);
     window.location.href = "/auth/login";
 })
 

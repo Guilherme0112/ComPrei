@@ -11,4 +11,4 @@ public interface VerificationEmailRepository extends JpaRepository<VerificationE
 
     @Query("SELECT v FROM VerificationEmail v WHERE v.token = :token")
     List<VerificationEmail> findByToken(@Param("token") String token);
-}
+        }

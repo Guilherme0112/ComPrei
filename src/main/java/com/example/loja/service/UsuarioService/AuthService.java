@@ -23,11 +23,13 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final HttpServletRequest request;
+    private final ProfileService profileService;
 
     public AuthService(UsuarioRepository usuarioRepository,
-                       HttpServletRequest request) {
+                       HttpServletRequest request,
+                       ProfileService profileService) {
         this.usuarioRepository = usuarioRepository;
-
+        this.profileService = profileService;
         this.request = request;
     }
 
@@ -115,7 +117,9 @@ public class AuthService {
             // Caso o usuário já tenha o e-mail registrado, mas a conta está inativa
             if(!usuarioRepository.findByEmail(usuario.getEmail(), false).isEmpty()){
 
-                // Lógica para fazer a ativação da conta
+                // Método para ativar a conta
+                profileService.activeAccount(usuario);
+                return;
             }
 
             // Criptografa a senha do usuário

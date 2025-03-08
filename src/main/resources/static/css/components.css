@@ -1,5 +1,25 @@
 @import url("globals.css");
 
+
+/* Load */
+@keyframes load{
+    0% {
+        transform: scale(1);
+    } 50%{
+        transform: scale(2);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+.load{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    animation: load 1s linear infinite;
+  }
+
 /* Estilo para exibir mensagens de erro */
 .erro_msg{
     color: rgb(192, 53, 53);

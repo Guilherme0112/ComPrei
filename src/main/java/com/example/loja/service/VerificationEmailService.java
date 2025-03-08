@@ -31,7 +31,6 @@ public class VerificationEmailService {
                 // Verifica se o token está expirado
                 if(this.isExpired(token.getToken())) {
                     verificationEmailRepository.delete(token);
-                    break;
                 }
             }
 
@@ -66,10 +65,11 @@ public class VerificationEmailService {
            LocalDateTime expire_in = tokenObj.getExpire_in();
 
            // Verifica se a expiração é antes da data atual
-           if(expire_in.isBefore(LocalDateTime.now())){
+            if(expire_in.isBefore(LocalDateTime.now())){
 
-               return  true;
-           }
+                verificationEmailRepository.delete(tokenObj);
+                return  true;
+            }
 
            return false;
 

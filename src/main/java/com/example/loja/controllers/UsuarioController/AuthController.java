@@ -2,7 +2,6 @@ package com.example.loja.controllers.UsuarioController;
 
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.VerificationEmail;
-import com.example.loja.repositories.EmailRequestRepository;
 import com.example.loja.repositories.VerificationEmailRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -12,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.loja.exceptions.EmailRequestException;
 import com.example.loja.exceptions.SessionException;
-import com.example.loja.models.EmailRequests;
 import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.LoginRequest;
 import com.example.loja.service.EmailsService.EmailRequestService;
@@ -28,18 +26,15 @@ public class AuthController {
     private final AuthService authService;
     private final EmailService emailService;
     private final VerificationEmailRepository verificationEmailRepository;
-    private final EmailRequestRepository emailRequestRepository;
     private final EmailRequestService emailRequestService;
 
     public AuthController(AuthService authService,
                           EmailService emailService,
                           VerificationEmailRepository verificationEmailRepository,
-                          EmailRequestRepository emailRequestRepository,
                           EmailRequestService emailRequestService) {
         this.authService = authService;
         this.emailService = emailService;
         this.verificationEmailRepository = verificationEmailRepository;
-        this.emailRequestRepository = emailRequestRepository;
         this.emailRequestService = emailRequestService;
     }
 
@@ -113,10 +108,8 @@ public class AuthController {
             // Cria o token
             String token = Util.generateToken();
 
-            // Verifica se o usuário pediu um email a menos de 2 minutos
-            if(!emailRequestService.verifyUserRequest(usuario)){
-                throw new EmailRequestException("Já enviamos o seu e-mail. Aguarde um pouco");
-            }
+            // Verifica se o usuário pediu um email a menos de 1 minuto
+            emailRequestService.verifyUserRequest(usuario);
 
             // HTML que será enviado para o usuario
             String html = """
@@ -170,11 +163,10 @@ public class AuthController {
 
             // Envia o e-mail de verificação
             emailService.sendEmail(usuario.getEmail(), "Confirmação de e-mail", html);
+            System.out.println("----------- email enviado");
 
             // Salva a requisição no banco de dados
-            EmailRequests email_request = new EmailRequests();
-            email_request.setEmail(usuario.getEmail());
-            emailRequestRepository.save(email_request);
+            emailRequestService.saveRequestEmail(usuario.getEmail());
 
             // Salva o token no banco de dados para a verificação
             VerificationEmail email_request_token = new VerificationEmail(usuario.getEmail(), token);

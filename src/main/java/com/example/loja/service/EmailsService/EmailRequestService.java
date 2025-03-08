@@ -1,7 +1,8 @@
 package com.example.loja.service.EmailsService;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -20,6 +21,32 @@ public class EmailRequestService {
         this.emailRequestRepository = emailRequestRepository;
     }
 
+
+    public void saveRequestEmail(String email){
+
+        // Busca alguma requisição feita pelo o usuário
+        List<EmailRequests> findEmail = emailRequestRepository.findByEmail(email);
+        
+        // Se tiver vazia, ela salva no banco de dados
+        if(findEmail.isEmpty()){
+
+            EmailRequests email_request = new EmailRequests();
+            email_request.setEmail(email);
+            emailRequestRepository.save(email_request);
+            return;
+        }
+
+        for(EmailRequests i : findEmail){
+            emailRequestRepository.delete(i);
+        }
+
+        EmailRequests email_request = new EmailRequests();
+        email_request.setEmail(email);
+        emailRequestRepository.save(email_request);
+
+
+    }
+
     /***
      * Verifica todos os requests feito para garantir que não sobre carrege o
      * sistema
@@ -32,11 +59,8 @@ public class EmailRequestService {
 
             for (EmailRequests request : email_requests) {
 
-                // Pega a diferença entre as duas datas (em minutos)
-                Long diferenca = Duration.between(request.getQuando(), LocalDateTime.now()).toMinutes();
-
-                // Se tiver mais de 2 minutos de diferença, ele apaga o registro
-                if (diferenca > 0 && diferenca <= 2) {
+                // Se tiver mais de 1 minuto de diferença, ele apaga o registro
+                if (request.getQuando().until(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")), ChronoUnit.MINUTES) > 1) {
                     emailRequestRepository.delete(request);
                 }
             }
@@ -57,39 +81,31 @@ public class EmailRequestService {
      *         mais de 2 minutos a requisição) e
      *         FALSE caso contrário
      */
-    public boolean verifyUserRequest(Usuario usuario) throws Exception, EmailRequestException{
+    public void verifyUserRequest(Usuario usuario) throws Exception, EmailRequestException{
 
         try {
+
+            // Verifica todos as requisições
+            verifyAllRequests();
 
             // Busca as requisições de email do usuário
             List<EmailRequests> emailRequests = emailRequestRepository.findByEmail(usuario.getEmail());
 
             // Se não houver requisições, o usuário pode fazer a requisição
             if(emailRequests.isEmpty()){
-                return true;
+                return;
             }
-
-            // Diferença (minutos) entre o registro da requisição e a hora atual
-            Long diferenca = Duration.between(emailRequests.get(0).getQuando(), LocalDateTime.now()).toMinutes();
-
-            // Verifica se foi de fato o usuário que fez a requisição
-            if(emailRequests.get(0).getEmail() != usuario.getEmail()){
-                return false;
-            }
-
-            // Se tiver mais de 2 minutos de diferença, ele apaga o registro
-            if (diferenca > 0 && diferenca <= 2) {
-                System.out.println(diferenca);
-                emailRequestRepository.delete(emailRequests.get(0));
+      
+            // Se tiver mais de 1 minutos de diferença, ele apaga o registro
+            if (emailRequests.get(0).getQuando().until(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")), ChronoUnit.MINUTES) < 1) {
+                
                 throw new EmailRequestException("Você já pediu um email, espere um pouco");
             }
-
-            return true;
 
         } catch (EmailRequestException e) {
 
             System.out.println("email_request_service: " + e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new EmailRequestException(e.getMessage());
 
         } catch (Exception e) {
 

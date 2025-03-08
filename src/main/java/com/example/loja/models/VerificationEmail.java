@@ -22,6 +22,7 @@ public class VerificationEmail {
     
     private LocalDateTime expire_in = LocalDateTime.now().plusMinutes(5);
 
+    public VerificationEmail(){}
 
     public VerificationEmail(String email, String token){
         this.token = token;
