@@ -32,6 +32,16 @@ public class ProdutoService {
                 throw new ProdutoException("Ocorreu algum erro. Tente novamente mais tarde");
             }
 
+            String codigo = produto.getCodigo();
+
+            if(!codigo.matches("\\d+")){
+                throw new ProdutoException("Somente números são válidos");
+            }
+
+            if(!produtoRepository.findByCodigoDeBarras(codigo).isEmpty()){
+                throw new ProdutoException("Este código já está cadastrado");
+            }
+
             produtoRepository.save(produto);
 
         } catch(ProdutoException e){
@@ -65,10 +75,6 @@ public class ProdutoService {
 
             Produto produtoObj = productOpt.get();
 
-            if(produtoObj.getAmount() == 0){
-                throw new ProdutoException("O produto está sem estoque");
-            }
-
             return produtoObj;
 
         } catch (ProdutoException e){
@@ -79,5 +85,31 @@ public class ProdutoService {
 
             throw new Exception(e.getMessage());
         }
+    }
+
+    /**
+     * Deleta um produto do banco de dados
+     * 
+     * @param produto Objeto do produto que será deletado
+     * @throws Exception Erros genéricos
+     * @throws ProdutoException Erros referente ao produto
+     */
+    public void deleteProduct(Produto produto) throws Exception, ProdutoException{
+
+        try {
+
+            if(produto == null){
+                throw new ProdutoException("Produto não existe");
+            }
+            
+            produtoRepository.delete(produto);
+
+        } catch (ProdutoException e) {
+            throw new ProdutoException(e.getMessage());
+    
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+
     }
 }

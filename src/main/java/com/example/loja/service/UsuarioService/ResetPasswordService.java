@@ -19,8 +19,14 @@ public class ResetPasswordService {
         this.resetPasswordRepository = resetPasswordRepository;
     }
 
+    /***
+     * Verifica todos os tokens do banco de dados para deletar os que não
+     * serão mais utilizados
+     * 
+     * @throws Exception Erros genéricos
+     * @throws TokenException Erros a respeito dos tokens
+     */
     public void verifyAllTokens() throws Exception, TokenException{
-
 
         try {
             
@@ -43,6 +49,13 @@ public class ResetPasswordService {
     }
 
 
+    /***
+     * Verifica se um token está expirado
+     * 
+     * @param token Token que será verificado
+     * @return TRUE caso esteja expirado e FALSE caso não esteja expirado
+     * @throws Exception Erros genéricos
+     */
     public boolean isExpired(String token) throws Exception{
 
        try {

@@ -19,6 +19,10 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "O código de barras é obrigatório")
+    @Size(max = 13, min = 13, message = "O código de barras deve ter 13 caracteres")
+    private String codigo;
+
     @Size(min = 3, max = 40, message = "O nome do produto deve ter entre 3 e 40 caracteres")
     @NotBlank(message = "O nome do produto é obrigatório")
     private String name;
@@ -32,9 +36,8 @@ public class Produto {
     @NotBlank(message = "A foto do produto é obrigatório")
     private String photo;
 
-    @NotBlank(message = "O valor do produto é obrigatório")
-    private Long amount;
 
+    
     public Long getId() {
         return id;
     }
@@ -75,11 +78,11 @@ public class Produto {
         this.photo = photo;
     }
 
-    public Long getAmount() {
-        return amount;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 }

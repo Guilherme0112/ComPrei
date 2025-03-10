@@ -25,7 +25,7 @@ public class Usuario {
     private Long id;
 
     @NotBlank(message = "O nome é obrigatório")
-    @Size(min = 3, max = 30, message = "")
+    @Size(min = 3, max = 30, message = "O nome deve ter entre 3 e 30 caracteres")
     private String name;
 
     @Email(message = "O email deve ser válido")

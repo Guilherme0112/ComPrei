@@ -101,3 +101,22 @@
     
     display: none;
 }
+
+.box{
+
+    width: auto;
+    height: auto;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--box-form);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    margin: 20px 0;
+}
+.box *{
+    margin: 0 10px;
+}

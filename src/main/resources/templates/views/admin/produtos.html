@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="https://www.thymelaef.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/globals.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <title>Gerenciar Produtos</title>
+</head>
+<body>
+<header th:replace="~{components/component :: header}"></header>
+<main>
+
+    <div class="box_search">
+        <label for="id_produto">Insira o código de barras do produto:</label>
+        <input type="text" id="id_produto" maxlength="13">
+        <button id="btnSubmit" style="margin: 10px 0;">Buscar</button>
+    </div>
+
+    <div id="resposta" class="resposta">
+
+    </div>
+</main>
+<script src="../js/functions/admin/generateProdutosAdmin.js"></script>
+</body>
+</html>

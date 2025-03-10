@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/globals.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <title>Administração</title>
+</head>
+<body>
+    <header th:replace="~{components/component :: header}"></header>
+
+    <main>
+        <div>
+            <a th:href="@{/admin/usuarios}">Gerenciar Usuários</a>
+            <a th:href="@{/admin/produtos}">Gerenciar Produtos</a>
+            <a th:href="@{/admin/pedidos}">Gerenciar Pedidos</a>
+        </div>
+    </main>
+</body>
+</html>

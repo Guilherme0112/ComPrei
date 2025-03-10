@@ -14,7 +14,7 @@
 <main>
     <div></div>
     <div class="box-form">
-        <form action="/profile/edit/" method="post" th:object="${editUserRequest}" style="margin-top: -150px;">
+        <form action="/profile/edit" method="post" th:object="${editUserRequest}" style="margin-top: -150px;">
             <h1>Usuário</h1>
 
             <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
@@ -26,16 +26,13 @@
             <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                 <label for="telefone">Telefone:</label>
                 <input type="text" th:field="*{telefone}" required>
-                <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></p>
             </div>
 
             <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                 <label for="rua">Confirme sua Senha:</label>
-                <input type="text" th:field="*{senha}" required>
-                <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></p>
+                <input type="password" th:field="*{senha}" required>
             </div>
 
-            
             <p th:if="${erro}" th:text="${erro}" class="erro_msg"></p>
 
             <button>Enviar</button>
