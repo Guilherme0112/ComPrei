@@ -25,10 +25,13 @@ main{
 }
 
 .reposta{
-    width: auto;
+    width: 100%;
     height: auto;
     border-radius: 10px;
     padding: 10px;
     background-color: var(--box-form);
+
+    display: flex;
+    justify-content: center;
 }
 

@@ -110,11 +110,4 @@ public class ProfileController {
             return ResponseEntity.badRequest().body(Map.of("erro", "Ocorreu algum  erro. Tente novamente mais tarde"));
         }
     }
-
-    @GetMapping("/profile/favoritos")
-    public ModelAndView Favoritos(){
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/profile/favoritos/favoritos");
-        return mv;
-    }
 }
