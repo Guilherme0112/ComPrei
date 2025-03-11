@@ -49,6 +49,12 @@ btn.addEventListener("click", async () => {
     const p3 = document.createElement("p");
     p3.textContent = data[0].telefone;
     
+    const box1 = document.createElement("div");
+    box1.style.width = "100%";
+    box1.style.display = "flex";
+    box1.style.justifyContent = "center";
+    box1.style.flexWrap = "wrap";
+
     const btnAdmin = document.createElement("button");
     btnAdmin.id = "btn_admin";
     btnAdmin.style.margin = "10px 0";
@@ -56,24 +62,23 @@ btn.addEventListener("click", async () => {
     const btnDel = document.createElement("button");
     btnDel.className = "btn_del";
     btnDel.id = "btn_del";
-    btnDel.style.margin = "10px 0";
-
+    btnDel.style.margin = "10px";
     
     if(data[0].role == "CLIENTE") {
         btnDel.textContent = "Banir";
         btnAdmin.textContent = "Dar Admin";
-        box.appendChild(btnDel);
-        box.appendChild(btnAdmin);
+        box1.appendChild(btnDel);
+        box1.appendChild(btnAdmin);
         
     } else if (data[0].role == "BANIDO"){
         
         btnDel.textContent = "Desbanir"
-        box.appendChild(btnDel);
+        box1.appendChild(btnDel);
         
     } else if (data[0].role == "ADMIN"){
 
         btnAdmin.textContent = "Remover Admin";
-        box.appendChild(btnAdmin);
+        box1.appendChild(btnAdmin);
     }
 
     
@@ -81,6 +86,7 @@ btn.addEventListener("click", async () => {
     box.appendChild(p1);
     box.appendChild(p2);
     box.appendChild(p3);
+    box.appendChild(box1)
 
 
 

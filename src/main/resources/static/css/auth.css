@@ -29,12 +29,13 @@ label{
     color: white;
     margin: 10px 0 10px 40px;
 }
-input{
+input, textarea{
     background-color: transparent;
     border-bottom: 2px solid white;
     width: 80%;
     padding: 3px;
     margin: auto auto 20px auto;
+    resize: none;
 }
 button{
     width: 300px;

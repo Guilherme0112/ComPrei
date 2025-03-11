@@ -65,6 +65,11 @@ public class AuthService {
                 throw new SessionException("As credenciais estão incorretas");
             }
 
+            // Verifica se está banida
+            if(existEmail.get(0).getRole().equals(Cargo.BANIDO)){
+                throw new SessionException("Esta conta está banida");
+            }
+
             // Obtém o objeto do usuario e a senha
             Usuario user = existEmail.get(0);
             String passwordBD = user.getPassword();
@@ -121,6 +126,10 @@ public class AuthService {
                 // Método para ativar a conta
                 profileService.activeAccount(usuario);
                 return;
+            }
+
+            if(usuarioRepository.findByEmail(usuario.getEmail(), true).get(0).getRole().equals(Cargo.BANIDO)){
+                throw new UsuarioException("Está conta já existe e está banida");
             }
 
             // Criptografa a senha do usuário, seta o cargo e coloca o +55 no teledone

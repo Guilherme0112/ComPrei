@@ -1,23 +1,8 @@
-// Status da popup (False para fechada e TRUE para aberta)
-var popupStats = false;
-
-document.getElementById("del").addEventListener("click", async () => {
-
-    if(popupStats == false){
-
-        const popup = document.getElementById("popup");
-        popup.style.display = "block";
-        popupStats = true;
-        return;
-    } 
-
-});
+document.querySelector("#del").addEventListener("click", function(){
+    Popup(false);
+})
 
 document.getElementById("submit_del").addEventListener("click", async() =>{
-
-    if(popupStats != true){
-        return;
-    }
 
     var password = document.getElementById("password").value;
 
@@ -46,10 +31,6 @@ document.getElementById("submit_del").addEventListener("click", async() =>{
 
 document.querySelector("#close").addEventListener("click", function(){
 
-    if(popupStats == true){
-
-        document.getElementById("popup").style.display = "none";
-        popupStats = false;
-    }
+    Popup(true);
 })
 
