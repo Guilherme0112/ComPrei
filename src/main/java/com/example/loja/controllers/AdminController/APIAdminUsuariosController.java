@@ -18,16 +18,16 @@ public class APIAdminUsuariosController {
 
     private final UsuarioRepository usuarioRepository;
 
-    public APIAdminUsuariosController(UsuarioRepository usuarioRepository){
+    public APIAdminUsuariosController(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
 
     }
- 
+
     @GetMapping("/admin/usuarios/{id}")
-    public List<?> AdminUsuariosGET(@PathVariable("id") String id){
+    public List<?> AdminUsuariosGET(@PathVariable("id") String id) {
         try {
-        
-            if(!id.matches("\\d+")){
+
+            if (!id.matches("\\d+")) {
                 return List.of("erro", "O código  é inválido");
             }
 
@@ -36,33 +36,36 @@ public class APIAdminUsuariosController {
             Optional<Usuario> usuario = usuarioRepository.findById(idLong);
 
             return usuario.map(Collections::singletonList)
-                                         .orElseGet(Collections::emptyList);
+                    .orElseGet(Collections::emptyList);
 
         } catch (Exception e) {
-            
+
             return List.of("erro", e.getMessage());
         }
     }
 
     @GetMapping("/admin/usuarios/banir/{id}")
-    public List<?> Banir(@PathVariable("id") String id) throws Exception, UsuarioException{
+    public List<?> BanirOrDesbanir(@PathVariable("id") String id) throws Exception, UsuarioException {
 
         try {
-            
-            if(!id.matches("\\d+")){
+
+            if (!id.matches("\\d+")) {
                 return List.of("erro", "O código  é inválido");
             }
 
             Long idLong = Long.parseLong(id);
 
-            if(usuarioRepository.findById(idLong).isEmpty()){
+            if (usuarioRepository.findById(idLong).isEmpty()) {
                 throw new UsuarioException("Usuário não existe");
             }
 
             Usuario user = usuarioRepository.findById(idLong).get();
 
-            if(user.getRole().equals(Cargo.BANIDO)){
-                Desbanir(id);
+            if (user.getRole().equals(Cargo.BANIDO)) {
+
+                user.setRole(Cargo.CLIENTE);
+                usuarioRepository.save(user);
+                return List.of(200, "Usuário desbanido com sucesso");
             }
 
             user.setRole(Cargo.BANIDO);
@@ -70,54 +73,60 @@ public class APIAdminUsuariosController {
 
             return List.of(200, "Usuário banido com sucesso");
 
-        } catch(UsuarioException e){
+        } catch (UsuarioException e) {
 
             System.out.println(e.getMessage());
-            return List.of(200, e.getMessage());
-            
+            return List.of("erro", e.getMessage());
+
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
-            return List.of(200, "Ocorreu algum erro. Tente novamente mais tarde");
+            return List.of("erro", "Ocorreu algum erro. Tente novamente mais tarde");
         }
     }
 
-    
-    @GetMapping("/admin/usuarios/desbanir/{id}")
-    public List<?> Desbanir(@PathVariable("id") String id) throws Exception, UsuarioException{
+    @GetMapping("/admin/usuarios/admin/{id}")
+    public List<?> SetAdmin(@PathVariable("id") String id) throws Exception, UsuarioException {
 
         try {
-            
-            if(!id.matches("\\d+")){
+
+            if (!id.matches("\\d+")) {
                 return List.of("erro", "O código  é inválido");
             }
 
             Long idLong = Long.parseLong(id);
 
-            if(usuarioRepository.findById(idLong).isEmpty()){
+            if (usuarioRepository.findById(idLong).isEmpty()) {
                 throw new UsuarioException("Usuário não existe");
             }
 
             Usuario user = usuarioRepository.findById(idLong).get();
 
-            if(!user.getRole().equals(Cargo.BANIDO)){
-                throw new UsuarioException("Não está banido");
+            if (user.getRole().equals(Cargo.BANIDO)) {
+                return List.of("erro", "Você precisa desbanir o usuário primeiro");
             }
 
-            user.setRole(Cargo.CLIENTE);
-            usuarioRepository.save(user);
+            if (user.getRole().equals(Cargo.CLIENTE)) {
 
-            return List.of(200, "Usuário desbanido com sucesso");
+                user.setRole(Cargo.ADMIN);
+                usuarioRepository.save(user);
+                return List.of(200, "O usuário agora é admin");
+            } else {
+                
+                user.setRole(Cargo.CLIENTE);
+                usuarioRepository.save(user);
+                return List.of(200, "Você retirou o cargo de admin do id " + id);
+            }
 
-        } catch(UsuarioException e){
+        } catch (UsuarioException e) {
 
             System.out.println(e.getMessage());
-            return List.of(200, e.getMessage());
+            return List.of("erro", e.getMessage());
 
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
-            return List.of(200, "Ocorreu algum erro. Tente novamente mais tarde");
+            return List.of("erro", "Ocorreu algum erro. Tente novamente mais tarde");
         }
     }
 }

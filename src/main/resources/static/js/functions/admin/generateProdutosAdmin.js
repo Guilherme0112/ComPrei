@@ -63,7 +63,6 @@ btn.addEventListener("click", async () => {
 
     allBtnDel.forEach((btn) => {
         btn.addEventListener("click", async () => {
-            console.log("Clicou no botão de deletar!");
 
             var id = document.getElementById("id_produto").value;
 
