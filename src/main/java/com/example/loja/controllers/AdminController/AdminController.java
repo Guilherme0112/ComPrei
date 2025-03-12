@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.loja.models.Produto;
+
 @Controller
 public class AdminController {
     
@@ -22,6 +24,17 @@ public class AdminController {
         mv.setViewName("views/admin/produtos");
         return mv;
     }
+    
+    @GetMapping("/admin/produtos/criar")
+    public ModelAndView AdminProdutosCriarGET(){
+
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("produto", new Produto());
+        mv.setViewName("views/admin/criarProdutos");
+        return mv;
+    }
+
+
     @GetMapping("/admin/pedidos")
     public ModelAndView AdminPedidosGET(){
 
