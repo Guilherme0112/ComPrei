@@ -3,7 +3,6 @@ package com.example.loja.controllers.AdminController;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +28,7 @@ import jakarta.validation.Valid;
 @RestController
 public class APIAdminProdutosController {
 
-    private final String UPLOAD_DIR =  "uploads/";
+    private static final String UPLOAD_DIR = "C:/Imagens/uploads/";
     private final ProdutoRepository produtoRepository;
     private final ProdutoService produtoService;
 
@@ -79,18 +78,19 @@ public class APIAdminProdutosController {
                 throw new ProdutoException("A foto é obrigatório");
             }
 
-            // Cria um diretório para uploads (caso não exista)
-            Path uploadPath = Paths.get(System.getProperty("user.dir")).resolve(UPLOAD_DIR);
-            Files.createDirectories(uploadPath);
+            if(!Files.exists(Paths.get(UPLOAD_DIR))){
+                Files.createDirectories(Paths.get(UPLOAD_DIR));
+            }
 
-            // Gera um nome aleatorio para o arquivo
-            String filename = Util.generateToken() + "_" + file.getOriginalFilename();
-            Path filePath = Paths.get(UPLOAD_DIR, filename);
+            byte[] bytes = file.getBytes();
+            System.out.println(bytes);
+            System.out.println(bytes.toString());
+            Path path = Paths.get(UPLOAD_DIR + Util.generateToken() + "_" + file.getOriginalFilename());
+            System.out.println(path);
+            Files.write(path, bytes);
 
-            // Salva o arquivo na pasta
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            produto.setPhoto(filePath.toString());
+            produto.setPhoto(path.toString());
             produtoService.createProduct(produto);
 
             mv.setViewName("redirect:/admin/produtos");

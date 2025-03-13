@@ -14,7 +14,9 @@ services:
       - mysql
     networks:
       - app-network
-      
+    volumes:
+      - C:/imagens/uploads:/app/imagens/uploads
+
 # Configurações referente ao MySQL
   mysql:
     image: mysql:5.7
