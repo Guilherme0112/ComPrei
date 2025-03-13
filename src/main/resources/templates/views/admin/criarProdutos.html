@@ -15,7 +15,7 @@
     <main>
         <div></div>
         <div class="box-form">
-            <form method="post" action="/admin/produtos/criar" th:object="${produto}" id="form" style="margin-top: -350px; width: 100%;">
+            <form method="post" action="/admin/produtos/criar" enctype="multipart/form-data" th:object="${produto}" id="form" style="margin-top: -350px; width: 100%;">
                 
                 <h1 style="width: 100%; text-align: center;">Produto</h1>
 
@@ -26,12 +26,12 @@
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="amount">Quantidade de produtos:</label>
-                    <input type="number">
+                    <input type="number" name="amount">
                     <!-- <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p> -->
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="codigo">Código de barras:</label>
-                    <input type="number" th:field="*{codigo}">
+                    <input type="number" th:field="*{codigo}" maxlength="13">
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></p>
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
@@ -41,7 +41,7 @@
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="foto" style="text-align: center; padding-right: 60px; cursor: pointer;">Enviar foto</label>
-                    <input type="file" id="foto" style="display: none;">
+                    <input type="file" id="foto" style="display: none;" name="file">
                     <!-- <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('photo')}" th:errors="*{photo}"></p> -->
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">

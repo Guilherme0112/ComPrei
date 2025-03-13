@@ -1,5 +1,9 @@
 package com.example.loja.controllers.AdminController;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
 
@@ -9,19 +13,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.loja.exceptions.ProdutoException;
 import com.example.loja.models.Produto;
 import com.example.loja.repositories.ProdutoRepository;
 import com.example.loja.service.ProdutoService;
+import com.example.loja.util.Util;
 
 import jakarta.validation.Valid;
 
 @RestController
 public class APIAdminProdutosController {
 
+    private final String UPLOAD_DIR =  "uploads/";
     private final ProdutoRepository produtoRepository;
     private final ProdutoService produtoService;
 
@@ -51,7 +59,10 @@ public class APIAdminProdutosController {
     }
 
     @PostMapping("/admin/produtos/criar")
-    public ModelAndView CriarProduto(@Valid Produto produto, BindingResult br) throws Exception, ProdutoException{
+    public ModelAndView CriarProduto(@Valid Produto produto,
+                                     @RequestParam String amount, 
+                                     @RequestParam MultipartFile file,
+                                     BindingResult br) throws Exception, ProdutoException{
 
         ModelAndView mv = new ModelAndView();
 
@@ -63,7 +74,25 @@ public class APIAdminProdutosController {
                 return mv;
             }
             
+            
+            if(file.isEmpty()){
+                throw new ProdutoException("A foto é obrigatório");
+            }
+
+            // Cria um diretório para uploads (caso não exista)
+            Path uploadPath = Paths.get(System.getProperty("user.dir")).resolve(UPLOAD_DIR);
+            Files.createDirectories(uploadPath);
+
+            // Gera um nome aleatorio para o arquivo
+            String filename = Util.generateToken() + "_" + file.getOriginalFilename();
+            Path filePath = Paths.get(UPLOAD_DIR, filename);
+
+            // Salva o arquivo na pasta
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            produto.setPhoto(filePath.toString());
             produtoService.createProduct(produto);
+
             mv.setViewName("redirect:/admin/produtos");
 
         } catch(ProdutoException e){
