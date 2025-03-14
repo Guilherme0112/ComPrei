@@ -15,7 +15,7 @@ services:
     networks:
       - app-network
     volumes:
-      - C:/imagens/uploads:/app/imagens/uploads
+      - uploads:/app/uploads
 
 # Configurações referente ao MySQL
   mysql:
@@ -37,3 +37,4 @@ networks:
 
 volumes:
   mysql-data:
+  uploads:

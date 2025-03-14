@@ -117,6 +117,10 @@ public class AuthService {
             // Verifica se o e-mail está já está sendo usado
             if (!usuarioRepository.findByEmail(usuario.getEmail(), true).isEmpty()) {
 
+                if(usuarioRepository.findByEmail(usuario.getEmail(), true).get(0).getRole().equals(Cargo.BANIDO)){
+                    throw new UsuarioException("Está conta já existe e está banida");
+                }
+
                 throw new UsuarioException("Este e-mail já está sendo usado");
             }
 
@@ -126,10 +130,6 @@ public class AuthService {
                 // Método para ativar a conta
                 profileService.activeAccount(usuario);
                 return;
-            }
-
-            if(usuarioRepository.findByEmail(usuario.getEmail(), true).get(0).getRole().equals(Cargo.BANIDO)){
-                throw new UsuarioException("Está conta já existe e está banida");
             }
 
             // Criptografa a senha do usuário, seta o cargo e coloca o +55 no teledone

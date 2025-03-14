@@ -1,8 +1,8 @@
 package com.example.loja.controllers.AdminController;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 @RestController
 public class APIAdminProdutosController {
 
-    private static final String UPLOAD_DIR = "C:/Imagens/uploads/";
+    private static final String UPLOAD_DIR = "/app/uploads/";
     private final ProdutoRepository produtoRepository;
     private final ProdutoService produtoService;
 
@@ -78,19 +78,20 @@ public class APIAdminProdutosController {
                 throw new ProdutoException("A foto é obrigatório");
             }
 
-            if(!Files.exists(Paths.get(UPLOAD_DIR))){
-                Files.createDirectories(Paths.get(UPLOAD_DIR));
+            File dir = new File(UPLOAD_DIR);
+
+            if(!dir.exists()){
+                dir.mkdirs();
             }
 
-            byte[] bytes = file.getBytes();
-            System.out.println(bytes);
-            System.out.println(bytes.toString());
-            Path path = Paths.get(UPLOAD_DIR + Util.generateToken() + "_" + file.getOriginalFilename());
-            System.out.println(path);
-            Files.write(path, bytes);
+            File serverFile = new File(dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + file.getOriginalFilename());
 
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 
-            produto.setPhoto(path.toString());
+            stream.write(file.getBytes());
+            stream.close();
+
+            produto.setPhoto(serverFile.getAbsolutePath());
             produtoService.createProduct(produto);
 
             mv.setViewName("redirect:/admin/produtos");

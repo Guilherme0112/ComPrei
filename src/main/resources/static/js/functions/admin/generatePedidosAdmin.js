@@ -37,6 +37,7 @@ btn.addEventListener("click", async() => {
         document.querySelector(".box").remove();
     }
 
+
     const box = document.createElement("div");
     box.className = "box"
     box.dataset.id = data[0].id;

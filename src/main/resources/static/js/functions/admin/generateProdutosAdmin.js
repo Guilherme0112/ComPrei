@@ -33,9 +33,14 @@ btn.addEventListener("click", async () => {
         document.querySelector(".box").remove();
     }
 
+    console.log(data)
+
     const box = document.createElement("div");
     box.className = "box";
     box.dataset.id = data[0].id;
+    
+    const image = document.createElement("img");
+    image.src = data[0].photo;
 
     const p1 = document.createElement("p");
     p1.textContent = data[0].name;
@@ -53,6 +58,7 @@ btn.addEventListener("click", async () => {
 
     divPai.appendChild(box);
 
+    box.appendChild(image);
     box.appendChild(p1);
     box.appendChild(p2);
     box.appendChild(p3);

@@ -31,7 +31,7 @@
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="codigo">Código de barras:</label>
-                    <input type="number" th:field="*{codigo}" maxlength="13">
+                    <input type="text" th:field="*{codigo}" maxlength="13">
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></p>
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
