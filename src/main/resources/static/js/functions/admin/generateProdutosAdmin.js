@@ -33,23 +33,25 @@ btn.addEventListener("click", async () => {
         document.querySelector(".box").remove();
     }
 
-    console.log(data)
-
     const box = document.createElement("div");
     box.className = "box";
     box.dataset.id = data[0].id;
     
     const image = document.createElement("img");
+    image.className = "box_image"
     image.src = data[0].photo;
 
-    const p1 = document.createElement("p");
-    p1.textContent = data[0].name;
+    const nomeProduto = document.createElement("p");
+    nomeProduto.textContent = data[0].name;
 
-    const p2 = document.createElement("p");
-    p2.textContent = data[0].description;
+    const precoProduto = document.createElement("p");
+    precoProduto.textContent = data[0].price;
 
-    const p3 = document.createElement("p");
-    p3.textContent = data[0].price;
+    const codigoDeBarras = document.createElement("p");
+    codigoDeBarras.textContent = data[0].codigo;
+    
+    const quantidadeProduto = document.createElement("p");
+    quantidadeProduto.textContent = "13";
 
     const btnDel = document.createElement("button");
     btnDel.className = "btn_del";
@@ -59,9 +61,10 @@ btn.addEventListener("click", async () => {
     divPai.appendChild(box);
 
     box.appendChild(image);
-    box.appendChild(p1);
-    box.appendChild(p2);
-    box.appendChild(p3);
+    box.appendChild(nomeProduto);
+    box.appendChild(precoProduto);
+    box.appendChild(codigoDeBarras);
+    box.appendChild(quantidadeProduto);
     box.appendChild(btnDel);
 
     // Seleciona os botões de deletar e adiciona os eventos neles

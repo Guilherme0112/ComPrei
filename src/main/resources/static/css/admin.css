@@ -20,6 +20,11 @@ main{
 
     margin: 20px 0;
 }
+.box_image{
+
+    width: 120px;
+    border-radius: 10px;
+}
 .box_search *{
     margin: 0 10px;
 }

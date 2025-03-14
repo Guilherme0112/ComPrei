@@ -3,6 +3,9 @@ package com.example.loja.controllers.AdminController;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +31,7 @@ import jakarta.validation.Valid;
 @RestController
 public class APIAdminProdutosController {
 
-    private static final String UPLOAD_DIR = "/app/uploads/";
+    private static final String UPLOAD_DIR = "/uploads/";
     private final ProdutoRepository produtoRepository;
     private final ProdutoService produtoService;
 
@@ -48,6 +51,7 @@ public class APIAdminProdutosController {
                 return List.of("erro", "O código  é inválido");
             }
 
+        
             return produtoRepository.findByCodigoDeBarras(codigo);
 
         } catch (Exception e) {
@@ -84,14 +88,16 @@ public class APIAdminProdutosController {
                 dir.mkdirs();
             }
 
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + file.getOriginalFilename());
+            String fileName = file.getOriginalFilename().replaceAll(" ", "");
+
+            File serverFile = new File("/app/" + dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + fileName);
 
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 
             stream.write(file.getBytes());
             stream.close();
 
-            produto.setPhoto(serverFile.getAbsolutePath());
+            produto.setPhoto(serverFile.toString().replaceFirst("/app", ""));
             produtoService.createProduct(produto);
 
             mv.setViewName("redirect:/admin/produtos");
@@ -127,6 +133,10 @@ public class APIAdminProdutosController {
             }
 
             Produto produto = produtoRepository.findByCodigoDeBarras(codigo).get(0);
+
+            Path path = Paths.get("/app" + produto.getPhoto());
+
+            Files.deleteIfExists(path);
 
             produtoRepository.delete(produto);
 
