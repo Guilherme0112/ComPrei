@@ -104,12 +104,13 @@
 
 .box{
 
+    width: auto;
     height: auto;
     padding: 10px;
     border-radius: 10px;
     background-color: var(--box-form);
 
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;

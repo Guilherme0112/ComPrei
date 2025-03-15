@@ -1,5 +1,6 @@
 const btn = document.getElementById("btnSubmit");
 var allBtnDel = null;
+var box = document.getElementById("box");
 
 btn.addEventListener("click", async () => {
     var id = document.getElementById("id_produto").value;
@@ -14,8 +15,6 @@ btn.addEventListener("click", async () => {
         document.querySelector(".erro_msg").remove();
     }
 
-    const divPai = document.getElementById("resposta");
-
     if (!data[0]) {
         const p1 = document.createElement("p");
         p1.className = "erro_msg";
@@ -24,48 +23,16 @@ btn.addEventListener("click", async () => {
         p1.style.textAlign = "center";
         document.querySelector(".box_search").appendChild(p1);
 
-        document.querySelector(".box") ? document.querySelector(".box").remove() : document.querySelector(".box");
+        document.getElementById("box").style.display = "block" ? document.getElementById("box").style.display = "none" : document.querySelector(".box");
 
         return;
     }
 
-    if (document.querySelector(".box")) {
-        document.querySelector(".box").remove();
-    }
-
-    const box = document.createElement("div");
-    box.className = "box";
-    box.dataset.id = data[0].id;
-    
-    const image = document.createElement("img");
-    image.className = "box_image"
-    image.src = data[0].photo;
-
-    const nomeProduto = document.createElement("p");
-    nomeProduto.textContent = data[0].name;
-
-    const precoProduto = document.createElement("p");
-    precoProduto.textContent = data[0].price;
-
-    const codigoDeBarras = document.createElement("p");
-    codigoDeBarras.textContent = data[0].codigo;
-    
-    const quantidadeProduto = document.createElement("p");
-    quantidadeProduto.textContent = "13";
-
-    const btnDel = document.createElement("button");
-    btnDel.className = "btn_del";
-    btnDel.id = "btn_del";
-    btnDel.textContent = "x";
-
-    divPai.appendChild(box);
-
-    box.appendChild(image);
-    box.appendChild(nomeProduto);
-    box.appendChild(precoProduto);
-    box.appendChild(codigoDeBarras);
-    box.appendChild(quantidadeProduto);
-    box.appendChild(btnDel);
+    box.style.display = "flex";
+    document.getElementById("image").src = data[0].photo;
+    document.getElementById("nome").textContent = data[0].name;
+    document.getElementById("preco").textContent = data[0].price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    document.getElementById("quantidade").textContent = 12;
 
     // Seleciona os botões de deletar e adiciona os eventos neles
     allBtnDel = document.querySelectorAll("#btn_del");
@@ -93,7 +60,7 @@ btn.addEventListener("click", async () => {
                 return;
             }
 
-            document.querySelector(".box").remove();
+            box.style.display = "none";
         });
     });
 });
