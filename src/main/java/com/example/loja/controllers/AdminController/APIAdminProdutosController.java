@@ -118,6 +118,12 @@ public class APIAdminProdutosController {
         return mv;
     }
 
+    @PostMapping("/admin/produtos/editar/{codigo}")
+    public List<?> EditarProduto(){
+
+        return List.of("ok", "ok");
+    }
+
     @DeleteMapping("/admin/deletar/produtos")
     public List<?> DeletarProduto(@RequestBody Map<String, String> codigoMap) throws Exception, ProdutoException {
         try {

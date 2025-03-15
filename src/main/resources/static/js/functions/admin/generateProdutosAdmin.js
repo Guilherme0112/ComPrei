@@ -29,6 +29,7 @@ btn.addEventListener("click", async () => {
     }
 
     box.style.display = "flex";
+    document.getElementById("id").value = data[0].id;
     document.getElementById("image").src = data[0].photo;
     document.getElementById("nome").textContent = data[0].name;
     document.getElementById("preco").textContent = data[0].price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
