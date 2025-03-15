@@ -73,7 +73,7 @@ public class APIAdminProdutosController {
 
             if(br.hasErrors()){
                 mv.addObject("produtos", produto);
-                mv.setViewName("views/admin/criarProdutos");
+                mv.setViewName("views/admin/produtos/criarProdutos");
                 return mv;
             }
             
@@ -106,7 +106,7 @@ public class APIAdminProdutosController {
 
             System.out.println("api_controller: " + e.getMessage());
             mv.addObject("erro", e.getMessage());
-            mv.setViewName("views/admin/criarProdutos");
+            mv.setViewName("views/admin/produtos/criarProdutos");
 
         } catch (Exception e) {
 
@@ -119,10 +119,67 @@ public class APIAdminProdutosController {
     }
 
     @PostMapping("/admin/produtos/editar/{codigo}")
-    public List<?> EditarProduto(){
+    public ModelAndView EditarProduto(@Valid Produto produto,
+                                     @RequestParam String amount, 
+                                     @RequestParam MultipartFile file,
+                                     BindingResult br) throws Exception, ProdutoException{
 
-        return List.of("ok", "ok");
+        ModelAndView mv = new ModelAndView();
+
+        try {
+
+            if(br.hasErrors()){
+                mv.addObject("produtos", produto);
+                mv.setViewName("views/admin/produtos/criarProdutos");
+                return mv;
+            }
+            
+            
+            if(file.isEmpty()){
+                throw new ProdutoException("A foto é obrigatório");
+            }
+            
+            // Verifica se a pasta de uploads existe
+            File dir = new File(UPLOAD_DIR);
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+
+            // Tira os espaços do nome do arquivo e cria o diretorio
+            String fileName = file.getOriginalFilename().replaceAll(" ", "");
+            File serverFile = new File("/app/" + dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + fileName);
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
+
+            // Deleta a foto que estava antes
+            Path path = Paths.get("/app" + produto.getPhoto());
+            Files.deleteIfExists(path);
+
+            // Salva a foto nova
+            stream.write(file.getBytes());
+            stream.close();
+
+            // Atualiza no banco de dados e salva
+            produto.setPhoto(serverFile.toString().replaceFirst("/app", ""));
+            produtoService.createProduct(produto);
+
+            mv.setViewName("redirect:/admin/produtos");
+
+        } catch(ProdutoException e){
+
+            System.out.println("api_controller: " + e.getMessage());
+            mv.addObject("erro", e.getMessage());
+            mv.setViewName("views/admin/produtos/criarProdutos");
+
+        } catch (Exception e) {
+
+            System.out.println("api_controller: " + e.getMessage());
+            mv.addObject("erro", "Ocorreu algum erro. Tente novamente mais tarde");
+            mv.setViewName("views/admin/criarProdutos");
+        }
+
+        return mv;
     }
+
 
     @DeleteMapping("/admin/deletar/produtos")
     public List<?> DeletarProduto(@RequestBody Map<String, String> codigoMap) throws Exception, ProdutoException {

@@ -15,7 +15,8 @@ btn.addEventListener("click", async () => {
         document.querySelector(".erro_msg").remove();
     }
 
-    if (!data[0]) {
+
+    if (data[0]) {
         const p1 = document.createElement("p");
         p1.className = "erro_msg";
         p1.textContent = "Nenhum produto encontrado com este código: " + id;
@@ -23,17 +24,18 @@ btn.addEventListener("click", async () => {
         p1.style.textAlign = "center";
         document.querySelector(".box_search").appendChild(p1);
 
-        document.getElementById("box").style.display = "block" ? document.getElementById("box").style.display = "none" : document.querySelector(".box");
+        box.style.display = "none";
 
         return;
-    }
+    }  
 
     box.style.display = "flex";
-    document.getElementById("id").value = data[0].id;
+    document.getElementById("codigo").value = data[0].codigo;
     document.getElementById("image").src = data[0].photo;
     document.getElementById("nome").textContent = data[0].name;
     document.getElementById("preco").textContent = data[0].price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     document.getElementById("quantidade").textContent = 12;
+
 
     // Seleciona os botões de deletar e adiciona os eventos neles
     allBtnDel = document.querySelectorAll("#btn_del");

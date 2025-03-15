@@ -31,7 +31,7 @@ public class AdminController {
     public ModelAndView AdminProdutosGET(){
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/admin/produtos");
+        mv.setViewName("views/admin/produtos/produtos");
         return mv;
     }
     
@@ -40,7 +40,7 @@ public class AdminController {
 
         ModelAndView mv = new ModelAndView();
         mv.addObject("produto", new Produto());
-        mv.setViewName("views/admin/criarProdutos");
+        mv.setViewName("views/admin/produtos/criarProdutos");
         return mv;
     }
 
@@ -59,12 +59,12 @@ public class AdminController {
             }
 
             mv.addObject("produto", produto.get(0));
-            mv.setViewName("");
+            mv.setViewName("views/admin/produtos/editarProdutos");
 
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
-            mv.setViewName("redirect:/admin/produtos");
+            mv.setViewName("redirect:/admin/produtos/editarProdutos");
         }
 
         return mv;
