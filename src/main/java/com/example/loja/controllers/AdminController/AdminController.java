@@ -44,33 +44,6 @@ public class AdminController {
         return mv;
     }
 
-    @GetMapping("/admin/produtos/editar/{codigo}")
-    public ModelAndView AdminProdutosEditarGET(@PathVariable("codigo") String codigo) throws Exception{
-
-        ModelAndView mv = new ModelAndView();
-
-        try {
-            
-            List<Produto> produto = produtoRepository.findByCodigoDeBarras(codigo);
-
-            if(produto.isEmpty()){
-                mv.setViewName("redirect:/admin/produtos");
-                return mv;
-            }
-
-            mv.addObject("produto", produto.get(0));
-            mv.setViewName("views/admin/produtos/editarProdutos");
-
-        } catch (Exception e) {
-
-            System.out.println(e.getMessage());
-            mv.setViewName("redirect:/admin/produtos/editarProdutos");
-        }
-
-        return mv;
-
-    }
-
     @GetMapping("/admin/pedidos")
     public ModelAndView AdminPedidosGET(){
 

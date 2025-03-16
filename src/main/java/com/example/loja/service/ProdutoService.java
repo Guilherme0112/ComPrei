@@ -39,7 +39,11 @@ public class ProdutoService {
             }
 
             if(!produtoRepository.findByCodigoDeBarras(codigo).isEmpty()){
-                throw new ProdutoException("Este código já está cadastrado");
+
+                if(!produto.getName().equals(produtoRepository.findByCodigoDeBarras(codigo).get(0).getName())){
+                    throw new ProdutoException("Este código já está cadastrado");
+                }
+
             }
 
             produtoRepository.save(produto);

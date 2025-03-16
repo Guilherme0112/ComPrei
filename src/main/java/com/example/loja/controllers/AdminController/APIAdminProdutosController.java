@@ -72,7 +72,7 @@ public class APIAdminProdutosController {
         try {
 
             if(br.hasErrors()){
-                mv.addObject("produtos", produto);
+                mv.addObject("produto", produto);
                 mv.setViewName("views/admin/produtos/criarProdutos");
                 return mv;
             }
@@ -83,22 +83,41 @@ public class APIAdminProdutosController {
             }
 
             File dir = new File(UPLOAD_DIR);
-
             if(!dir.exists()){
                 dir.mkdirs();
             }
 
             String fileName = file.getOriginalFilename().replaceAll(" ", "");
-
             File serverFile = new File("/app/" + dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + fileName);
-
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
 
             stream.write(file.getBytes());
             stream.close();
 
             produto.setPhoto(serverFile.toString().replaceFirst("/app", ""));
-            produtoService.createProduct(produto);
+
+
+            if (!amount.matches("\\d+")) {
+                throw new ProdutoException("A quantidade deve ser um valor válido");
+            }
+
+            int amountInt = Integer.parseInt(amount);
+
+            if (amountInt > 10000 || amountInt < 1){
+                throw new ProdutoException("A quantidade não pode ser maior que 10000 ou menor que 1");
+            }
+
+            for(int i = 0; i < amountInt; i++){
+
+                Produto produto2 = new Produto();
+                produto2.setCodigo(produto.getCodigo());                
+                produto2.setDescription(produto.getDescription());             
+                produto2.setName(produto.getName());             
+                produto2.setPhoto(produto.getPhoto());            
+                produto2.setPrice(produto.getPrice());          
+
+                produtoService.createProduct(produto2);
+            }
 
             mv.setViewName("redirect:/admin/produtos");
 
@@ -112,69 +131,7 @@ public class APIAdminProdutosController {
 
             System.out.println("api_controller: " + e.getMessage());
             mv.addObject("erro", "Ocorreu algum erro. Tente novamente mais tarde");
-            mv.setViewName("views/admin/criarProdutos");
-        }
-
-        return mv;
-    }
-
-    @PostMapping("/admin/produtos/editar/{codigo}")
-    public ModelAndView EditarProduto(@Valid Produto produto,
-                                     @RequestParam String amount, 
-                                     @RequestParam MultipartFile file,
-                                     BindingResult br) throws Exception, ProdutoException{
-
-        ModelAndView mv = new ModelAndView();
-
-        try {
-
-            if(br.hasErrors()){
-                mv.addObject("produtos", produto);
-                mv.setViewName("views/admin/produtos/criarProdutos");
-                return mv;
-            }
-            
-            
-            if(file.isEmpty()){
-                throw new ProdutoException("A foto é obrigatório");
-            }
-            
-            // Verifica se a pasta de uploads existe
-            File dir = new File(UPLOAD_DIR);
-            if(!dir.exists()){
-                dir.mkdirs();
-            }
-
-            // Tira os espaços do nome do arquivo e cria o diretorio
-            String fileName = file.getOriginalFilename().replaceAll(" ", "");
-            File serverFile = new File("/app/" + dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + fileName);
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-
-            // Deleta a foto que estava antes
-            Path path = Paths.get("/app" + produto.getPhoto());
-            Files.deleteIfExists(path);
-
-            // Salva a foto nova
-            stream.write(file.getBytes());
-            stream.close();
-
-            // Atualiza no banco de dados e salva
-            produto.setPhoto(serverFile.toString().replaceFirst("/app", ""));
-            produtoService.createProduct(produto);
-
-            mv.setViewName("redirect:/admin/produtos");
-
-        } catch(ProdutoException e){
-
-            System.out.println("api_controller: " + e.getMessage());
-            mv.addObject("erro", e.getMessage());
             mv.setViewName("views/admin/produtos/criarProdutos");
-
-        } catch (Exception e) {
-
-            System.out.println("api_controller: " + e.getMessage());
-            mv.addObject("erro", "Ocorreu algum erro. Tente novamente mais tarde");
-            mv.setViewName("views/admin/criarProdutos");
         }
 
         return mv;
@@ -201,7 +158,7 @@ public class APIAdminProdutosController {
 
             Files.deleteIfExists(path);
 
-            produtoRepository.delete(produto);
+            produtoRepository.deleteByCodigo(produto.getCodigo());
 
             return List.of(200, "Produto deletado com sucesso");
 
