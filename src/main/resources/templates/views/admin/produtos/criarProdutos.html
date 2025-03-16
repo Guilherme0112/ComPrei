@@ -15,7 +15,7 @@
     <main>
         <div></div>
         <div class="box-form">
-            <form method="post" action="/admin/produtos/criar" enctype="multipart/form-data" th:object="${produto}" id="form" style="margin-top: -350px; width: 100%;">
+            <form method="post" action="/admin/produtos/criar" enctype="multipart/form-data" th:object="${produto}" id="form" style="margin-top: 50px; width: 100%; height: auto;">
                 
                 <h1 style="width: 100%; text-align: center;">Produto</h1>
 
@@ -27,7 +27,6 @@
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="amount">Quantidade de produtos:</label>
                     <input type="number" name="amount">
-                    <!-- <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p> -->
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="codigo">Código de barras:</label>
@@ -36,10 +35,10 @@
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="price">Preço:</label>
-                    R$<input type="text" th:field="*{price}">
+                   <span>R$</span> <input type="text" th:field="*{price}">
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
                 </div>
-                <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
+                <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; margin: 10px 0;">
                     <label for="foto" style="text-align: center; padding-right: 60px; cursor: pointer;">Enviar foto</label>
                     <input type="file" id="foto" style="display: none;" name="file">
                 </div>
@@ -48,9 +47,9 @@
                     <textarea></textarea>
                 </div>
 
-                <p th:if="${erro}" th:text="${erro}" class="erro_msg"></p>
+                <p th:if="${erro}" th:text="${erro}" class="erro_msg" style="width: 100%; text-align: center;"></p>
     
-                <p style="font-size: 10px; margin: 10px 0;">Verifique os dados pois após criar o produto não será possível editá-los, será necessário apagar o produto e criar novamente</p>
+                <p style="font-size: 10px; margin: 10px 0; padding: 0 20px;">Verifique os dados pois após criar o produto não será possível editá-los, será necessário apagar o produto e criar novamente</p>
 
                 <button>Enviar</button>
             </form>

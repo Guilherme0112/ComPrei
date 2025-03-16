@@ -2,6 +2,8 @@ package com.example.loja.service;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.ProdutoException;
@@ -37,10 +39,10 @@ public class ProdutoService {
             if(!codigo.matches("\\d+")){
                 throw new ProdutoException("Somente números são válidos");
             }
+            Pageable pageable = PageRequest.of(0, 1);
+            if(!produtoRepository.findByCodigoDeBarras(codigo, pageable).isEmpty()){
 
-            if(!produtoRepository.findByCodigoDeBarras(codigo).isEmpty()){
-
-                if(!produto.getName().equals(produtoRepository.findByCodigoDeBarras(codigo).get(0).getName())){
+                if(!produto.getName().equals(produtoRepository.findByCodigoDeBarras(codigo, pageable ).get(0).getName())){
                     throw new ProdutoException("Este código já está cadastrado");
                 }
 

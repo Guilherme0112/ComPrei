@@ -16,7 +16,7 @@ btn.addEventListener("click", async () => {
     }
 
     // Verifica se há dados para exibir a mensagem de erro caso não tenha
-    if (!data[0]) {
+    if (data[0] == "erro") {
         const p1 = document.createElement("p");
         p1.className = "erro_msg";
         p1.textContent = "Nenhum produto encontrado com este código: " + id;
@@ -34,7 +34,7 @@ btn.addEventListener("click", async () => {
         document.getElementById("image").src = data[0].photo;
         document.getElementById("nome").textContent = data[0].name;
         document.getElementById("preco").textContent = data[0].price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        document.getElementById("quantidade").textContent = 12;
+        document.getElementById("quantidade").textContent = data[1].amount;
     }
 
     // Define data como null para evitar de ter dados (quando se tem dados ele não oculta a box)

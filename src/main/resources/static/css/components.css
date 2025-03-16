@@ -23,7 +23,7 @@
 /* Estilo para exibir mensagens de erro */
 .erro_msg{
     color: rgb(192, 53, 53);
-    margin: 20px 0;
+    margin: 10px 0;
     font-size: 18px;
 }
 
