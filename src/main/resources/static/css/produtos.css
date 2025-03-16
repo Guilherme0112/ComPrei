@@ -1,0 +1,30 @@
+@import url("./globals.css");
+
+main{
+
+    width: 100%;
+    display: flex;
+    justify-content: center !important;
+}
+.div_img{
+    width: auto;
+    height: 600px;
+}
+.div_img img {
+
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+    height: 600px;
+}   
+
+.div_produto{
+    width: 500px;
+    background-color: var(--box-form);
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+}

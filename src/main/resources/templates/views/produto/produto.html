@@ -5,23 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/globals.css">
     <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/produtos.css">
+    <link rel="stylesheet" href="../css/auth.css">
     <title>Carrinho</title>
 </head>
 <body>
     <header th:replace="~{components/component :: header}"></header>
     <main>
-        <div>
-            <div>
-                <img src="" alt="">
+        <div class="div_img">
+            <img th:src="@{${produto.photo}}">
+        </div>
+        <div class="div_produto">
+            <div style="display: grid;">
+                <h1 th:text="${produto.name}"></h1>
+                <p th:text="${produto.description}"></p>
+                <h3 th:text="${produto.price}"></h3>
             </div>
-            <div>
-                <h1>Titulo</h1>
-                <p>descrição</p>
-                <h3>R$99,99</h3>
+            <div style="display: flex;">
                 <button>Adicionar ao carrinho</button>
                 <button>Comprar</button>
             </div>
         </div>
     </main>
+
+    <script src="../js/produto.js"></script>
 </body>
 </html>

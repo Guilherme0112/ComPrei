@@ -1,6 +1,6 @@
 package com.example.loja.service;
 
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,16 +70,18 @@ public class ProdutoService {
      * @throws ProdutoException Caso o produto não existe e erros afins
      * @throws Exception Erros do sistema
      */
-    public Produto getProduct(Long id) throws ProdutoException, Exception{
+    public Produto getProduct(String codigo) throws ProdutoException, Exception{
         try {
             
-            Optional<Produto> productOpt = produtoRepository.findById(id);
+            Pageable pageable = PageRequest.of(0, 1);
+
+            List<Produto> productOpt = produtoRepository.findByCodigoDeBarras(codigo, pageable);
 
             if(productOpt.isEmpty()){
                 throw new ProdutoException("O id do produto é inválido");
             }
 
-            Produto produtoObj = productOpt.get();
+            Produto produtoObj = productOpt.get(0);
 
             return produtoObj;
 

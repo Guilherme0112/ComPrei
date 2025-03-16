@@ -19,31 +19,36 @@ public class ProdutoController {
     }
 
 
-    @GetMapping("/produto/{id}")
-    public ModelAndView Produto(@PathVariable("id") String id) throws Exception, ProdutoException{
+    @GetMapping("/produto/{codigo}")
+    public ModelAndView Produto(@PathVariable("codigo") String codigo) throws Exception, ProdutoException{
 
         ModelAndView mv = new ModelAndView();
 
         try {
             
-            Long id_long = Long.parseLong(id);
 
-            Produto produto = produtoService.getProduct(id_long);
+            Produto produto = produtoService.getProduct(codigo);
+
+            if(produto == null){
+                throw new  ProdutoException("Produto não existe");
+            }
 
             mv.addObject(produto);
+            mv.setViewName("views/produto/produto");
             
         } catch (ProdutoException e){
 
-            mv.addObject("erro", e.getMessage());
+            System.out.println(e.getMessage());
+            mv.setViewName("redirect:/");
     
         } catch (Exception e) {
 
     
             System.out.println(e.getMessage());
             mv.addObject("erro", "Ocorreu um erro. Tente novamente mais tarde");
+            mv.setViewName("redirect:/");
         }
         
-        mv.setViewName("/views/produto/produto");
         return mv;
     }
 

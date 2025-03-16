@@ -1,22 +1,17 @@
 package com.example.loja.controllers.AdminController;
 
-import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.loja.models.Produto;
-import com.example.loja.repositories.ProdutoRepository;
 
 @Controller
 public class AdminController {
     
-    private final ProdutoRepository produtoRepository;
 
-    public AdminController(ProdutoRepository produtoRepository){
-        this.produtoRepository = produtoRepository;
+    public AdminController(){
     }
 
     @GetMapping("/admin")

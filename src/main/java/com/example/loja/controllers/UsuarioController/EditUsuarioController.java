@@ -45,7 +45,9 @@ public class EditUsuarioController {
             mv.setViewName("views/profile/edit/usuario");
 
         } catch (Exception e) {
-            // TODO: handle exception
+           
+            System.out.println(e.getMessage());
+            mv.setViewName("redirect:/profile");
         }
         return mv;
     }

@@ -2,6 +2,7 @@ package com.example.loja.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,6 +20,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
 
     @Query("SELECT COUNT(p) FROM Produto p WHERE p.codigo = :codigo")
     Long coutByCodigo(@Param("codigo") String codigo);
+
+    @Query(value = "SELECT * FROM produtos ORDER BY RAND()", nativeQuery = true)
+    Page<Produto> findRandom(Pageable pageable);
 
     @Modifying
     @Transactional

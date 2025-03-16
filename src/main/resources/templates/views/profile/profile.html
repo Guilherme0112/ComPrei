@@ -28,6 +28,8 @@
                 <br>
                 <a th:href="@{/profile/edit}" style="display: flex; width: 100%; margin-bottom: 15px;">Editar Dados</a>
                 <a th:href="@{/profile/edit/password}" style="display: flex; width: 100%;">Alterar senha</a>
+                <button id="admin" style="margin: 20px 0 0 0; width: 200px;">Admin</button>
+                <br>
                 <button class="btn_del" id="del" style="margin-top: 20px;">Apagar Conta</button>
             </div>
             <div>
@@ -76,5 +78,11 @@
 
 <script src="../js/functions/others/popup.js"></script>
 <script src="../js/profile.js"></script>
+
+<script>
+    document.getElementById("admin").addEventListener("click", function(){
+        window.location.href = "/admin";
+    })
+</script>
 </body>
 </html>
