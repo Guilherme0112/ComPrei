@@ -7,11 +7,11 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CarrinhoController {
     
-    @GetMapping("/profile/carrinho")
+    @GetMapping("/carrinho")
     public ModelAndView Carrinho(){
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("views/profile/carrinho/carrinho");
+        mv.setViewName("views/produto/carrinho/carrinho");
         return mv;
     }
 }

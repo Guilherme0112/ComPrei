@@ -21,7 +21,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
     @Query("SELECT COUNT(p) FROM Produto p WHERE p.codigo = :codigo")
     Long coutByCodigo(@Param("codigo") String codigo);
 
-    @Query(value = "SELECT * FROM produtos ORDER BY RAND()", nativeQuery = true)
+    @Query(value = "SELECT * FROM produtos p WHERE p.id IN (SELECT MIN(p2.id) FROM produtos p2 GROUP BY p2.codigo) ORDER BY RAND()", nativeQuery = true)
     Page<Produto> findRandom(Pageable pageable);
 
     @Modifying

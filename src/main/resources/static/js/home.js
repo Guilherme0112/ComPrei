@@ -15,7 +15,7 @@ function createBox(codigo, foto, nome, preco){
 
     const price = document.createElement("p");
     price.className = "box_product_buy";
-    price.textContent = preco;
+    price.textContent = preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });;
 
     divPai.appendChild(img);
     divPai.appendChild(name);
@@ -43,7 +43,7 @@ async function getData(indice) {
     const data = await res.json();
     
     load = false; 
-
+    indice++;
     return data.produtos;
 
 }
@@ -66,7 +66,10 @@ async function loadProducts() {
      });
 }
 
-loadProducts();
+document.addEventListener("DOMContentLoaded", async() =>{
+    await loadProducts();
+})
+
 
 window.addEventListener("scroll", async() =>{
     

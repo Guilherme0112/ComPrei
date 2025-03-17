@@ -44,11 +44,16 @@
     background-color: var(--background);
     border-radius: 5px;
     margin: 20px;
+    text-decoration: none;
 
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     padding: 10px;
+    transition: .3s;
+}
+.box_product:hover{
+    scale: 1.01;
 }
 .box_product_img{
 
@@ -67,8 +72,11 @@
     background-color: var(--box-form);
     border-radius: 5px;
     text-decoration: none;
-}
 
+}
+.box_product_price{
+    text-decoration: none;
+}
 .form{
     position: absolute;
     top: 0;

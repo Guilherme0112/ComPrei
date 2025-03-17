@@ -4,7 +4,7 @@ header{
     background-color: var(--background);
 }
 .container_destaques{
-    width: 90%;
+    max-width: 1200px;
     height: auto;
     background-color: var(--box-form);
     border-radius: 5px;

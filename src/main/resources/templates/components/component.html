@@ -10,9 +10,7 @@
     <header th:fragment="header">
         <div style="display: flex;"> 
             <a th:href="@{/}">Início</a>
-            <div sec:authorize="isAuthenticated()">
-                <a th:href="@{/profile/carrinho}">Carrinho</a>
-            </div>
+            <a th:href="@{/carrinho}">Carrinho</a>
         </div>
         <div>
             <div sec:authorize="isAuthenticated()">

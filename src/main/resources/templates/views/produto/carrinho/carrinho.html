@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../css/globals.css">
     <link rel="stylesheet" href="../../css/components.css">
     <link rel="stylesheet" href="../../css/carrinho.css">
+    <link rel="stylesheet" href="../../css/auth.css">
     <title>Carrinho</title>
 </head>
 <body>
@@ -17,7 +18,18 @@
         </div>
         <div class="car_2">
             <h1 style="width: 100%; padding-left: 30px;">Carrinho</h1>
+
+            
+            <div sec:authorize="isAnonymous()">
+                <button >Fazer Login</button>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <button >Finalizar Compra</button>
+            </div>
         </div>
     </main>
+
+    <script src="../../js/functions/others/carrinho.js"></script>
+    <script src="../../js/carrinho.js"></script>
 </body>
 </html>
