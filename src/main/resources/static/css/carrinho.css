@@ -12,5 +12,23 @@
     height: 100vh;
     padding-top: 80px;
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     background-color: var(--box-form);
+}
+
+.box_carrinho{
+    display: flex;
+    justify-content: space-between;
+}
+.box_quantidade_produto{
+
+}
+.box_nome_produto{
+
+}
+.box_img_carrinho{
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
 }
