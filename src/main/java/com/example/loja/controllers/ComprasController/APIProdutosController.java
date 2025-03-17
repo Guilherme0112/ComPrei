@@ -1,7 +1,6 @@
 package com.example.loja.controllers.ComprasController;
 
-
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -15,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.loja.exceptions.ProdutoException;
 import com.example.loja.models.Produto;
+import com.example.loja.models.dto.ProdutoDTO;
 import com.example.loja.models.dto.ProdutoPageDTO;
 import com.example.loja.repositories.ProdutoRepository;
+
 
 @RestController
 public class APIProdutosController {
@@ -48,13 +49,44 @@ public class APIProdutosController {
     }
 
     @PostMapping("/carrinho/produtos")
-    public List<?> verifyCar(@RequestBody List<String> codigos){
-        
-        for (String string : codigos) {
-            System.out.println(string);
-        }
+    public List<?> verifyCar(@RequestBody ProdutoDTO codigos) throws Exception, ProdutoException{
 
-        return List.of("ok", "ok");
+        try {
+
+            // Verifica se existe produtos npo carrinho
+            if(codigos.getProdutos().isEmpty()){
+                throw new ProdutoException("O carrinho está vazio");
+            }
+
+            // Cria a array de retorno e pega a array com produtos
+            List<String> codigosList = codigos.getProdutos();
+            List<Produto> res = new ArrayList<>();
+
+            // Busca somente o primeiro registro de cada query
+            Pageable pageable = PageRequest.of(0, 1);
+
+            // Busca todos os produtos do carrinho e coloca na resposta
+            for (String produto : codigosList) {
+
+                if(!produtoRepository.findByCodigoDeBarras(produto, pageable).isEmpty()){
+                    res.add(
+                        produtoRepository.findByCodigoDeBarras(produto, pageable).get(0)
+                    );
+                }
+            }
+            
+            return res; 
+
+        } catch (ProdutoException e){
+
+            return List.of("erro", e.getMessage()); 
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+            return List.of("erro", "Ocorreu algum erro. Tente novamente mais tarde"); 
+        }
+        
     }
 
 }
