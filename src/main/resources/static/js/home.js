@@ -25,10 +25,10 @@ function createBox(codigo, foto, nome, preco){
 }
 
 
-let indice = 0;
-let load = false; 
 
-async function getData(indice) {
+let load = false; 
+let indice = 0;
+async function getData() {
     
     if(load) {
         return;
@@ -52,17 +52,19 @@ async function loadProducts() {
    
     const res = await getData(indice);
 
-    console.log(res)
+    if (Array.isArray(res) && res.length === 0) {
+        return;
+    }
 
     const container = document.createElement("div");
     container.className = "container_destaques";
     container.id = "destaques";
     document.getElementById("main").appendChild(container)
 
+
     res.forEach(re => {
         var box = createBox(re.codigo, re.photo, re.name, re.price);
-        container.appendChild(box)
-        console.log(re)
+        container.appendChild(box);
      });
 }
 
@@ -80,7 +82,5 @@ window.addEventListener("scroll", async() =>{
     if(alturaVP + scroll >= alturaP){
   
         await loadProducts();
-
-        console.log("chegou ao final da página")
     }
 })

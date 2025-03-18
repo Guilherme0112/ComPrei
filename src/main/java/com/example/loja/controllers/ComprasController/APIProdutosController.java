@@ -33,7 +33,8 @@ public class APIProdutosController {
 
         try {
 
-            int indice = Integer.parseInt(i);
+            int indice = Integer.parseInt(i) * 15;
+            
             
             Pageable pageable = PageRequest.of(indice, 15);
 

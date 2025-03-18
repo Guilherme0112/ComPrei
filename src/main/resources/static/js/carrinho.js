@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async() =>{
 
     mais.forEach(button => {
         button.addEventListener("click", function(){
-            dropItemCarrinho(button.parentElement.id);   
+            setItemCarrinho(button.parentElement.id);   
             let amount = button.parentElement.querySelector("#quantidade");
             amount.textContent = parseInt(amount.textContent) + 1;
         })
