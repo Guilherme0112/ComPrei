@@ -20,6 +20,7 @@
 .box_carrinho{
     display: flex;
     justify-content: space-between;
+    width: 90%;
 }
 .box_quantidade_produto{
 

@@ -1,6 +1,7 @@
-function createBox(img, nome, quantidadeP, preco){
+function createBox(img, nome, quantidadeP, preco, codigo){
 
     const divPai = document.createElement("div");
+    divPai.id = codigo;
     divPai.className = "box_carrinho";
 
     const imgP = document.createElement("img");
@@ -17,12 +18,25 @@ function createBox(img, nome, quantidadeP, preco){
 
     const quantidade = document.createElement("p");
     quantidade.className = "box_quantidade_produto";
+    quantidade.id = "quantidade";
     quantidade.textContent = quantidadeP;
+
+    const buttonMais = document.createElement("button")
+    buttonMais.id = "mais";
+    buttonMais.style.width = "40px";
+    buttonMais.textContent = "+"
+
+    const buttonMenos = document.createElement("button")
+    buttonMenos.id = "menos"
+    buttonMenos.style.width = "40px";
+    buttonMenos.textContent = "-"
 
     divPai.appendChild(imgP);
     divPai.appendChild(nomeProduto);
     divPai.appendChild(price);
     divPai.appendChild(quantidade);
+    divPai.appendChild(buttonMais);
+    divPai.appendChild(buttonMenos);
 
     return divPai;
 }
@@ -52,7 +66,32 @@ document.addEventListener("DOMContentLoaded", async() =>{
     const carrinho = document.getElementById("carrinho");
     let box = null;
     data.forEach(dado => {
-        box = createBox(dado.photo, dado.name, getItemCarrinho(dado.codigo).quantidade, dado.price);
+        box = createBox(dado.photo, dado.name, getItemCarrinho(dado.codigo).quantidade, dado.price, dado.codigo);
         carrinho.appendChild(box);
+    });
+
+    let menos = document.querySelectorAll("#menos");
+    let mais = document.querySelectorAll("#mais");
+
+    mais.forEach(button => {
+        button.addEventListener("click", function(){
+            dropItemCarrinho(button.parentElement.id);   
+            let amount = button.parentElement.querySelector("#quantidade");
+            amount.textContent = parseInt(amount.textContent) + 1;
+        })
+    });
+
+    menos.forEach(button => {
+        button.addEventListener("click", function(){
+            dropItemCarrinho(button.parentElement.id);
+            
+            let amount = button.parentElement.querySelector("#quantidade");
+
+            if(!getItemCarrinho(button.parentElement.id)){
+                button.parentElement.remove();
+            }
+            amount.textContent = parseInt(amount.textContent) - 1;
+
+        })
     });
 })

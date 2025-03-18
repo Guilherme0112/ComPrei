@@ -34,8 +34,15 @@ function getCarrinho(){
 function dropItemCarrinho(codigo){
 
     let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+    const produto = carrinho.find(item => item.codigo === codigo);
 
-    carrinho = carrinho.filter(item => item.codigo !== codigo);
+    if(produto){
+        if(produto.quantidade > 1){
+            produto.quantidade--;
+        } else {
+            carrinho = carrinho.filter(item => item.codigo !== codigo);
+        }
+    }
 
     localStorage.setItem("carrinho", JSON.stringify(carrinho));
 }

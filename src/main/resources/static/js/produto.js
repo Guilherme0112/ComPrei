@@ -49,7 +49,5 @@ share.addEventListener("click", function(){
 
 comprar.addEventListener("click", function(){
 
-    setItemCarrinho(codigo);
-
     window.location.href = "/carrinho";
 })
