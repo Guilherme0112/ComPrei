@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt_BR"  xmlns:th="https://www.thymelaef.org"
+                    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/globals.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/carrinho.css">
+    <link rel="stylesheet" href="../../css/auth.css">
+    <title>PIX</title>
+</head>
+<body>
+    <header th:replace="~{components/component :: header}"></header>
+    <main style="width: 100%; display: flex; justify-content: center;">
+        <div class="car_1">
+        </div>
+        <div class="car_2">
+            <h1 style="width: 100%; padding-left: 30px;">Checkout</h1>
+
+            <div id="carrinho">
+
+            </div>
+
+            <h1 style="width: 100%; padding-left: 20px;">Total: <span id="total"></span></h1>
+
+        </div>
+    </main>
+
+    <script src="../../js/functions/others/carrinho.js"></script>
+    <script src="../../js/carrinho.js"></script>
+</body>
+</html>

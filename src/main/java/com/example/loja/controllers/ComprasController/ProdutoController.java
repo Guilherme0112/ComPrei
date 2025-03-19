@@ -52,4 +52,27 @@ public class ProdutoController {
         return mv;
     }
 
+    @GetMapping("/checkout/{pagamento}")
+    public ModelAndView checkout(@PathVariable("pagamento") String pagamento){
+
+        ModelAndView mv = new ModelAndView();
+
+        if(pagamento.equals("pix")){
+
+            mv.setViewName("views/produto/compra/pix");
+            
+        } else if(pagamento.equals("boleto")){
+
+            mv.setViewName("views/produto/compra/boleto");
+            
+        } else if(pagamento.equals("cartao")){
+            
+            mv.setViewName("views/produto/compra/cartao");
+        } else {
+        
+            mv.setViewName("redirect:/carrinho");
+        }
+
+        return mv;
+    }
 }

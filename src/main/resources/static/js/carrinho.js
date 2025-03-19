@@ -1,3 +1,5 @@
+
+// Função que retorna a div dos produtos do carrinho
 function createBox(img, nome, quantidadeP, preco, codigo){
 
     const divPai = document.createElement("div");
@@ -46,9 +48,17 @@ function createBox(img, nome, quantidadeP, preco, codigo){
 document.addEventListener("DOMContentLoaded", async() => {
 
     // Redireciona o usuário para o login
-    document.getElementById("login").addEventListener("click", function(){
-        window.location.href = "/auth/login";
-    })
+    if(document.getElementById("login")){
+        document.getElementById("login").addEventListener("click", function(){
+            window.location.href = "/auth/login";
+        });
+    }
+    
+    if(document.getElementById("buy")){
+        document.getElementById("buy").addEventListener("click", function(){
+            window.location.href = "/checkout";
+        });
+    }
 
     var produtos = [];
 
@@ -123,5 +133,36 @@ document.addEventListener("DOMContentLoaded", async() => {
             amount.textContent = parseInt(amount.textContent) - 1;
 
         })
+    });
+
+    // Redireciona o usuário para a forma de pagamento
+    document.querySelector("#buy").addEventListener("click", function(){
+
+        // Pega a forma de pagamento que o usuário escolheu
+        let select = document.querySelector("#select");
+
+        console.log(select.value);
+
+        // Redireciona conforme a escolha do usuário
+        if(select.value == "pix"){
+            console.log("pix")
+            window.location.href = "/checkout/pix";
+            return;
+        }
+        
+        if(select.value == "cartao"){
+            
+            console.log("cartao")
+            window.location.href = "/checkout/cartao";
+            return;
+        }
+        
+        if(select.value == "boleto"){
+            
+            console.log("boleto")
+            window.location.href = "/checkout/boleto";
+            return;
+        }
+
     });
 })

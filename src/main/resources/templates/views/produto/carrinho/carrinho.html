@@ -28,7 +28,12 @@
                 <button id="login">Fazer Login</button>
             </div>
             <div sec:authorize="isAuthenticated()" style="width: 100%; display: flex; justify-content: center;">
-                <button >Finalizar Compra</button>
+                <button id="buy">Finalizar Compra</button>
+                <select id="select">
+                    <option value="pix">PIX</option>
+                    <option value="cartao">Cartão de Crédito</option>
+                    <option value="boleto">Boleto</option>
+                </select>
             </div>
         </div>
     </main>
