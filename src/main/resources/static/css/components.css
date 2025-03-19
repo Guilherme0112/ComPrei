@@ -51,6 +51,7 @@
     flex-wrap: wrap;
     padding: 10px;
     transition: .3s;
+    outline: 2px solid var(--box-form);
 }
 .box_product:hover{
     scale: 1.01;

@@ -59,8 +59,7 @@ async function loadProducts() {
     const container = document.createElement("div");
     container.className = "container_destaques";
     container.id = "destaques";
-    document.getElementById("main").appendChild(container)
-
+    document.getElementById("main").appendChild(container);
 
     res.forEach(re => {
         var box = createBox(re.codigo, re.photo, re.name, re.price);

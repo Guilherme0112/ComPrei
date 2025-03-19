@@ -14,6 +14,7 @@ function createBox(img, nome, quantidadeP, preco, codigo){
 
     const price = document.createElement("p");
     price.className = "box_preco_produto";
+    price.id = "preco";
     price.textContent = preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
     const quantidade = document.createElement("p");
@@ -42,7 +43,13 @@ function createBox(img, nome, quantidadeP, preco, codigo){
 }
 
 
-document.addEventListener("DOMContentLoaded", async() =>{
+document.addEventListener("DOMContentLoaded", async() => {
+
+    // Redireciona o usuário para o login
+    document.getElementById("login").addEventListener("click", function(){
+        window.location.href = "/auth/login";
+    })
+
     var produtos = [];
 
     const produtosCarrinho = getCarrinho();
@@ -51,6 +58,7 @@ document.addEventListener("DOMContentLoaded", async() =>{
         produtos.push(produto.codigo);
     });
     
+    // Faz a requisição para buscar os produtos do carrinho
     const res = await fetch("/carrinho/produtos", {
         method: "POST",
         headers: {
@@ -65,24 +73,41 @@ document.addEventListener("DOMContentLoaded", async() =>{
     
     const carrinho = document.getElementById("carrinho");
     let box = null;
+    let total = 0;
+
+    // Cria os produtos do carrinho 
     data.forEach(dado => {
+        total = total + (dado.price * getItemCarrinho(dado.codigo).quantidade);
         box = createBox(dado.photo, dado.name, getItemCarrinho(dado.codigo).quantidade, dado.price, dado.codigo);
         carrinho.appendChild(box);
     });
 
+    // Coloca o valor total do carrinho
+    document.getElementById("total").textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // Pega todos os botões de aumentar e diminuir
     let menos = document.querySelectorAll("#menos");
     let mais = document.querySelectorAll("#mais");
 
+    // Evento que adiciona produto do carrinho
     mais.forEach(button => {
         button.addEventListener("click", function(){
+
             setItemCarrinho(button.parentElement.id);   
+
             let amount = button.parentElement.querySelector("#quantidade");
+            let precoProduto = parseFloat(button.parentElement.querySelector("#preco").textContent.replace(/[^\d,]/g, '').replace(',', '.'));
+            let total = document.getElementById("total").textContent.replace(/[^\d,]/g, '').replace(',', '.');
+            total = parseFloat(total) + precoProduto;
+            document.getElementById("total").textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             amount.textContent = parseInt(amount.textContent) + 1;
         })
     });
 
+    // Evento que tira produto do carrinho
     menos.forEach(button => {
         button.addEventListener("click", function(){
+
             dropItemCarrinho(button.parentElement.id);
             
             let amount = button.parentElement.querySelector("#quantidade");
@@ -90,6 +115,11 @@ document.addEventListener("DOMContentLoaded", async() =>{
             if(!getItemCarrinho(button.parentElement.id)){
                 button.parentElement.remove();
             }
+
+            let precoProduto = parseFloat(button.parentElement.querySelector("#preco").textContent.replace(/[^\d,]/g, '').replace(',', '.'));
+            let total = document.getElementById("total").textContent.replace(/[^\d,]/g, '').replace(',', '.');
+            total = total - precoProduto;
+            document.getElementById("total").textContent = total.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             amount.textContent = parseInt(amount.textContent) - 1;
 
         })

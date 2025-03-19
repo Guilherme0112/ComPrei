@@ -21,6 +21,7 @@
     display: flex;
     justify-content: space-between;
     width: 90%;
+    margin: 5px 0;
 }
 .box_quantidade_produto{
 
@@ -33,6 +34,7 @@
     height: 80px;
     border-radius: 10px;
     object-fit: contain;
+    background-color: var(--background);
 }
 
 #carrinho{
