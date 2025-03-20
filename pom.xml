@@ -18,8 +18,13 @@
 		<license/>
 	</licenses>
 	<developers>
-		<developer/>
-	</developers>
+        <developer>
+            <name>Mercado Pago</name>
+            <email>mp_sdk@mercadopago.com</email>
+            <organization>Mercado Pago</organization>
+            <organizationUrl>https://www.mercadopago.com/developers</organizationUrl>
+        </developer>
+    </developers>
 	<scm>
 		<connection/>
 		<developerConnection/>
@@ -32,6 +37,12 @@
 		<maven.compiler.target>17</maven.compiler.target>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>com.mercadopago</groupId>
+			<artifactId>sdk-java</artifactId>
+			<version>2.1.29</version>
+		</dependency>
 
 		<dependency>
 			<groupId>io.github.cdimascio</groupId>
