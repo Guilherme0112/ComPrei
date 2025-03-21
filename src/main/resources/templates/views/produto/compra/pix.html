@@ -19,8 +19,8 @@
         <div class="car_2">
             <h1 style="width: 100%; padding-left: 30px;">Checkout</h1>
 
-                <form id="form-checkout" action="/process_payment" method="post">
-                    <div>
+                <form id="form-checkout" action="/process_payment" method="post" style="width: 100%;">
+                    <div style="width: 80%;">
                         <div>
                             <label for="payerFirstName">Nome</label>
                             <input id="form-checkout__payerFirstName" name="payerFirstName" type="text">
@@ -61,8 +61,8 @@
     </main>
 
     
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-    <script src="../../js/pix.js"></script>
+    <script type="module" src="https://sdk.mercadopago.com/js/v2"></script>
+    <script src="../../js/payment/pix.js"></script>
     <script src="../../js/functions/others/carrinho.js"></script>
     <script src="../../js/carrinho.js"></script>
 </body>
