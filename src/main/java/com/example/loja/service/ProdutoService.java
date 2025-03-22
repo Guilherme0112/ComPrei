@@ -78,7 +78,7 @@ public class ProdutoService {
             List<Produto> productOpt = produtoRepository.findByCodigoDeBarras(codigo, pageable);
 
             if(productOpt.isEmpty()){
-                throw new ProdutoException("O id do produto é inválido");
+                throw new ProdutoException("O código de barras do produto é inválido");
             }
 
             Produto produtoObj = productOpt.get(0);

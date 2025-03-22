@@ -138,31 +138,6 @@ document.addEventListener("DOMContentLoaded", async() => {
     // Redireciona o usuário para a forma de pagamento
     document.querySelector("#buy").addEventListener("click", function(){
 
-        // Pega a forma de pagamento que o usuário escolheu
-        let select = document.querySelector("#select");
-
-        console.log(select.value);
-
-        // Redireciona conforme a escolha do usuário
-        if(select.value == "pix"){
-            console.log("pix")
-            window.location.href = "/checkout/pix";
-            return;
-        }
-        
-        if(select.value == "cartao"){
-            
-            console.log("cartao")
-            window.location.href = "/checkout/cartao";
-            return;
-        }
-        
-        if(select.value == "boleto"){
-            
-            console.log("boleto")
-            window.location.href = "/checkout/boleto";
-            return;
-        }
-
+        window.location.href = "/payment";
     });
 })
