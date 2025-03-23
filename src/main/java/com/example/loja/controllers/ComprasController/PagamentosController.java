@@ -1,7 +1,6 @@
 package com.example.loja.controllers.ComprasController;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,19 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.loja.enums.Pedido;
+import com.example.loja.exceptions.PagamentoException;
 import com.example.loja.exceptions.ProdutoException;
 import com.example.loja.models.Pagamentos;
-import com.example.loja.models.Produto;
+import com.example.loja.models.Pedidos;
+import com.example.loja.models.dto.PagamentoInfo;
 import com.example.loja.models.dto.ProdutoQuantidade;
 import com.example.loja.repositories.PagamentosRepository;
-import com.example.loja.repositories.ProdutoRepository;
-import com.example.loja.service.ProdutoService;
+import com.example.loja.repositories.PedidosRepository;
+import com.example.loja.service.PagamentosService;
 import com.example.loja.service.UsuarioService.AuthService;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.mercadopago.MercadoPagoConfig;
-import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
-import com.mercadopago.client.preference.PreferenceClient;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferenceRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
@@ -35,19 +34,21 @@ public class PagamentosController {
 
         private static final String KEY_MP = "TEST-4070014182739433-032109-cbfd04dc5f8fe1d00a9964af62a247b4-611245292";
 
-        private final ProdutoService produtoService;
-        private final ProdutoRepository produtoRepository;
+       
         private final PagamentosRepository pagamentosRepository;
         private final AuthService authService;
+        private final PedidosRepository pedidosRepository;
+        private final PagamentosService pagamentosService;
 
-        public PagamentosController(ProdutoService produtoService,
-                                    ProdutoRepository produtoRepository,
-                                    PagamentosRepository pagamentosRepository,
-                                    AuthService authService) {
-                this.produtoService = produtoService;
-                this.produtoRepository = produtoRepository;
+        public PagamentosController(PagamentosRepository pagamentosRepository,
+                                    AuthService authService,
+                                    PedidosRepository pedidosRepository,
+                                    PagamentosService pagamentosService) {
+                
                 this.pagamentosRepository = pagamentosRepository;
                 this.authService = authService;
+                this.pedidosRepository = pedidosRepository;
+                this.pagamentosService = pagamentosService;
         }
 
         @GetMapping("/payment")
@@ -65,54 +66,14 @@ public class PagamentosController {
                 try {
                         // Token de acesso para as requisições
                         MercadoPagoConfig.setAccessToken(KEY_MP);
-                        PreferenceClient client = new PreferenceClient();
-                        BigDecimal total = BigDecimal.ZERO;
+                        
+                        // Cria o pagamento para o cliente
+                        PagamentoInfo pagamentoInfo = pagamentosService.createPayment(produtos, KEY_MP);
 
-                        // Lista com todos os produtos
-                        List<PreferenceItemRequest> items = new ArrayList<>();
-
-                        // Verifica se todos os produtos do carrinho de fato existem
-                        for (ProdutoQuantidade codigoProduto : produtos) {
-
-                                // Verificação
-                                Produto p = produtoService.getProduct(codigoProduto.getCodigo());
-
-                                // Verifica se tem estoque para o produto
-                                if(produtoRepository.coutByCodigo(p.getCodigo()) < codigoProduto.getQuantidade()){
-                                        throw new ProdutoException("A quantidade é maior que o estoque atual");
-                                }
-
-                                // Cria o objeto para constuir a lista
-                                PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
-                                        .id(p.getCodigo())
-                                        .title(p.getName())
-                                        .quantity(codigoProduto.getQuantidade())
-                                        .currencyId("BRL")
-                                        .unitPrice(p.getPrice())
-                                        .build();
-                                        
-                                        // Adiciona o item a lista
-                                        items.add(itemRequest);
-
-                                        // Incrementa com o valor do produto vezes a quantidade
-                                        total = total.add(p.getPrice().multiply(BigDecimal.valueOf(codigoProduto.getQuantidade())));
-                        }
-
-                        // Links para caso o pagamento seja finalizado, falhou ou pendente
-                        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                                .backUrls(
-                                        PreferenceBackUrlsRequest.builder()
-                                                .success("https://localhost:8080/payment/success")
-                                                .failure("https://localhost:8080/payment/erro")
-                                                .pending("https://localhost:8080/payment/erro")
-                                                .build())
-
-                                .autoReturn("all")
-                                .items(items)
-                                .build();
-
-                        Preference preference = client.create(preferenceRequest);
-
+                        // Resposta da camada service
+                        Preference preference = pagamentoInfo.getPreference();
+                        BigDecimal total = pagamentoInfo.getTotal();
+                        
                         // Salva os dados do pagamento
                         pagamentosRepository.save(new Pagamentos(
                                 authService.getSession(http).getEmail(),
@@ -128,6 +89,7 @@ public class PagamentosController {
 
                         System.out.println("produtoexception: " + e.getMessage());
                         return e.getMessage();
+                        
                 } catch (MPApiException e) {
 
                         System.out.println("mpapiexception: " + e.getApiResponse().getContent());
@@ -146,18 +108,66 @@ public class PagamentosController {
         }
 
         @GetMapping("/payment/success")
-        public ModelAndView PaymentSucces(@RequestParam("payment_id") String payment_id) {
+        public ModelAndView PaymentSucces(@RequestParam("payment_id") String payment_id, @RequestParam("preference_id") String preference_id, HttpSession http) throws Exception, PagamentoException {
                  
                 ModelAndView mv = new ModelAndView();
 
-                System.out.println(payment_id);
+                try {
 
-                mv.setViewName("views/produto/compra/success");
+                        // Verifica se existe o id na url
+                        if(payment_id.isEmpty() || preference_id.isEmpty()){
+                                mv.setViewName("redirect:/profile");
+                                return mv;
+                        }
+
+                        // Verifica se a transação foi aprovada
+                        JsonNode jsonNode = pagamentosService.verifyPayment(payment_id, KEY_MP);
+
+                        // Verifica o status de pagamento para atualizar no banco de dados
+                        if(!jsonNode.get("status").asText().equals("approved")){
+                                throw new PagamentoException("Para fazer o pedido você deve concluir a compra");
+                        }
+                        
+                        // Pega o registro do pagamento no banco de dados
+                        Pagamentos objPreference = pagamentosRepository.findByPreferenceId(preference_id).get(0);
+                        if(objPreference == null){
+                                throw new PagamentoException("O id da preferência não existe");
+                         }
+
+                        // Como ele só vai passar se o status do pagamento for aprovado, ele atualiza no banco o status do pagamento para aprovado
+                        // Também adiciona o id do pagamento (só tinha o id da preferencia)
+                        objPreference.setStatus("approved");
+                        objPreference.setPagamento_id(payment_id);
+                        pagamentosRepository.save(objPreference);
+
+                        // Cria o pedido para os admins e o salva no banco de dados
+                        pedidosRepository.save(
+                                new Pedidos(payment_id, 
+                                            new BigDecimal(jsonNode.get("transaction_amount").asText()),
+                                            jsonNode.get("additional_info").get("items").asText(),
+                                            authService.getSession(http).getEmail(),
+                                            Pedido.ENVIADO
+                                )
+                        );
+
+                        mv.setViewName("views/produto/compra/success");
+                        
+                } catch(PagamentoException e){
+
+                        System.out.println(e.getMessage());
+                        mv.setViewName("redirect:/payment/erro");
+                } catch (Exception e) {
+
+                        System.out.println(e.getMessage());
+                        mv.setViewName("redirect:/payment/erro");
+                }
+
                 return mv;
         }
 
         @GetMapping("/payment/erro")
         public ModelAndView PaymentErro() {
+
                 ModelAndView mv = new ModelAndView();
 
                 mv.setViewName("views/produto/compra/erro");

@@ -23,6 +23,8 @@ public class Pagamentos {
 
   private String pagamento_id;
 
+  private String preferencia_id;
+
   private String status = "pending";
 
   private BigDecimal valor;
@@ -32,9 +34,9 @@ public class Pagamentos {
 
   public Pagamentos(){ }
 
-  public Pagamentos(String email, String pagamento_id, String status, BigDecimal valor){
+  public Pagamentos(String email, String preferencia_id, String status, BigDecimal valor){
     this.email = email;
-    this.pagamento_id = pagamento_id;
+    this.preferencia_id = preferencia_id;
     this.status = status;
     this.valor = valor;
   }
@@ -85,6 +87,14 @@ public class Pagamentos {
 
   public void setCriado_em(LocalDateTime criado_em) {
     this.criado_em = criado_em;
+  }
+
+  public String getPreferencia_id() {
+    return preferencia_id;
+  }
+
+  public void setPreferencia_id(String preferencia_id) {
+    this.preferencia_id = preferencia_id;
   }
 
   
