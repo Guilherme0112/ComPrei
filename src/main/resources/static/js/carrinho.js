@@ -53,12 +53,6 @@ document.addEventListener("DOMContentLoaded", async() => {
             window.location.href = "/auth/login";
         });
     }
-    
-    if(document.getElementById("buy")){
-        document.getElementById("buy").addEventListener("click", function(){
-            window.location.href = "/checkout";
-        });
-    }
 
     var produtos = [];
 
@@ -136,8 +130,16 @@ document.addEventListener("DOMContentLoaded", async() => {
     });
 
     // Redireciona o usuário para a forma de pagamento
-    document.querySelector("#buy").addEventListener("click", function(){
+    document.querySelector("#buy").addEventListener("click", async(event) =>{
 
-        window.location.href = "/payment";
+        event.preventDefault();
+
+        // window.location.href = "/payment";
+
+        const res = await Payment();
+
+        console.log(res);
+
+
     });
 })

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.UsuarioAddress;
 import com.example.loja.repositories.UsuarioAddressRepository;
 
@@ -46,6 +47,36 @@ public class UsuarioAddressService {
         } catch (Exception e) {
             
             System.out.println("exception: " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    /**
+     * Verifica se o usuário tem um endereço cadastrado
+     * 
+     * @param email Email do usuário    
+     * @return Objeto que contém as informações do endereço do usuário
+     * @throws Exception Erro genérico
+     * @throws UsuarioException Se o usuário não tiver endereço cadastrado
+     */
+    public UsuarioAddress verifyAddress(String email) throws Exception, UsuarioException{
+
+        try {
+            
+            List<UsuarioAddress> userAddress = usuarioAddressRepository.findByEmail(email);
+
+            if(userAddress.isEmpty()){
+                throw new UsuarioException("É obrigatório ter um endereço cadastrado");
+            }
+
+            return userAddress.get(0);
+
+        } catch(UsuarioException e){
+
+            throw new UsuarioException(e.getMessage());
+
+        } catch (Exception e) {
+
             throw new Exception(e.getMessage());
         }
     }
