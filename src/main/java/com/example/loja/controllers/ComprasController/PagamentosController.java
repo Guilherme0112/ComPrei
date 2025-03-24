@@ -19,6 +19,7 @@ import com.example.loja.models.dto.PagamentoInfo;
 import com.example.loja.models.dto.ProdutoQuantidade;
 import com.example.loja.repositories.PagamentosRepository;
 import com.example.loja.repositories.PedidosRepository;
+import com.example.loja.service.MPApiPreferencesService;
 import com.example.loja.service.PagamentosService;
 import com.example.loja.service.UsuarioService.AuthService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -39,16 +40,20 @@ public class PagamentosController {
         private final AuthService authService;
         private final PedidosRepository pedidosRepository;
         private final PagamentosService pagamentosService;
+        private final MPApiPreferencesService MpApiPreferencesService;
 
         public PagamentosController(PagamentosRepository pagamentosRepository,
                                     AuthService authService,
                                     PedidosRepository pedidosRepository,
-                                    PagamentosService pagamentosService) {
+                                    PagamentosService pagamentosService,
+                                    MPApiPreferencesService MpApiPreferencesService) {
                 
                 this.pagamentosRepository = pagamentosRepository;
                 this.authService = authService;
                 this.pedidosRepository = pedidosRepository;
                 this.pagamentosService = pagamentosService;
+                this.MpApiPreferencesService = MpApiPreferencesService;
+
         }
 
         @GetMapping("/payment")
@@ -73,14 +78,18 @@ public class PagamentosController {
                         // Resposta da camada service
                         Preference preference = pagamentoInfo.getPreference();
                         BigDecimal total = pagamentoInfo.getTotal();
-                        
+                
+
                         // Salva os dados do pagamento
                         pagamentosRepository.save(new Pagamentos(
                                 authService.getSession(http).getEmail(),
-                                preference.getId(),
+                                preference.getId().toString(),
                                 "pending",
                                 total
                         ));
+
+                        // Verifica os pagamentos no banco de dados
+                        pagamentosService.verifyAllPayments();
 
                         // Retorna o link para efetuar o apagamento
                         return preference.getInitPoint().toString();
@@ -108,17 +117,19 @@ public class PagamentosController {
         }
 
         @GetMapping("/payment/success")
-        public ModelAndView PaymentSucces(@RequestParam("payment_id") String payment_id, @RequestParam("preference_id") String preference_id, HttpSession http) throws Exception, PagamentoException {
+        public ModelAndView PaymentSucces(@RequestParam("preference_id") String preference_id, @RequestParam("payment_id") String payment_id, HttpSession http) throws Exception, PagamentoException {
                  
                 ModelAndView mv = new ModelAndView();
 
                 try {
 
                         // Verifica se existe o id na url
-                        if(payment_id.isEmpty() || preference_id.isEmpty()){
+                        if(preference_id.isEmpty()){
                                 mv.setViewName("redirect:/profile");
                                 return mv;
                         }
+
+                        Pagamentos objPreference = MpApiPreferencesService.verifyPreferencePayment(preference_id);
 
                         // Verifica se a transação foi aprovada
                         JsonNode jsonNode = pagamentosService.verifyPayment(payment_id, KEY_MP);
@@ -128,21 +139,14 @@ public class PagamentosController {
                                 throw new PagamentoException("Para fazer o pedido você deve concluir a compra");
                         }
                         
-                        // Pega o registro do pagamento no banco de dados
-                        Pagamentos objPreference = pagamentosRepository.findByPreferenceId(preference_id).get(0);
-                        if(objPreference == null){
-                                throw new PagamentoException("O id da preferência não existe");
-                         }
-
                         // Como ele só vai passar se o status do pagamento for aprovado, ele atualiza no banco o status do pagamento para aprovado
                         // Também adiciona o id do pagamento (só tinha o id da preferencia)
                         objPreference.setStatus("approved");
-                        objPreference.setPagamento_id(payment_id);
                         pagamentosRepository.save(objPreference);
 
                         // Cria o pedido para os admins e o salva no banco de dados
                         pedidosRepository.save(
-                                new Pedidos(payment_id, 
+                                new Pedidos(preference_id, 
                                             new BigDecimal(jsonNode.get("transaction_amount").asText()),
                                             jsonNode.get("additional_info").get("items").asText(),
                                             authService.getSession(http).getEmail(),
@@ -156,6 +160,7 @@ public class PagamentosController {
 
                         System.out.println(e.getMessage());
                         mv.setViewName("redirect:/payment/erro");
+                        
                 } catch (Exception e) {
 
                         System.out.println(e.getMessage());

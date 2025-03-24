@@ -47,7 +47,7 @@ public class APIAdminProdutosController {
     }
 
     @GetMapping("/admin/produtos/{codigo}")
-    public List<?> AdminProdutosGET(@PathVariable("codigo") String codigo) {
+    public List<?> AdminAPIProdutosGET(@PathVariable("codigo") String codigo) {
 
         try {
 

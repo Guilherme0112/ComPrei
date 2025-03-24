@@ -5,15 +5,20 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.ProdutoException;
+import com.example.loja.models.Pagamentos;
 import com.example.loja.models.Produto;
 import com.example.loja.models.dto.PagamentoInfo;
 import com.example.loja.models.dto.ProdutoQuantidade;
+import com.example.loja.repositories.PagamentosRepository;
 import com.example.loja.repositories.ProdutoRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,12 +34,15 @@ public class PagamentosService {
 
     private final ProdutoService produtoService;
     private final ProdutoRepository produtoRepository;
+    private final PagamentosRepository pagamentosRepository;
 
     public PagamentosService(ProdutoService produtoService,
-            ProdutoRepository produtoRepository) {
+            ProdutoRepository produtoRepository,
+            PagamentosRepository pagamentosRepository) {
 
         this.produtoService = produtoService;
         this.produtoRepository = produtoRepository;
+        this.pagamentosRepository = pagamentosRepository;
     }
 
     /***
@@ -162,6 +170,43 @@ public class PagamentosService {
 
         } catch (Exception e) {
 
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    /**
+     * Verifica todos os pagamentos do banco de dados
+     * Exclui aqueles que já falharam, os que estão pendentes/concluídos por pelo menos 3 dias
+     * 
+     * @throws Exception Erro genérico
+     */
+    public void verifyAllPayments() throws Exception{
+        try {
+            
+            // Lista com todos os pagamentos
+            List<Pagamentos> pagamentos = pagamentosRepository.findAll();
+
+            // Data e hora atual
+            LocalDateTime agora = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
+
+            // Verifica todos os pagamentos
+            for(Pagamentos pagamento : pagamentos){
+
+                // Se o pagamento falhou, deletar do banco de dados
+                if(pagamento.getStatus().equals("failure")){
+                    pagamentosRepository.delete(pagamento);
+                }
+
+                // Se tiver mais de 3 dias, é deletado
+                if(ChronoUnit.DAYS.between(pagamento.getCriado_em(), agora) >= 3 && pagamento.getStatus().equals("pending")){
+                    pagamentosRepository.delete(pagamento);
+                }
+
+            }
+
+
+        } catch (Exception e) {
+            
             throw new Exception(e.getMessage());
         }
     }

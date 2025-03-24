@@ -24,7 +24,7 @@ public class APIAdminUsuariosController {
     }
 
     @GetMapping("/admin/usuarios/{id}")
-    public List<?> AdminUsuariosGET(@PathVariable("id") String id) {
+    public List<?> AdminUsuariosAPIGET(@PathVariable("id") String id) {
         try {
 
             if (!id.matches("\\d+")) {

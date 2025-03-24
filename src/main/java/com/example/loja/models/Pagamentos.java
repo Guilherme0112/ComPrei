@@ -21,8 +21,6 @@ public class Pagamentos {
 
   private String email;
 
-  private String pagamento_id;
-
   private String preferencia_id;
 
   private String status = "pending";
@@ -57,12 +55,12 @@ public class Pagamentos {
     this.email = email;
   }
 
-  public String getPagamento_id() {
-    return pagamento_id;
+  public String getPreferencia_id() {
+    return preferencia_id;
   }
 
-  public void setPagamento_id(String pagamento_id) {
-    this.pagamento_id = pagamento_id;
+  public void setPreferencia_id(String preferencia_id) {
+    this.preferencia_id = preferencia_id;
   }
 
   public String getStatus() {
@@ -87,16 +85,6 @@ public class Pagamentos {
 
   public void setCriado_em(LocalDateTime criado_em) {
     this.criado_em = criado_em;
-  }
-
-  public String getPreferencia_id() {
-    return preferencia_id;
-  }
-
-  public void setPreferencia_id(String preferencia_id) {
-    this.preferencia_id = preferencia_id;
-  }
-
-  
+  }  
 
 }
