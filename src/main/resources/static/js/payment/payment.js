@@ -23,14 +23,7 @@ async function  Payment(){
     const data = await res.json();
 
     return data;
-    
-    // if(!data){
-    //     document.querySelector("#text").textContent = "Ocorreu algum erro. Tente novamente mais tarde";
-    //     return;
-    // }
 
-    // document.querySelector("#link").href = data;
-    // window.location.href = data;
 }
 
     

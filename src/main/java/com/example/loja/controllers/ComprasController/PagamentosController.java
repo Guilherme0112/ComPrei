@@ -3,7 +3,7 @@ package com.example.loja.controllers.ComprasController;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -102,7 +102,7 @@ public class PagamentosController {
                         pagamentosService.verifyAllPayments();
 
                         // Retorna o link para efetuar o apagamento
-                        return ResponseEntity.ok(preference.getInitPoint().toString());
+                        return ResponseEntity.ok(List.of(HttpStatus.OK, preference.getInitPoint().toString()));
 
                 } catch(UsuarioException e){
 

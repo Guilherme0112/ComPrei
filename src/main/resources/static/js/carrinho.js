@@ -134,12 +134,18 @@ document.addEventListener("DOMContentLoaded", async() => {
 
         event.preventDefault();
 
-        // window.location.href = "/payment";
-
         const res = await Payment();
 
         console.log(res);
 
+        if(res["0"] != "OK"){
+            document.getElementById("address_msg").style.display = "block";
+            return;
+        }
+
+        document.getElementById("address_msg").style.display = "none";
+
+        window.location.href = res["1"];
 
     });
 })

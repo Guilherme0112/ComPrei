@@ -27,8 +27,11 @@
             <div sec:authorize="isAnonymous()" style="width: 100%; display: flex; justify-content: center;">
                 <button id="login">Fazer Login</button>
             </div>
-            <div sec:authorize="isAuthenticated()" style="width: 100%; display: flex; justify-content: center;">
+            <div sec:authorize="isAuthenticated()" style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap;">
                 <button id="buy">Finalizar Compra</button>
+                <div id="address_msg" style="display: none; width: 100%; text-align: center;">
+                    <p class="erro_msg">Você precisa cadastrar um endereço, <a th:href="@{/profile/edit/address}">clique aqui para cadastrar</a></p>
+                </div>
             </div>
         </div>
     </main>
