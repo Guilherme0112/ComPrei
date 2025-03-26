@@ -143,7 +143,11 @@ public class PagamentosController {
                                 return mv;
                         }
 
-                        Pagamentos objPreference = MpApiPreferencesService.verifyPreferencePayment(preference_id);
+                        // Busca o email do usuário da sessão
+                        String emailUser = authService.getSession(http).getEmail();
+
+                        // Verifica a autenticidade do do pagamento
+                        Pagamentos objPreference = MpApiPreferencesService.verifyPreferencePayment(preference_id, emailUser);
 
                         // Verifica se a transação foi aprovada
                         JsonNode jsonNode = pagamentosService.verifyPayment(payment_id, KEY_MP);

@@ -28,6 +28,7 @@ import com.example.loja.models.Produto;
 import com.example.loja.models.dto.AmountProducts;
 import com.example.loja.repositories.ProdutoRepository;
 import com.example.loja.service.ProdutoService;
+import com.example.loja.service.AdminService.AdminProdutosService;
 import com.example.loja.util.Util;
 
 import jakarta.validation.Valid;
@@ -35,14 +36,13 @@ import jakarta.validation.Valid;
 @RestController
 public class APIAdminProdutosController {
 
-    private static final String UPLOAD_DIR = "/uploads/";
     private final ProdutoRepository produtoRepository;
-    private final ProdutoService produtoService;
+    private final AdminProdutosService adminProdutosService;
 
     public APIAdminProdutosController(ProdutoRepository produtoRepository,
-                                      ProdutoService produtoService) {
+                                      AdminProdutosService adminProdutosService) {
         this.produtoRepository = produtoRepository;
-        this.produtoService = produtoService;
+        this.adminProdutosService = adminProdutosService;
 
     }
 
@@ -96,48 +96,9 @@ public class APIAdminProdutosController {
                 return mv;
             }
             
-            
-            if(file.isEmpty()){
-                throw new ProdutoException("A foto é obrigatório");
-            }
-
-            File dir = new File(UPLOAD_DIR);
-            if(!dir.exists()){
-                dir.mkdirs();
-            }
-
-            String fileName = file.getOriginalFilename().replaceAll(" ", "");
-            File serverFile = new File("/app/" + dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + fileName);
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-
-            stream.write(file.getBytes());
-            stream.close();
-
-            produto.setPhoto(serverFile.toString().replaceFirst("/app", ""));
-
-
-            if (!amount.matches("\\d+")) {
-                throw new ProdutoException("A quantidade deve ser um valor válido");
-            }
-
-            int amountInt = Integer.parseInt(amount);
-
-            if (amountInt > 10000 || amountInt < 1){
-                throw new ProdutoException("A quantidade não pode ser maior que 10000 ou menor que 1");
-            }
-
-            for(int i = 0; i < amountInt; i++){
-
-                Produto produto2 = new Produto();
-                produto2.setCodigo(produto.getCodigo());                
-                produto2.setDescription(produto.getDescription());             
-                produto2.setName(produto.getName());             
-                produto2.setPhoto(produto.getPhoto());            
-                produto2 .setPrice(produto.getPrice());          
-
-                produtoService.createProduct(produto2);
-            }
-
+            // Cria o produto
+            adminProdutosService.createProduct(produto, file, amount);      
+          
             mv.setViewName("redirect:/admin/produtos");
 
         } catch(ProdutoException e){

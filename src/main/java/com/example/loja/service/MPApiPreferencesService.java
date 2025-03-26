@@ -15,7 +15,7 @@ public class MPApiPreferencesService {
         this.pagamentosRepository = pagamentosRepository;
     }
 
-    public Pagamentos verifyPreferencePayment(String preference_id) throws Exception, PagamentoException{
+    public Pagamentos verifyPreferencePayment(String preference_id, String email) throws Exception, PagamentoException{
 
         try {
 
@@ -24,11 +24,17 @@ public class MPApiPreferencesService {
                 throw new PagamentoException("O id da preferência não existe");
             }
 
+            // Busca o objeto do pagamento
             Pagamentos objPreference = pagamentosRepository.findByPreferenceId(preference_id).get(0);
+
+            // Verifica se o email da sessão foi quem fez o pagamento
+            if(!objPreference.getEmail().equals(email)){
+                throw new PagamentoException("Este pagamento não foi feito por você");
+            }
 
             // Verifica se é um id que já está pago
             if(objPreference.getStatus().equals("approved")){
-                new PagamentoException("Este pagamento já foi aprovado");
+                throw new PagamentoException("Este pagamento já foi aprovado");
             }
 
             return objPreference;
