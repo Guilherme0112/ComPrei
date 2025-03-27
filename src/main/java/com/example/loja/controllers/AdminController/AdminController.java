@@ -5,13 +5,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.loja.enums.Pedido;
 import com.example.loja.models.Produto;
+import com.example.loja.repositories.PedidosRepository;
 
 @Controller
 public class AdminController {
     
+    private final PedidosRepository pedidosRepository;
 
-    public AdminController(){
+    public AdminController(PedidosRepository pedidosRepository){
+        this.pedidosRepository = pedidosRepository;
     }
 
     @GetMapping("/admin")
@@ -45,6 +49,8 @@ public class AdminController {
         ModelAndView mv = new ModelAndView();
 
         mv.setViewName("views/admin/pedidos");
+        mv.addObject("pedidos", pedidosRepository.findAll());
+        mv.addObject("status", Pedido.values());
         return mv;
     }
     @GetMapping("/admin/usuarios")

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.loja.enums.Pedido;
@@ -22,13 +23,13 @@ public class APIAdminPedidosController {
     }
 
     @GetMapping("/admin/get/pedidos")
-    public List<Pedidos> AdminAPIPedidosGET(@PathVariable("id") String id) {
+    public List<Pedidos> AdminAPIPedidosGET() {
 
         return pedidosRepository.findAll();
 
     }
 
-    @GetMapping("/admin/pedidos/edit/status/{id}")
+    @PostMapping("/admin/pedidos/edit/status")
     public ResponseEntity<?> UpdatePedido(@PathVariable("id") String id, Pedido status) throws Exception, PedidosException{
 
         try {
@@ -45,6 +46,7 @@ public class APIAdminPedidosController {
             if(!pedidosRepository.existsById(idLong)){
                 throw new PedidosException("Este produto não existe");
             }
+
 
 
         } catch(PedidosException e) {
