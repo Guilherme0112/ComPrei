@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../css/globals.css">
     <link rel="stylesheet" href="../css/components.css">
     <link rel="stylesheet" href="../css/pedidos.css">
+    <link rel="stylesheet" href="../css/auth.css">
     <title>Gerenciar Pedidos </title>
 </head>
 <body>
@@ -19,20 +20,29 @@
                 <td>Quando:</td>
                 <td>Status:</td>
                 <td>Valor:</td>
+                <td></td>
             </thead>
             <tbody th:each="pedidos : ${pedidos}">
                 <th th:text="${pedidos.email}"></th>
                 <th th:text="${#temporals.format(pedidos.quando, 'dd/MM/yyyy')}"></th>
                 <th>
                     <select id="select">
+                        <option th:value="${pedidos.status}"
+                                th:text="${pedidos.status}"></option>
                         <option th:each="status : ${status}" 
-                                value="${status}"
+                                th:value="${status}"
                                 th:text="${status}"></option>
                     </select>
                 </th>
                 <th th:text="'R$ ' + ${#numbers.formatDecimal(pedidos.valor, 0, 'POINT', 2, 'COMMA')}"></th>
+                <th id="column_save" style="opacity: 0; pointer-events: none; transition: opacity .3s ease-in-out;">
+                    <button id="save" th:data-id="${pedidos.id}" style="background-color: #5bf15b; width: 50px; padding-top: 8px; ">
+                        <img src="../icons/check-solid.png" width="20" style="filter: brightness(0) invert(1);">
+                    </button>
+                </th>
             </tbody>
         </table>
     </main>
+    
     <script src="../js/pedidos.js"></script>
 </html>

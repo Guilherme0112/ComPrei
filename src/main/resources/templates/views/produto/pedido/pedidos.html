@@ -25,9 +25,9 @@
                     <th style="text-align: center;">Valor</th>
                 </thead>
                 <tbody th:each="pedidos : ${pedidos}">
-                    <td th:text="${pedidos.status}"></td>
-                    <td th:text="${#temporals.format(pedidos.quando, 'dd/MM/yyyy')}"></td>
-                    <td th:text="'R$ ' + ${#numbers.formatDecimal(pedidos.valor, 0, 'POINT', 2, 'COMMA')}"></td>     
+                    <td th:text="${pedidos.status}" style="text-align: center;"></td>
+                    <td th:text="${#temporals.format(pedidos.quando, 'dd/MM/yyyy')}" style="text-align: center;"></td>
+                    <td th:text="'R$ ' + ${#numbers.formatDecimal(pedidos.valor, 0, 'POINT', 2, 'COMMA')}" style="text-align: center;"></td>     
                 </tbody>
             </table>
         </div>

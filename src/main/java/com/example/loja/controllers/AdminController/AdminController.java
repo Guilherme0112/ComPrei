@@ -48,6 +48,8 @@ public class AdminController {
 
         ModelAndView mv = new ModelAndView();
 
+        
+
         mv.setViewName("views/admin/pedidos");
         mv.addObject("pedidos", pedidosRepository.findAll());
         mv.addObject("status", Pedido.values());

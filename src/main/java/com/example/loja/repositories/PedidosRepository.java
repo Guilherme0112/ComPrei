@@ -12,4 +12,5 @@ public interface PedidosRepository extends JpaRepository<Pedidos, Long>{
     
     @Query("SELECT p FROM Pedidos p WHERE p.email = :email")
     List<Pedidos> findByEmail(@Param("email") String email);
+
 }

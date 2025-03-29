@@ -1,4 +1,12 @@
+@import url("./globals.css");
 
 th{
     text-align: start;
+}
+select{
+    background: transparent;
+}
+option{
+
+    background-color: var(--background);
 }

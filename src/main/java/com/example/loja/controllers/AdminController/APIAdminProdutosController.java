@@ -1,8 +1,5 @@
 package com.example.loja.controllers.AdminController;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,9 +24,7 @@ import com.example.loja.exceptions.ProdutoException;
 import com.example.loja.models.Produto;
 import com.example.loja.models.dto.AmountProducts;
 import com.example.loja.repositories.ProdutoRepository;
-import com.example.loja.service.ProdutoService;
 import com.example.loja.service.AdminService.AdminProdutosService;
-import com.example.loja.util.Util;
 
 import jakarta.validation.Valid;
 

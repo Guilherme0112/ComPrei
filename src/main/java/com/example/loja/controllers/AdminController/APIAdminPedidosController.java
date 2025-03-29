@@ -4,22 +4,32 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.loja.enums.Pedido;
 import com.example.loja.exceptions.PedidosException;
 import com.example.loja.models.Pedidos;
+import com.example.loja.models.dto.UpdatePedidoDTO;
 import com.example.loja.repositories.PedidosRepository;
+import com.example.loja.service.AdminService.AdminPedidosService;
+import com.example.loja.service.UsuarioService.AuthService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 public class APIAdminPedidosController {
 
+    private final AdminPedidosService adminPedidosService;
     private final PedidosRepository pedidosRepository;
+    private final AuthService authService;
 
-    public APIAdminPedidosController(PedidosRepository pedidosRepository){
+    public APIAdminPedidosController(AdminPedidosService adminPedidosService,
+                                     PedidosRepository pedidosRepository,
+                                     AuthService authService){
+        this.adminPedidosService = adminPedidosService;
         this.pedidosRepository = pedidosRepository;
+        this.authService = authService;
     }
 
     @GetMapping("/admin/get/pedidos")
@@ -29,25 +39,20 @@ public class APIAdminPedidosController {
 
     }
 
-    @PostMapping("/admin/pedidos/edit/status")
-    public ResponseEntity<?> UpdatePedido(@PathVariable("id") String id, Pedido status) throws Exception, PedidosException{
+    @PutMapping("/admin/pedidos/edit/status")
+    public ResponseEntity<?> UpdatePedido(@RequestBody UpdatePedidoDTO updatePedidoDTO, HttpSession http) throws Exception, PedidosException{
 
         try {
+
+            // Recebe os dados do DTO
+            Long id = updatePedidoDTO.getId();
+            String status = updatePedidoDTO.getStatus();
+            String email = authService.getSession(http).getEmail();
+
+            // // Atualiza o status do pedido
+            adminPedidosService.updatePedido(id, status, email);
             
-            // Verifica se é um número
-            if(!id.matches("\\d+")){
-                throw new PedidosException("O id não é um número válido");
-            }
-
-            // Converte para Long
-            Long idLong = Long.parseLong(id);
-
-            // Verifica se existe no banco de dados
-            if(!pedidosRepository.existsById(idLong)){
-                throw new PedidosException("Este produto não existe");
-            }
-
-
+            return ResponseEntity.ok(200);
 
         } catch(PedidosException e) {
 
@@ -58,8 +63,6 @@ public class APIAdminPedidosController {
             System.out.println(e.getMessage());
             return ResponseEntity.badRequest().body("Ocorreu algum erro. Tente novamente mais tarde");
         }
-    
-        return ResponseEntity.ok(200);
 
     }
 }

@@ -1,12 +1,11 @@
 package com.example.loja.models.dto;
 
-import com.example.loja.enums.Pedido;
 
 public class UpdatePedidoDTO {
     
     private Long id;
 
-    private Pedido pedido;
+    private String status;
 
     public Long getId() {
         return id;
@@ -16,12 +15,12 @@ public class UpdatePedidoDTO {
         this.id = id;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public String getStatus() {
+        return status;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     
