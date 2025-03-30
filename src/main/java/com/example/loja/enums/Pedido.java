@@ -1,7 +1,7 @@
 package com.example.loja.enums;
 
 public enum Pedido {
-    ENVIADO,
+    PEDIDO,
     TRANSITO,
     ENTREGUE,
     CANCELADO;

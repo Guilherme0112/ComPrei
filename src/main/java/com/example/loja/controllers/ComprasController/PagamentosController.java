@@ -162,13 +162,16 @@ public class PagamentosController {
                         objPreference.setStatus("approved");
                         pagamentosRepository.save(objPreference);
 
+                        // Obtém o JSON que contém os produtos e quantidade que foram comprados
+                        JsonNode itemsObj = jsonNode.get("additional_info").get("items");
+
                         // Cria o pedido para os admins e o salva no banco de dados
                         pedidosRepository.save(
                                 new Pedidos(preference_id, 
                                             new BigDecimal(jsonNode.get("transaction_amount").asText()),
-                                            jsonNode.get("additional_info").get("items").asText(),
+                                            jsonNode.get("additional_info").get("items").toString(),
                                             authService.getSession(http).getEmail(),
-                                            Pedido.ENVIADO
+                                            Pedido.PEDIDO
                                 )
                         );
 

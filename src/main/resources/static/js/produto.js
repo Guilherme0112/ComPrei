@@ -60,7 +60,9 @@ share.addEventListener("click", function(){
 })
 
 // Se o usuário clicar em comprar, ele é redirecionado para o carrinho para 
-// finalizar a compra
+// finalizar a compra 
 comprar.addEventListener("click", function(){
+
+    setItemCarrinho(codigo);
     window.location.href = "/carrinho";
 })

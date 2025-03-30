@@ -71,7 +71,7 @@ public class PagamentosService {
             con.setRequestProperty("Authorization", "Bearer " + KEY_MP);
 
             // Status da requisição
-            int responseCode = con.getResponseCode();
+            // int responseCode = con.getResponseCode();
 
             // Lê a resposta
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -119,7 +119,7 @@ public class PagamentosService {
                 Produto p = produtoService.getProduct(codigoProduto.getCodigo());
 
                 // Verifica se tem estoque para o produto
-                if (produtoRepository.coutByCodigo(p.getCodigo()) < codigoProduto.getQuantidade()) {
+                if (produtoRepository.countByCodigo(p.getCodigo()) < codigoProduto.getQuantidade()) {
                     throw new ProdutoException("A quantidade é maior que o estoque atual");
                 }
 

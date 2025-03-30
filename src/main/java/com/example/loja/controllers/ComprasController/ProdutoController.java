@@ -7,15 +7,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.loja.exceptions.ProdutoException;
 import com.example.loja.models.Produto;
+import com.example.loja.repositories.ProdutoRepository;
 import com.example.loja.service.ProdutoService;
 
 @Controller
 public class ProdutoController {
     
     private final ProdutoService produtoService;
+    private final ProdutoRepository produtoRepository;
 
-    public ProdutoController(ProdutoService produtoService){
+    public ProdutoController(ProdutoService produtoService,
+                             ProdutoRepository produtoRepository) {
         this.produtoService = produtoService;
+        this.produtoRepository = produtoRepository;
     }
 
 
@@ -28,12 +32,14 @@ public class ProdutoController {
             
 
             Produto produto = produtoService.getProduct(codigo);
+            Long amount = produtoRepository.countByCodigo(codigo);
 
             if(produto == null){
                 throw new  ProdutoException("Produto não existe");
             }
 
             mv.addObject(produto);
+            mv.addObject("quantidade", amount);
             mv.setViewName("views/produto/produto");
             
         } catch (ProdutoException e){

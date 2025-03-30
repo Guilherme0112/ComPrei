@@ -1,12 +1,12 @@
 
 // Evento inicia após o carregamento total da página
-document.addEventListener("DOMContentLoaded", async () => {
+async function eventButtons() {
 
     // Seleciona todos os selects da página
-    var selects = document.querySelectorAll("#select");
+    let selects = document.querySelectorAll("#select");
 
     // Inicializa a variavel onde armazenará o id e o status do pedido
-    var updatePedidos = {};
+    let updatePedidos = {};
 
     // Adiciona o evento para exibir o botão de salvar 
     selects.forEach(select => {
@@ -61,6 +61,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         })
     });
-})
+}
 
 

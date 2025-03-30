@@ -51,7 +51,7 @@ public class APIAdminProdutosController {
             }
 
             // Busca a quantidade de registros que tem no banco de dados
-            Long amountP = produtoRepository.coutByCodigo(codigo);
+            Long amountP = produtoRepository.countByCodigo(codigo);
             AmountProducts amount =  new AmountProducts(amountP.toString());
             
             // Cria o LIMIT e OFFSET para buscar somente a primeira resposta

@@ -29,7 +29,7 @@
             <div style="width: 100%;">
                 <h1 th:text="${produto.name}" style="width: 100%; text-align: start;  white-space: normal; overflow-wrap: break-word; margin: 5px 0; font-size: 30px;"></h1>
                 <p th:text="${produto.description ?: 'Sem descrição'}" style="margin: 5px 0; width: 100%; text-align: start;  white-space: normal; overflow-wrap: break-word; font-size: 15px;"></p>
-                <p style="font-size: 15px;">Quantidade: <span style="font-size: 14px;">12</span></p>
+                <p style="font-size: 15px;">Quantidade: <span style="font-size: 14px;" th:text="${quantidade}"></span></p>
                 <p style="font-size: 15px;">Código de barras: <span th:text="${produto.codigo}" style="font-size: 14px;" id="codigo"></span></p>
                 <h2 th:text="'R$ ' + ${#numbers.formatDecimal(produto.price, 0, 'POINT', 2, 'COMMA')}" style="margin: 5px 0; font-size: 22px;"></h2>
             </div>

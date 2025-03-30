@@ -1,5 +1,8 @@
 package com.example.loja.service.AdminService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.loja.enums.Pedido;
@@ -7,6 +10,7 @@ import com.example.loja.exceptions.PedidosException;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Pedidos;
 import com.example.loja.models.Usuario;
+import com.example.loja.models.dto.PedidoDTO;
 import com.example.loja.repositories.PedidosRepository;
 import com.example.loja.repositories.UsuarioRepository;
 
@@ -20,6 +24,60 @@ public class AdminPedidosService {
                                UsuarioRepository usuarioRepository){
         this.pedidosRepository = pedidosRepository;
         this.usuarioRepository = usuarioRepository;
+    }
+
+    public List<PedidoDTO> getPedidos(String status) throws Exception, PedidosException, UsuarioException {
+
+
+        try {
+           
+            List<PedidoDTO> response = new ArrayList<>();
+
+            Pedido statusObj = Pedido.valueOf(status.toUpperCase());
+
+            // Busca os status com um determinado status
+            List<Pedidos> pedidos = pedidosRepository.findByStatus(statusObj);
+
+            // Verifica se existe algum dado e se não existir ele lança uma exceção
+            pedidos.stream()
+            .findFirst()
+            .orElseThrow(() -> new PedidosException("Não existem produtos com este status"));
+
+            for (Pedidos pedido : pedidos) {
+
+                // Busca o usuário que tem o email do pedido
+                List<Usuario> user = usuarioRepository.findByEmail(pedido.getEmail(), true);
+                user.stream()
+                    .findFirst()
+                    .orElseThrow(() -> new UsuarioException("O dono do pedido não existe"));
+
+                // Cria o DTO com os dados
+                PedidoDTO pedidoDto = new PedidoDTO(
+                    pedido.getId(),
+                    user.get(0).getName(),
+                    user.get(0).getTelefone(),
+                    pedido.getValor(),
+                    pedido.getStatus().toString(),
+                    pedido.getQuando()
+                );
+
+                // Adiciona o DTO na lista de resposta
+                response.add(pedidoDto);
+
+            }
+
+            return response;
+
+        } catch(PedidosException | UsuarioException e){ 
+
+            throw e;
+          
+        } catch (Exception e) {
+            
+            throw new Exception(e.getMessage());
+        }
+
+        
     }
 
     public void updatePedido(Long id, String status, String email) throws Exception, PedidosException, UsuarioException {

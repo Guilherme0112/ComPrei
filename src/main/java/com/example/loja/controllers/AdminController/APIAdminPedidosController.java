@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.loja.exceptions.PedidosException;
-import com.example.loja.models.Pedidos;
+import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.dto.UpdatePedidoDTO;
-import com.example.loja.repositories.PedidosRepository;
 import com.example.loja.service.AdminService.AdminPedidosService;
 import com.example.loja.service.UsuarioService.AuthService;
 
@@ -21,26 +21,38 @@ import jakarta.servlet.http.HttpSession;
 public class APIAdminPedidosController {
 
     private final AdminPedidosService adminPedidosService;
-    private final PedidosRepository pedidosRepository;
     private final AuthService authService;
 
     public APIAdminPedidosController(AdminPedidosService adminPedidosService,
-                                     PedidosRepository pedidosRepository,
-                                     AuthService authService){
+                                     AuthService authService) {
         this.adminPedidosService = adminPedidosService;
-        this.pedidosRepository = pedidosRepository;
         this.authService = authService;
     }
 
-    @GetMapping("/admin/get/pedidos")
-    public List<Pedidos> AdminAPIPedidosGET() {
+    @GetMapping("/admin/pedidos/{status}")
+    public List<?> AdminAPIPedidosGET(@PathVariable("status") String status)
+            throws Exception, PedidosException, UsuarioException {
 
-        return pedidosRepository.findAll();
+        try {
+
+            return adminPedidosService.getPedidos(status);
+
+        } catch (PedidosException | UsuarioException e) {
+
+            return List.of("erro", e.getMessage());
+
+        } catch (Exception e) {
+
+            System.out.println(e.getMessage());
+            return List.of("erro", "Ocorreu algum erro. Tente novamente mais tarde");
+
+        }
 
     }
 
     @PutMapping("/admin/pedidos/edit/status")
-    public ResponseEntity<?> UpdatePedido(@RequestBody UpdatePedidoDTO updatePedidoDTO, HttpSession http) throws Exception, PedidosException{
+    public ResponseEntity<?> UpdatePedido(@RequestBody UpdatePedidoDTO updatePedidoDTO, HttpSession http)
+            throws Exception, PedidosException {
 
         try {
 
@@ -51,10 +63,10 @@ public class APIAdminPedidosController {
 
             // // Atualiza o status do pedido
             adminPedidosService.updatePedido(id, status, email);
-            
+
             return ResponseEntity.ok(200);
 
-        } catch(PedidosException e) {
+        } catch (PedidosException e) {
 
             return ResponseEntity.badRequest().body(e.getMessage());
 
