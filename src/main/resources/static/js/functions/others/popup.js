@@ -9,15 +9,15 @@
  */
 function Popup(status){
 
-    var popupStats = status;
-
-    if(popupStats == false){
+    // Se o status for FALSE, abre a popup
+    if(status == false){
         const popup = document.getElementById("popup");
         popup.style.display = "block";
         return;
     }
 
-    if(popupStats == true){
+    // Se o status for TRUE, fecha a popup
+    if(status == true){
         document.getElementById("popup").style.display = "none";
         
     }

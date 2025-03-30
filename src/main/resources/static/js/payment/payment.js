@@ -1,14 +1,14 @@
 
 
 /***
- * Funçaõ que faz a requisição para gerar a cobrança
+ * Função que faz a requisição para gerar a cobrança
  */
 async function  Payment(){
 
     // Pega os produtos que estão no LocalStorage
     var carrinho = getCarrinho()
 
-    // faz a requisição
+    // Faz a requisição
     const res = await fetch("/payment", {
         method: "POST",
         headers: {

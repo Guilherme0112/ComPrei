@@ -1,13 +1,17 @@
 
+// Evento inicia após o carregamento total da página
 document.addEventListener("DOMContentLoaded", async () => {
 
+    // Seleciona todos os selects da página
     var selects = document.querySelectorAll("#select");
 
+    // Inicializa a variavel onde armazenará o id e o status do pedido
     var updatePedidos = {};
 
     // Adiciona o evento para exibir o botão de salvar 
     selects.forEach(select => {
 
+        // Função para todos os selects
         select.addEventListener("change", function () {
 
             // Deleta os dados da array (se tiver)
@@ -30,6 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     var allSave = document.querySelectorAll("#save");
     allSave.forEach(save => {
 
+        // Envia os dados para o back-end quando clicar em salvar
         save.addEventListener("click", async () => {
 
             // Faz a requisição para atualizar o status do pedido
@@ -51,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             // Oculta o botão de salvar após salvar
-            select.parentElement.parentElement.querySelector("#column_save").style.pointerEvents = "none";
+            save.parentElement.parentElement.querySelector("#column_save").style.pointerEvents = "none";
             save.parentElement.parentElement.querySelector("#column_save").style.opacity = "0";
 
         })
