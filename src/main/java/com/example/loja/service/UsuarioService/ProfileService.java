@@ -6,8 +6,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.loja.exceptions.EmailRequestException;
 import com.example.loja.exceptions.UsuarioException;
+import com.example.loja.models.Pagamentos;
+import com.example.loja.models.Pedidos;
 import com.example.loja.models.Usuario;
+import com.example.loja.models.UsuarioAddress;
 import com.example.loja.models.VerificationEmail;
+import com.example.loja.repositories.PagamentosRepository;
+import com.example.loja.repositories.PedidosRepository;
+import com.example.loja.repositories.UsuarioAddressRepository;
 import com.example.loja.repositories.UsuarioRepository;
 import com.example.loja.repositories.VerificationEmailRepository;
 import com.example.loja.service.EmailsService.EmailRequestService;
@@ -21,15 +27,24 @@ public class ProfileService {
     private final EmailService emailService;
     private final EmailRequestService emailRequestService;
     private final VerificationEmailRepository verificationEmailRepository;
+    private final PedidosRepository pedidosRepository;
+    private final UsuarioAddressRepository usuarioAddressRepository;
+    private final PagamentosRepository pagamentosRepository;
 
     public ProfileService(UsuarioRepository usuarioRepository,
                           EmailService emailService,
                           EmailRequestService emailRequestService,
-                          VerificationEmailRepository verificationEmailRepository){
+                          VerificationEmailRepository verificationEmailRepository,
+                          PedidosRepository pedidosRepository,
+                          UsuarioAddressRepository usuarioAddressRepository,
+                          PagamentosRepository pagamentosRepository) {
         this.usuarioRepository = usuarioRepository;
         this.emailService = emailService;
         this.emailRequestService = emailRequestService;
         this.verificationEmailRepository = verificationEmailRepository;
+        this.pedidosRepository = pedidosRepository;
+        this.usuarioAddressRepository = usuarioAddressRepository;
+        this.pagamentosRepository = pagamentosRepository;
 
     }
 
@@ -49,6 +64,19 @@ public class ProfileService {
             if(userVerify.isEmpty()){
                 throw new UsuarioException("Erro ao apagar conta. Tente novamente mais tarde");
             }
+
+            String email = userVerify.get(0).getEmail();
+
+            // Deleta todos os pedidos do usuário
+            List<Pedidos> pedidos = pedidosRepository.findByEmail(email);
+            pedidosRepository.deleteAll(pedidos);
+            
+            // Deleta os dados de endereço do usuário
+            List<UsuarioAddress> address = usuarioAddressRepository.findByEmail(email);
+            usuarioAddressRepository.deleteAll(address);
+
+            List<Pagamentos> pagamentos = pagamentosRepository.findByEmail(email);
+            pagamentosRepository.deleteAll(pagamentos);
 
             // Deleta a conta
             usuarioRepository.delete(userVerify.get(0));

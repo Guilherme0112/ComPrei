@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="https://www.thymelaef.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/globals.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/carrinho.css">
+    <link rel="stylesheet" href="../../css/pedidos.css">
+    <link rel="stylesheet" href="../../css/auth.css">
+    <link th:replace="~{components/component :: icon}">
+    <title>Rembolsos</title>
+</head>
+
+<body>
+
+    <header th:replace="~{components/component :: header}"></header>
+
+    <main style="width: 100%; display: flex;">
+        <div class="car_1"></div>
+        <div class="car_2" style="display: block;">
+            <table style="width: 100%;">
+                <thead>
+                    <th style="text-align: center;">Id</th>
+                    <th style="text-align: center;">Pedido</th>
+                    <th style="text-align: center;">Status</th>
+                    <th style="text-align: center;">Quando</th>
+                    <th style="text-align: center;">Email</th>
+                </thead>
+                <tbody th:each="reembolso : ${reembolsos}">
+                    <td th:text="${reembolso.id}" style="text-align: center;"></td>
+                    <td th:text="${reembolso.idPedido}" style="text-align: center;"></td>
+                    <td th:text="${reembolso.status}" style="text-align: center;"></td>
+                    <td th:text="${#temporals.format(reembolso.quando, 'dd/MM/yyyy, HH:mm:ss')}" style="text-align: center;"></td>
+                    <td th:text="${reembolso.email}" style="text-align: center;"></td>     
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+
+<script src="../../js/functions/others/popup.js"></script>
+</html>

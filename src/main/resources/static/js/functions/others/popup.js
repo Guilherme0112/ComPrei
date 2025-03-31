@@ -13,11 +13,16 @@ function Popup(status){
     if(status == false){
         const popup = document.getElementById("popup");
         popup.style.display = "block";
+
+        document.getElementById("overlay").style.display = "block";
+
         return;
     }
 
     // Se o status for TRUE, fecha a popup
     if(status == true){
+
+        document.getElementById("overlay").style.display = "none";
         document.getElementById("popup").style.display = "none";
         
     }
