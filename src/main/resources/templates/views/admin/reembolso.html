@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt_BR" xmlns:th="https://www.thymelaef.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/globals.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/pedidos.css">
+    <link rel="stylesheet" href="../css/auth.css">
+    <link th:replace="~{components/component :: icon}">
+    <title>Gerenciar Reembolsos</title>
+</head>
+
+<body>
+    <header th:replace="~{components/component :: header}"></header>
+    <main style="width: 100%; display: grid; justify-content: center;">
+
+        <select id="statusSelect" style="margin: 20px 0; text-align: center;">
+            <option value="PENDENTE">PENDENTE</option>
+            <option value="REEMBOLSADO">REEMBOLSADO</option>
+            <option value="CANCELADO">CANCELADO</option>
+        </select>
+
+        <table style="width: 1000px;">
+            <thead>
+                <td>Id<td>
+                <td>Pedido:</td>
+                <td>Nome:</td>
+                <td>Telefone:</td>
+                <td>Status:</td>
+                <td>Quando:</td>
+                <td></td>
+            </thead>
+        </table>
+    </main>
+
+    <script src="../js/functions/admin/createBoxReembolso.js"></script>
+    <script src="../js/functions/admin/getReembolso.js"></script>
+    <script src="../js/reembolso.js"></script>
+</body>
+</html>

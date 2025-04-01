@@ -77,6 +77,13 @@ public class ReembolsoService {
         }
     }
 
+    /** Busca os dados de um reembolso
+     * 
+     * @param idPedido Id do pedido que é reembolsado
+     * @return Reembolso
+     * @throws Exception Erro genérico
+     * @throws PedidosException Erros relacionados ao pedido
+     */
     public Reembolsos getReembolso(String idPedido) throws Exception, PedidosException {
 
         try {
@@ -108,6 +115,13 @@ public class ReembolsoService {
         }
     }
 
+    /** Atualiza o status de em reembolso
+     * 
+     * @param reembolso Objeto do reembolso
+     * @param status Novo status do reembolso
+     * @throws Exception Erro genérico
+     * @throws PedidosException Erros relacionados ao pedido
+     */
     public void updateReembolso(Reembolsos reembolso, String status) throws Exception, PedidosException {
 
         try {

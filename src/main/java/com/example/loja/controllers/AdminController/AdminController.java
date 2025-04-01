@@ -25,6 +25,13 @@ public class AdminController {
         mv.setViewName("views/admin/admin");
         return mv;
     }
+    @GetMapping("/admin/reembolso")
+    public ModelAndView AdminReembolsoGET(){
+        ModelAndView mv = new ModelAndView();
+
+        mv.setViewName("views/admin/reembolso");
+        return mv;
+    }
 
     @GetMapping("/admin/produtos")
     public ModelAndView AdminProdutosGET(){
