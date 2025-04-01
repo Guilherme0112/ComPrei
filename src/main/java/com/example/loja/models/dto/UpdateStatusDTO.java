@@ -1,7 +1,7 @@
 package com.example.loja.models.dto;
 
 
-public class UpdatePedidoDTO {
+public class UpdateStatusDTO {
     
     private Long id;
 

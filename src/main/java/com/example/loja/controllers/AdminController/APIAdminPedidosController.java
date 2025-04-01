@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.loja.exceptions.PedidosException;
 import com.example.loja.exceptions.UsuarioException;
-import com.example.loja.models.dto.UpdatePedidoDTO;
+import com.example.loja.models.dto.UpdateStatusDTO;
 import com.example.loja.service.AdminService.AdminPedidosService;
 import com.example.loja.service.UsuarioService.AuthService;
 
@@ -51,14 +51,14 @@ public class APIAdminPedidosController {
     }
 
     @PutMapping("/admin/pedidos/edit/status")
-    public ResponseEntity<?> UpdatePedido(@RequestBody UpdatePedidoDTO updatePedidoDTO, HttpSession http)
+    public ResponseEntity<?> UpdatePedido(@RequestBody UpdateStatusDTO updateStatusDTO, HttpSession http)
             throws Exception, PedidosException {
 
         try {
 
             // Recebe os dados do DTO
-            Long id = updatePedidoDTO.getId();
-            String status = updatePedidoDTO.getStatus();
+            Long id = updateStatusDTO.getId();
+            String status = updateStatusDTO.getStatus();
             String email = authService.getSession(http).getEmail();
 
             // // Atualiza o status do pedido

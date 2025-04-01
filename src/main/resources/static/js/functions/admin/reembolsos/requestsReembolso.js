@@ -17,13 +17,15 @@ statusSelect.addEventListener("change", async() =>{
         rembolso.remove();
     })
 
-    // Se houver rro
+    // Se houver erro
     if(dados[0] == "erro") {
 
-        alert(dados[1]);
+        document.querySelector("#resposta").textContent = dados[1];
         return;
     }
 
+    document.querySelector("#resposta").textContent = "";
+    
     // Exibe os pedidos se não houver erros
     dados.forEach(dado => {
         
@@ -31,6 +33,6 @@ statusSelect.addEventListener("change", async() =>{
         document.querySelector("table").appendChild(div);
     });
 
-    eventButtons();
+    eventButtonsReembolso();
 })
 

@@ -13,6 +13,7 @@
 }
 :root{
     --background: #0ca6ce;
+    --background-hover: #0d7a96;
     --box-form: #6bddf5;
 }
 html{

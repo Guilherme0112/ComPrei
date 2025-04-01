@@ -46,4 +46,8 @@ button{
     color: white;
     font-size: 18px;
     cursor: pointer;
+    transition: .3s;
+}
+button:hover{
+    background-color: var(--background-hover);
 }

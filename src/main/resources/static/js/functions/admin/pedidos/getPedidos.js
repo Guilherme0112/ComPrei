@@ -20,7 +20,7 @@ statusSelect.addEventListener("change", async() =>{
     // Se houver rro
     if(dados[0] == "erro") {
 
-        alert(data[1]);
+        document.querySelector("#resposta").textContent = dados[1];
         return;
     }
 
@@ -31,6 +31,6 @@ statusSelect.addEventListener("change", async() =>{
         document.querySelector("table").appendChild(div);
     });
 
-    eventButtons();
+    eventButtonsPedidos();
 })
 

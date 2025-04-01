@@ -1,6 +1,6 @@
 
 // Evento inicia após o carregamento total da página
-async function eventButtons() {
+async function eventButtonsReembolso() {
 
     // Seleciona todos os selects da página
     let selects = document.querySelectorAll("#select");
@@ -43,17 +43,20 @@ async function eventButtons() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(updatePedidos)
+                body: JSON.stringify(updateReembolso)
             })
 
             // Pega a resposta
             const data = await res.json();
 
             // Verifica se retornou algum erro
-            if (!data == 200) {
+            if (data[0] == "erro") {
 
+                document.querySelector("#resposta").textContent = data[1];
                 return;
             }
+
+            document.querySelector("#resposta").textContent = "";
 
             // Oculta o botão de salvar após salvar
             save.parentElement.parentElement.querySelector("#column_save").style.pointerEvents = "none";

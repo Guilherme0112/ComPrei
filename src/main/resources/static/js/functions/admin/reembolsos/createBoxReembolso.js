@@ -16,7 +16,6 @@ function createReembolso(id, idPedido, nome, telefone, quando){
     idReembolsoTh.textContent = id;
     divpai.appendChild(idReembolsoTh);
 
-    
     // Cria e adiciona o id do pedido ao container
     const idPedidoTh = document.createElement("th");
     idPedidoTh.textContent = idPedido;
@@ -77,7 +76,7 @@ function createReembolso(id, idPedido, nome, telefone, quando){
     // Cria o botão dentro do TH
     const buttonSave = document.createElement("button");
     buttonSave.id = "save";
-    buttonSave.dataset.id = idPedido;
+    buttonSave.dataset.id = id;
     buttonSave.style.backgroundColor = "#5bf15b";
     buttonSave.style.width = "50px";
     buttonSave.style.paddingTop = "8px";

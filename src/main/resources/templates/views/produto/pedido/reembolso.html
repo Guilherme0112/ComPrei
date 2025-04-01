@@ -26,14 +26,12 @@
                     <th style="text-align: center;">Pedido</th>
                     <th style="text-align: center;">Status</th>
                     <th style="text-align: center;">Quando</th>
-                    <th style="text-align: center;">Email</th>
                 </thead>
                 <tbody th:each="reembolso : ${reembolsos}">
                     <td th:text="${reembolso.id}" style="text-align: center;"></td>
                     <td th:text="${reembolso.idPedido}" style="text-align: center;"></td>
                     <td th:text="${reembolso.status}" style="text-align: center;"></td>
-                    <td th:text="${#temporals.format(reembolso.quando, 'dd/MM/yyyy, HH:mm:ss')}" style="text-align: center;"></td>
-                    <td th:text="${reembolso.email}" style="text-align: center;"></td>     
+                    <td th:text="${#temporals.format(reembolso.quando, 'dd/MM/yyyy, HH:mm:ss')}" style="text-align: center;"></td>     
                 </tbody>
             </table>
         </div>

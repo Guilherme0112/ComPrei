@@ -136,3 +136,12 @@
 .box *{
     margin: 0 10px;
 }
+
+/* Table */
+
+table{
+    width: 1000px;
+    background-color: var(--box-form);
+    border-radius: 10px;
+    padding: 10px;
+}

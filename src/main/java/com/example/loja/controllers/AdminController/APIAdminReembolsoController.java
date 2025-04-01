@@ -1,7 +1,6 @@
 package com.example.loja.controllers.AdminController;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,7 @@ import com.example.loja.exceptions.PedidosException;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Reembolsos;
 import com.example.loja.models.Usuario;
-import com.example.loja.models.dto.UpdatePedidoDTO;
+import com.example.loja.models.dto.UpdateStatusDTO;
 import com.example.loja.models.dto.UpdateReembolsoDTO;
 import com.example.loja.repositories.ReembolsosRepository;
 import com.example.loja.repositories.UsuarioRepository;
@@ -109,7 +108,7 @@ public class APIAdminReembolsoController {
     }
 
     @PutMapping("/profile/reembolso/editar")
-    public ResponseEntity<?> updateReembolsoAPI(UpdatePedidoDTO updateReembolso) throws Exception, PedidosException {
+    public ResponseEntity<?> updateReembolsoAPI(@RequestBody UpdateStatusDTO updateReembolso) throws Exception, PedidosException {
 
         try {
 
@@ -118,20 +117,16 @@ public class APIAdminReembolsoController {
             Long id = updateReembolso.getId();
 
             // Busca o reembolso no banco de dados
-            Optional<Reembolsos> reembolso = reembolsoRepository.findById(id);
-
-            // Verifica se existe
-            reembolso.stream()
-            .findFirst()
-            .orElseThrow(() -> new PedidosException("Reembolso nao encontrado"));
+            Reembolsos reembolso = reembolsoRepository.findById(id)
+                                                      .orElseThrow(() -> new PedidosException("Reembolso nao encontrado"));
 
             // Seta o novo status
-            reembolso.get().setStatus(Reembolso.valueOf(status.toUpperCase()));
+            reembolso.setStatus(Reembolso.valueOf(status.toUpperCase()));
 
             // Atualiza o reembolso
-            reembolsoRepository.save(reembolso.get());
+            reembolsoRepository.save(reembolso);
 
-            return ResponseEntity.ok().body(HttpStatus.ACCEPTED);
+            return ResponseEntity.ok(HttpStatus.OK);
 
         } catch (PedidosException e) {
 

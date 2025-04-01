@@ -1,6 +1,6 @@
 
 // Evento inicia após o carregamento total da página
-async function eventButtons() {
+async function eventButtonsPedidos() {
 
     // Seleciona todos os selects da página
     let selects = document.querySelectorAll("#select");
