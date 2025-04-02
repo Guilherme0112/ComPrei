@@ -1,5 +1,6 @@
 package com.example.loja.controllers.UsuarioController;
 
+import com.example.loja.enums.Cargo;
 import com.example.loja.exceptions.SessionException;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Usuario;
@@ -50,6 +51,11 @@ public class ProfileController {
             if(!usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
 
                 UsuarioAddress verifyUserAddress = usuarioAddressRepository.findByEmail(user.getEmail()).get(0);
+
+                // Verifica se é admin, se sim, adiciona o atributo
+                if(user.getRole().equals(Cargo.ADMIN)){
+                    mv.addObject("admin", true);
+                }
 
                 mv.addObject("address", verifyUserAddress);
                 mv.setViewName("views/profile/profile");

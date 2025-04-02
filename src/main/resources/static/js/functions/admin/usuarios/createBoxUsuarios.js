@@ -4,6 +4,7 @@ function createUsuarios(id, name, email, telefone, role) {
     const box = document.createElement("div");
     box.className = "box";
     box.dataset.id = id;
+    box.style.width = "450px";
 
     // Cria e adiciona o nome do usuário ao container
     const p1 = document.createElement("p");

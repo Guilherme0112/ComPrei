@@ -29,7 +29,7 @@
                 <br>
                 <a th:href="@{/profile/edit}" style="display: flex; width: 100%; margin-bottom: 15px;">Editar Dados</a>
                 <a th:href="@{/profile/edit/password}" style="display: flex; width: 100%;">Alterar senha</a>
-                <button id="admin" style="margin: 20px 0 0 0; width: 200px;">Admin</button>
+                <button th:if="${admin}" id="admin" style="margin: 20px 0 0 0; width: 200px;">Admin</button>
                 <br>
                 <button class="btn_del" id="del" style="margin-top: 20px;">Apagar Conta</button>
             </div>

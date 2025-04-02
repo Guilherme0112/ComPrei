@@ -30,6 +30,7 @@ main{
 }
 
 .reposta{
+    
     width: 100% !important;
     height: auto;
     border-radius: 10px;
@@ -41,3 +42,18 @@ main{
 }
 
 
+.admin{
+    display: grid;
+    background-color: var(--box-form);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    grid-template-columns: 1fr 1fr;
+}
+.admin a{
+    text-decoration: none;
+    margin: 10px 0;
+}
+.admin a:hover{
+    text-decoration: underline;
+}

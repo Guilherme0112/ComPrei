@@ -51,7 +51,7 @@ btn.addEventListener("click", async () => {
     // Chama a função que cria o container
     let box = createUsuarios(data[0].id, data[0].name, data[0].email, data[0].telefone, data[0].role);
     divPai.appendChild(box)
-    divPai.style.display = "block";
+    box.style.display = "block";
 
     // Seleciona os botões de deletar e adiciona os eventos neles
     allBtnDel = document.querySelectorAll("#btn_del");
