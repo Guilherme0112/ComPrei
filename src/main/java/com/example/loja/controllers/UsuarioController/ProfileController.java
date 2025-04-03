@@ -11,7 +11,6 @@ import com.example.loja.service.UsuarioService.ProfileService;
 import com.example.loja.util.Util;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 import java.util.Map;
 
@@ -39,21 +38,21 @@ public class ProfileController {
     }
 
     @GetMapping("/profile")
-    public ModelAndView Profile(HttpSession httpSession) throws SessionException, Exception {
+    public ModelAndView Profile() throws SessionException, Exception {
 
         ModelAndView mv = new ModelAndView();
 
         try {
 
             // Tenta buscar o usuário da sessão
-            Usuario user = authService.getSession(httpSession);
+            Usuario user = authService.buscarSessaUsuario();
 
             if(!usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
 
                 UsuarioAddress verifyUserAddress = usuarioAddressRepository.findByEmail(user.getEmail()).get(0);
 
                 // Verifica se é admin, se sim, adiciona o atributo
-                if(user.getRole().equals(Cargo.ADMIN)){
+                if(user.getRole().equals(Cargo.ROLE_ADMIN)){
                     mv.addObject("admin", true);
                 }
 
@@ -80,7 +79,7 @@ public class ProfileController {
     }
 
     @DeleteMapping("/profile/delete")
-    public ResponseEntity<?> ApagarUsuario(@RequestBody Map<String, String> senhaRequest, HttpSession http, HttpServletRequest request) throws Exception, UsuarioException{
+    public ResponseEntity<?> ApagarUsuario(@RequestBody Map<String, String> senhaRequest, HttpServletRequest request) throws Exception, UsuarioException{
 
         try {
             
@@ -88,7 +87,7 @@ public class ProfileController {
             String senha = senhaRequest.get("senha");
             
             // Verifica a autenticação do usuário
-            Usuario user = authService.getSession(http);
+            Usuario user = authService.buscarSessaUsuario();
             if(user == null){
                 throw new UsuarioException("Ocorreu algum erro. Tente novamente mais tarde");                
             }

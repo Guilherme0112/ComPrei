@@ -73,12 +73,12 @@ public class PagamentosController {
         }
 
         @PostMapping("/payment")
-        public ResponseEntity<?> PaymentPOST(@RequestBody List<ProdutoQuantidade> produtos, HttpSession http) throws Exception, ProdutoException, MPApiException, MPException, UsuarioException{
+        public ResponseEntity<?> PaymentPOST(@RequestBody List<ProdutoQuantidade> produtos) throws Exception, ProdutoException, MPApiException, MPException, UsuarioException{
 
                 try {
                         
                         // Verifica se o usuário tem algum endereço cadastrado
-                        usuarioAddressService.verifyAddress(authService.getSession(http).getEmail());
+                        usuarioAddressService.verifyAddress(authService.buscarSessaUsuario().getEmail());
 
                         // Token de acesso para as requisições
                         MercadoPagoConfig.setAccessToken(KEY_MP);
@@ -92,7 +92,7 @@ public class PagamentosController {
                 
                         // Salva os dados do pagamento
                         pagamentosRepository.save(new Pagamentos(
-                                authService.getSession(http).getEmail(),
+                                authService.buscarSessaUsuario().getEmail(),
                                 preference.getId().toString(),
                                 "pending",
                                 total
@@ -104,24 +104,14 @@ public class PagamentosController {
                         // Retorna o link para efetuar o apagamento
                         return ResponseEntity.ok(List.of(HttpStatus.OK, preference.getInitPoint().toString()));
 
-                } catch(UsuarioException e){
+                } catch(UsuarioException | ProdutoException | MPException e){
 
                         return ResponseEntity.badRequest().body(List.of(e.getMessage()));
-
-                } catch (ProdutoException e) {
-
-                        System.out.println("produtoexception: " + e.getMessage());
-                        return ResponseEntity.badRequest().body(List.of(e.getMessage()));
-                        
+       
                 } catch (MPApiException e) {
 
                         System.out.println("mpapiexception: " + e.getApiResponse().getContent());
                         return ResponseEntity.badRequest().body(List.of("Ocorreu algum erro ao gerar a forma de pagamento. Tente novamente mais tarde"));
-
-                } catch (MPException e) {
-
-                        System.out.println("mpexception: " + e.getMessage());
-                        return ResponseEntity.badRequest().body(List.of("Ocorreu algum erro na hora de criar a forma de pagamento. Tente novamente mais tarde"));
 
                 } catch (Exception e) {
 
@@ -144,7 +134,7 @@ public class PagamentosController {
                         }
 
                         // Busca o email do usuário da sessão
-                        String emailUser = authService.getSession(http).getEmail();
+                        String emailUser = authService.buscarSessaUsuario().getEmail();
 
                         // Verifica a autenticidade do do pagamento
                         Pagamentos objPreference = MpApiPreferencesService.verifyPreferencePayment(preference_id, emailUser);
@@ -167,7 +157,7 @@ public class PagamentosController {
                                 new Pedidos(preference_id, 
                                             new BigDecimal(jsonNode.get("transaction_amount").asText()),
                                             jsonNode.get("additional_info").get("items").toString(),
-                                            authService.getSession(http).getEmail(),
+                                            authService.buscarSessaUsuario().getEmail(),
                                             Pedido.PEDIDO
                                 )
                         );

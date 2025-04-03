@@ -40,7 +40,7 @@ function createUsuarios(id, name, email, telefone, role) {
     btnDel.style.margin = "10px";
 
     // Se o usuário for um cliente comum
-    if (role == "CLIENTE") {
+    if (role == "ROLE_CLIENTE") {
 
         // Dá a opção de banir e dar admin
         btnDel.textContent = "Banir";
@@ -49,14 +49,14 @@ function createUsuarios(id, name, email, telefone, role) {
         box1.appendChild(btnAdmin);
 
         // Se já estiver banido
-    } else if (role == "BANIDO") {
+    } else if (role == "ROLE_BANIDO") {
 
         // Dá apenas a opção de desbanir
         btnDel.textContent = "Desbanir"
         box1.appendChild(btnDel);
 
         // Se já for admin
-    } else if (role == "ADMIN") {
+    } else if (role == "ROLE_ADMIN") {
 
         // Dá apenas a opção de remover o admin
         btnAdmin.textContent = "Remover Admin";

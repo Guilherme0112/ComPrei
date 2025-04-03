@@ -12,7 +12,6 @@ import com.example.loja.repositories.UsuarioAddressRepository;
 import com.example.loja.service.UsuarioService.AuthService;
 import com.example.loja.service.UsuarioService.UsuarioAddressService;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -31,13 +30,13 @@ public class UsuarioAddressController {
     }
 
     @GetMapping("/profile/edit/address")
-    public ModelAndView Config(HttpSession http){
+    public ModelAndView Config(){
 
         ModelAndView mv = new ModelAndView();
 
         try {
 
-            Usuario user = authService.getSession(http);
+            Usuario user = authService.buscarSessaUsuario();
 
             if(usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
 
@@ -61,7 +60,7 @@ public class UsuarioAddressController {
     }
 
     @PostMapping("/profile/edit/address")
-    public ModelAndView ConfigPost(@Valid UsuarioAddress usuarioAddress, BindingResult br, HttpSession http) throws Exception{
+    public ModelAndView ConfigPost(@Valid UsuarioAddress usuarioAddress, BindingResult br) throws Exception{
 
         ModelAndView mv = new ModelAndView();
 
@@ -76,7 +75,7 @@ public class UsuarioAddressController {
             }
 
             // Chama o service pegando o email da sessão
-            usuarioAddressService.saveAddress(usuarioAddress, authService.getSession(http).getEmail());
+            usuarioAddressService.saveAddress(usuarioAddress, authService.buscarSessaUsuario().getEmail());
 
             mv.setViewName("redirect:/profile");
 

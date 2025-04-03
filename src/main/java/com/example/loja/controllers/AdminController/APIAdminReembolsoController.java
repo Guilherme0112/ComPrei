@@ -23,8 +23,6 @@ import com.example.loja.repositories.UsuarioRepository;
 import com.example.loja.service.ReembolsoService;
 import com.example.loja.service.UsuarioService.AuthService;
 
-import jakarta.servlet.http.HttpSession;
-
 @RestController        
 public class APIAdminReembolsoController {
     
@@ -85,12 +83,12 @@ public class APIAdminReembolsoController {
     }
 
     @PostMapping("/profile/reembolso/pedir")
-    public ResponseEntity<?> reembolsoAPI(@RequestBody String id, HttpSession http) throws Exception, PedidosException {
+    public ResponseEntity<?> reembolsoAPI(@RequestBody String id) throws Exception, PedidosException {
 
         try {
 
             // Pega o email da sessão e tenta criar o reeembolso
-            String email = authService.getSession(http).getEmail();
+            String email = authService.buscarSessaUsuario().getEmail();
             reembolsoService.createReembolso(id, email);
 
             return ResponseEntity.ok().body(HttpStatus.ACCEPTED);

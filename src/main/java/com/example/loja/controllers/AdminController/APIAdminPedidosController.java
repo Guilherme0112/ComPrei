@@ -15,8 +15,6 @@ import com.example.loja.models.dto.UpdateStatusDTO;
 import com.example.loja.service.AdminService.AdminPedidosService;
 import com.example.loja.service.UsuarioService.AuthService;
 
-import jakarta.servlet.http.HttpSession;
-
 @RestController
 public class APIAdminPedidosController {
 
@@ -51,7 +49,7 @@ public class APIAdminPedidosController {
     }
 
     @PutMapping("/admin/pedidos/edit/status")
-    public ResponseEntity<?> UpdatePedido(@RequestBody UpdateStatusDTO updateStatusDTO, HttpSession http)
+    public ResponseEntity<?> UpdatePedido(@RequestBody UpdateStatusDTO updateStatusDTO)
             throws Exception, PedidosException {
 
         try {
@@ -59,7 +57,7 @@ public class APIAdminPedidosController {
             // Recebe os dados do DTO
             Long id = updateStatusDTO.getId();
             String status = updateStatusDTO.getStatus();
-            String email = authService.getSession(http).getEmail();
+            String email = authService.buscarSessaUsuario().getEmail();
 
             // // Atualiza o status do pedido
             adminPedidosService.updatePedido(id, status, email);

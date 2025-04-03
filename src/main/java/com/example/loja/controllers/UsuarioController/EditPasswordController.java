@@ -24,8 +24,6 @@ import com.example.loja.service.UsuarioService.EditPasswordService;
 import com.example.loja.service.UsuarioService.ResetPasswordService;
 import com.example.loja.util.Util;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 public class EditPasswordController {
 
@@ -65,7 +63,7 @@ public class EditPasswordController {
     }
 
     @PostMapping("/profile/edit/password")
-    public ModelAndView TrocarSenhaPOST(PasswordRequest passwordRequest, HttpSession http)
+    public ModelAndView TrocarSenhaPOST(PasswordRequest passwordRequest)
             throws Exception, PasswordException {
 
         ModelAndView mv = new ModelAndView();
@@ -73,7 +71,7 @@ public class EditPasswordController {
         try {
 
             // Pegando o objeto do usuário da sessão
-            Usuario user = authService.getSession(http);
+            Usuario user = authService.buscarSessaUsuario();
 
             // Verifica a sessão do usuário
             if (user == null) {

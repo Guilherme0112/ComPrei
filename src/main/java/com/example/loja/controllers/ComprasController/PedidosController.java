@@ -8,8 +8,6 @@ import com.example.loja.models.Usuario;
 import com.example.loja.repositories.PedidosRepository;
 import com.example.loja.service.UsuarioService.AuthService;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 public class PedidosController {
 
@@ -23,13 +21,13 @@ public class PedidosController {
   }
 
   @GetMapping("/profile/pedidos")
-  public ModelAndView Pedidos(HttpSession http){
+  public ModelAndView Pedidos(){
 
     ModelAndView mv = new ModelAndView();
 
     try {
       
-      Usuario user = authService.getSession(http);
+      Usuario user = authService.buscarSessaUsuario();
       mv.addObject("pedidos", pedidosRepository.findByEmail(user.getEmail()));
     
     } catch (Exception e) {

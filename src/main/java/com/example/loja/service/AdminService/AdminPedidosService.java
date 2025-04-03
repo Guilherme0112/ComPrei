@@ -90,9 +90,9 @@ public class AdminPedidosService {
                                                           .orElseThrow(() -> new PedidosException("Usuário não existe"));
 
             // Verifica se existe algum usuário e se não existir lança uma exception
-            Usuario user = usuarioRepository.findByEmail(email, true).stream()
-                                                                            .findFirst()
-                                                                            .orElseThrow(() -> new UsuarioException("Usuário não existe"));
+           usuarioRepository.findByEmail(email, true).stream()
+                                                            .findFirst()
+                                                            .orElseThrow(() -> new UsuarioException("Usuário não existe"));
 
            Pedido novoStatus = Pedido.valueOf(status.toUpperCase());
            pedido.setStatus(novoStatus);

@@ -13,8 +13,6 @@ import com.example.loja.service.UsuarioService.AuthService;
 import com.example.loja.service.UsuarioService.EditUsuarioService;
 import com.example.loja.util.Util;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 public class EditUsuarioController {
 
@@ -28,13 +26,13 @@ public class EditUsuarioController {
     }
 
     @GetMapping("/profile/edit")
-    public ModelAndView EditUserGET(HttpSession http) throws SessionException {
+    public ModelAndView EditUserGET() throws SessionException {
 
         ModelAndView mv = new ModelAndView();
 
         try {
 
-            Usuario user = authService.getSession(http);
+            Usuario user = authService.buscarSessaUsuario();
 
             // Envia os dados para as inputs caso já houver os dados
             EditUserRequest editUserRequest = new EditUserRequest();
@@ -53,15 +51,14 @@ public class EditUsuarioController {
     }
 
     @PostMapping("/profile/edit")
-    public ModelAndView EditUserPOST(EditUserRequest editUserRequest, HttpSession http)
-            throws Exception, UsuarioException {
+    public ModelAndView EditUserPOST(EditUserRequest editUserRequest) throws Exception, UsuarioException {
 
         ModelAndView mv = new ModelAndView();
 
         try {
 
             // Busca a sessão do usuário
-            Usuario user = authService.getSession(http);
+            Usuario user = authService.buscarSessaUsuario();
 
             if (!Util.verifyPass(editUserRequest.getSenha(), user.getPassword())) {
                 throw new UsuarioException("A senha está incorreta");

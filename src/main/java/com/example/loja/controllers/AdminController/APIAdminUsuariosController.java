@@ -61,14 +61,14 @@ public class APIAdminUsuariosController {
 
             Usuario user = usuarioRepository.findById(idLong).get();
 
-            if (user.getRole().equals(Cargo.BANIDO)) {
+            if (user.getRole().equals(Cargo.ROLE_BANIDO)) {
 
-                user.setRole(Cargo.CLIENTE);
+                user.setRole(Cargo.ROLE_CLIENTE);
                 usuarioRepository.save(user);
                 return List.of(200, "Usuário desbanido com sucesso");
             }
 
-            user.setRole(Cargo.BANIDO);
+            user.setRole(Cargo.ROLE_BANIDO);
             usuarioRepository.save(user);
 
             return List.of(200, "Usuário banido com sucesso");
@@ -102,18 +102,18 @@ public class APIAdminUsuariosController {
 
             Usuario user = usuarioRepository.findById(idLong).get();
 
-            if (user.getRole().equals(Cargo.BANIDO)) {
+            if (user.getRole().equals(Cargo.ROLE_BANIDO)) {
                 return List.of("erro", "Você precisa desbanir o usuário primeiro");
             }
 
-            if (user.getRole().equals(Cargo.CLIENTE)) {
+            if (user.getRole().equals(Cargo.ROLE_CLIENTE)) {
 
-                user.setRole(Cargo.ADMIN);
+                user.setRole(Cargo.ROLE_ADMIN);
                 usuarioRepository.save(user);
                 return List.of(200, "O usuário agora é admin");
             } else {
                 
-                user.setRole(Cargo.CLIENTE);
+                user.setRole(Cargo.ROLE_CLIENTE);
                 usuarioRepository.save(user);
                 return List.of(200, "Você retirou o cargo de admin do id " + id);
             }

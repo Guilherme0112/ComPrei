@@ -8,8 +8,6 @@ import com.example.loja.exceptions.SessionException;
 import com.example.loja.repositories.ReembolsosRepository;
 import com.example.loja.service.UsuarioService.AuthService;
 
-import jakarta.servlet.http.HttpSession;
-
 @RestController
 public class ReembolsoController {
 
@@ -23,14 +21,14 @@ public class ReembolsoController {
     }
 
     @GetMapping("/profile/reembolsos")
-    public ModelAndView reembolso(HttpSession http) throws SessionException, Exception {
+    public ModelAndView reembolso() throws SessionException, Exception {
 
         ModelAndView mv = new ModelAndView();
 
         try {
 
 
-            String email = authService.getSession(http).getEmail();
+            String email = authService.buscarSessaUsuario().getEmail();
 
             mv.setViewName("views/produto/pedido/reembolso");
             mv.addObject("reembolsos", reembolsoRepository.findByEmail(email));

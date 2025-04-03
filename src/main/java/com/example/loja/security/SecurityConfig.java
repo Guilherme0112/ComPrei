@@ -17,14 +17,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/auth/login", "/auth/register").anonymous()
                 .requestMatchers("/", "/css/**", "/js/**", "/email/**", "/icons/**", "/reset/**", "/uploads/**", "/produto/**", "/carrinho/**").permitAll()
-                // .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
 
             .exceptionHandling(exception -> exception
-                    .accessDeniedPage("/auth/login")
+                    .accessDeniedPage("/")
             )
             .formLogin(formLogin -> formLogin.disable())
             .httpBasic(httpBasic -> httpBasic.disable())
@@ -35,9 +35,9 @@ public class SecurityConfig {
                     .deleteCookies("JSESSIONID")
             )
             .sessionManagement(session -> session
-                    .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                     .maximumSessions(1)
-                    .expiredUrl("/auth/login")
+                    .expiredUrl("/")
             );
 
             return http.build();
@@ -48,7 +48,7 @@ public class SecurityConfig {
     public AccessDeniedHandler accessDeniedHandler(){
 
         AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
-        handler.setErrorPage("/auth/login");
+        handler.setErrorPage("/");
 
         return handler;
     }

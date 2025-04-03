@@ -1,7 +1,7 @@
 package com.example.loja.enums;
 
 public enum Cargo {
-    BANIDO,
-    CLIENTE,
-    ADMIN;
+    ROLE_BANIDO,
+    ROLE_CLIENTE,
+    ROLE_ADMIN;
 }
