@@ -126,20 +126,17 @@ public class AuthController {
             emailRequestService.saveRequestEmail(usuario.getEmail());
 
             // Salva o token no banco de dados para a verificação
-            VerificationEmail email_request_token = new VerificationEmail(usuario.getEmail(), token);
-            verificationEmailRepository.save(email_request_token);
+            verificationEmailRepository.save(
+                new VerificationEmail(
+                    usuario.getEmail(),
+                    token
+                )
+            );
 
             mv.setViewName("/views/mails/send_email");
 
-        } catch (EmailRequestException e){
+        } catch (UsuarioException | EmailRequestException e){
 
-            System.out.println("email_request_exception: " + e.getMessage());
-            mv.addObject("erro", e.getMessage());
-            mv.setViewName("/views/auth/register");
-
-        } catch (UsuarioException e){
-
-            System.out.println("usuario_exception: " + e.getMessage());
             mv.addObject("erro", e.getMessage());
             mv.setViewName("/views/auth/register");
 

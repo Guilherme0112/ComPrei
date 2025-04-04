@@ -2,42 +2,48 @@ package com.example.loja.controllers.AdminController;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.loja.enums.Cargo;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Usuario;
 import com.example.loja.repositories.UsuarioRepository;
+import com.example.loja.service.AdminService.AdminUsuariosService;
+import com.mercadopago.net.HttpStatus;
 
 @RestController
 public class APIAdminUsuariosController {
 
     private final UsuarioRepository usuarioRepository;
+    private final AdminUsuariosService adminUsuariosService;
 
-    public APIAdminUsuariosController(UsuarioRepository usuarioRepository) {
+    public APIAdminUsuariosController(UsuarioRepository usuarioRepository,
+                                      AdminUsuariosService adminUsuariosService) {
         this.usuarioRepository = usuarioRepository;
+        this.adminUsuariosService = adminUsuariosService;
 
     }
 
     @GetMapping("/admin/usuarios/{id}")
-    public List<?> AdminUsuariosAPIGET(@PathVariable("id") String id) {
+    public List<?> AdminUsuariosAPIGET(@PathVariable("id") String id) throws Exception, UsuarioException{
         try {
 
-            if (!id.matches("\\d+")) {
-                return List.of("erro", "O código  é inválido");
-            }
+            // Verifica se existem apenas números na string
+            if (!id.matches("\\d+")) throw new UsuarioException("O código  é inválido");
 
+            // Converte o id para Long
             Long idLong = Long.parseLong(id);
 
-            Optional<Usuario> usuario = usuarioRepository.findById(idLong);
+            // Pega o usuário como Optional e converte para List
+            return usuarioRepository.findById(idLong).map(Collections::singletonList)
+                                                     .orElseGet(Collections::emptyList);
 
-            return usuario.map(Collections::singletonList)
-                    .orElseGet(Collections::emptyList);
-
+        } catch (UsuarioException e) {
+            
+            return List.of("erro", e.getMessage());
+        
         } catch (Exception e) {
 
             return List.of("erro", e.getMessage());
@@ -53,25 +59,14 @@ public class APIAdminUsuariosController {
                 return List.of("erro", "O código  é inválido");
             }
 
-            Long idLong = Long.parseLong(id);
+            Usuario user = usuarioRepository.findById(Long.parseLong(id)).stream()
+                                                                       .findFirst()
+                                                                       .orElseThrow(() -> new UsuarioException("Usuário nao encontrado"));
 
-            if (usuarioRepository.findById(idLong).isEmpty()) {
-                throw new UsuarioException("Usuário não existe");
-            }
+            // Chama o método que bane se tiver desbanido e desbane se tiver banido
+            adminUsuariosService.BanirOuDesbanir(user);
 
-            Usuario user = usuarioRepository.findById(idLong).get();
-
-            if (user.getRole().equals(Cargo.ROLE_BANIDO)) {
-
-                user.setRole(Cargo.ROLE_CLIENTE);
-                usuarioRepository.save(user);
-                return List.of(200, "Usuário desbanido com sucesso");
-            }
-
-            user.setRole(Cargo.ROLE_BANIDO);
-            usuarioRepository.save(user);
-
-            return List.of(200, "Usuário banido com sucesso");
+            return List.of(HttpStatus.OK);
 
         } catch (UsuarioException e) {
 
@@ -94,29 +89,16 @@ public class APIAdminUsuariosController {
                 return List.of("erro", "O código  é inválido");
             }
 
+            
             Long idLong = Long.parseLong(id);
+            
+            Usuario user = usuarioRepository.findById(idLong).stream()
+                                                             .findFirst()
+                                                             .orElseThrow(() -> new UsuarioException("Usuário nao encontrado"));
 
-            if (usuarioRepository.findById(idLong).isEmpty()) {
-                throw new UsuarioException("Usuário não existe");
-            }
+            adminUsuariosService.AdminOuNao(user);
 
-            Usuario user = usuarioRepository.findById(idLong).get();
-
-            if (user.getRole().equals(Cargo.ROLE_BANIDO)) {
-                return List.of("erro", "Você precisa desbanir o usuário primeiro");
-            }
-
-            if (user.getRole().equals(Cargo.ROLE_CLIENTE)) {
-
-                user.setRole(Cargo.ROLE_ADMIN);
-                usuarioRepository.save(user);
-                return List.of(200, "O usuário agora é admin");
-            } else {
-                
-                user.setRole(Cargo.ROLE_CLIENTE);
-                usuarioRepository.save(user);
-                return List.of(200, "Você retirou o cargo de admin do id " + id);
-            }
+            return List.of(HttpStatus.OK);
 
         } catch (UsuarioException e) {
 

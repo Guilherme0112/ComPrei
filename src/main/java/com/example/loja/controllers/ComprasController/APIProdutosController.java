@@ -3,7 +3,6 @@ package com.example.loja.controllers.ComprasController;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,14 +32,14 @@ public class APIProdutosController {
 
         try {
 
+            // Busca os 15 produtos de acordo com o indice
             int indice = Integer.parseInt(i) * 15;
             
-            
+            // Cria o pageable para buscar de acordo com o indice
             Pageable pageable = PageRequest.of(indice, 15);
 
-            Page<Produto> res = produtoRepository.findRandom(pageable);
-
-            return new ProdutoPageDTO(res);
+            // Retorna o DTO com a lista de produtos
+            return new ProdutoPageDTO(produtoRepository.findRandom(pageable));
 
         } catch (Exception e) {
             
@@ -55,9 +54,7 @@ public class APIProdutosController {
         try {
 
             // Verifica se existe produtos npo carrinho
-            if(codigos.getProdutos().isEmpty()){
-                throw new ProdutoException("O carrinho está vazio");
-            }
+            if(codigos.getProdutos().isEmpty()) throw new ProdutoException("O carrinho está vazio");
 
             // Cria a array de retorno e pega a array com produtos
             List<String> codigosList = codigos.getProdutos();

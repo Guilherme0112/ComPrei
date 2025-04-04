@@ -1,7 +1,5 @@
 package com.example.loja.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -73,18 +71,13 @@ public class ProdutoService {
     public Produto getProduct(String codigo) throws ProdutoException, Exception{
         try {
             
+            // Cria o PageAble que retorna o primeiro resultado
             Pageable pageable = PageRequest.of(0, 1);
 
-            List<Produto> productOpt = produtoRepository.findByCodigoDeBarras(codigo, pageable);
-
-            if(productOpt.isEmpty()){
-                throw new ProdutoException("O código de barras do produto é inválido");
-            }
-
-            Produto produtoObj = productOpt.get(0);
-
-            return produtoObj;
-
+            // Retorna o primeiro resultado e lança uma exceção caso não houver dados
+            return produtoRepository.findByCodigoDeBarras(codigo, pageable).stream()
+                                                                           .findFirst()
+                                                                           .orElseThrow(() -> new ProdutoException("O produto nao foi encontrado"));
         } catch (ProdutoException e){
 
             throw new ProdutoException(e.getMessage());

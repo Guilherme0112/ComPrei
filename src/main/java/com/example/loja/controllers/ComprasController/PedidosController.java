@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.loja.models.Usuario;
 import com.example.loja.repositories.PedidosRepository;
 import com.example.loja.service.UsuarioService.AuthService;
 
@@ -15,21 +14,24 @@ public class PedidosController {
   private final PedidosRepository pedidosRepository;
 
   public PedidosController(AuthService authService,
-                           PedidosRepository pedidosRepository){
+      PedidosRepository pedidosRepository) {
     this.authService = authService;
     this.pedidosRepository = pedidosRepository;
   }
 
   @GetMapping("/profile/pedidos")
-  public ModelAndView Pedidos(){
+  public ModelAndView Pedidos() throws Exception {
 
     ModelAndView mv = new ModelAndView();
 
     try {
-      
-      Usuario user = authService.buscarSessaUsuario();
-      mv.addObject("pedidos", pedidosRepository.findByEmail(user.getEmail()));
-    
+
+      // Busca o email do usuário 
+      String emailUser = authService.buscarSessaUsuario().getEmail();
+
+      // Retorna os pedidos referente ao email do usuário (Caso não haja email, ele retorna nada)
+      mv.addObject("pedidos", pedidosRepository.findByEmail(emailUser));
+
     } catch (Exception e) {
 
       System.out.println(e.getMessage());

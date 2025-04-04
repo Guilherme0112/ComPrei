@@ -31,13 +31,11 @@ public class ProdutoController {
         try {
             
 
+            // Guarda o valor das variáveis
             Produto produto = produtoService.getProduct(codigo);
             Long amount = produtoRepository.countByCodigo(codigo);
 
-            if(produto == null){
-                throw new  ProdutoException("Produto não existe");
-            }
-
+            // Retorna os valores para a view 
             mv.addObject(produto);
             mv.addObject("quantidade", amount);
             mv.setViewName("views/produto/produto");
@@ -49,36 +47,11 @@ public class ProdutoController {
     
         } catch (Exception e) {
 
-    
             System.out.println(e.getMessage());
             mv.addObject("erro", "Ocorreu um erro. Tente novamente mais tarde");
             mv.setViewName("redirect:/");
         }
         
-        return mv;
-    }
-
-    @GetMapping("/checkout/{pagamento}")
-    public ModelAndView checkout(@PathVariable("pagamento") String pagamento){
-
-        ModelAndView mv = new ModelAndView();
-
-        if(pagamento.equals("pix")){
-
-            mv.setViewName("views/produto/compra/pix");
-            
-        } else if(pagamento.equals("boleto")){
-
-            mv.setViewName("views/produto/compra/boleto");
-            
-        } else if(pagamento.equals("cartao")){
-            
-            mv.setViewName("views/produto/compra/cartao");
-        } else {
-        
-            mv.setViewName("redirect:/carrinho");
-        }
-
         return mv;
     }
 }
