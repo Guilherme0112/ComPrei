@@ -6,7 +6,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 
 @Configuration
 public class SecurityConfig {
@@ -24,7 +23,7 @@ public class SecurityConfig {
             )
 
             .exceptionHandling(exception -> exception
-                    .accessDeniedPage("/")
+                    .accessDeniedHandler(accessDeniedHandler())
             )
             .formLogin(formLogin -> formLogin.disable())
             .httpBasic(httpBasic -> httpBasic.disable())
@@ -43,13 +42,10 @@ public class SecurityConfig {
             return http.build();
 
     }
-
     @Bean
-    public AccessDeniedHandler accessDeniedHandler(){
-
-        AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
-        handler.setErrorPage("/");
-
-        return handler;
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, accessDeniedException) -> {
+            response.sendRedirect("/");
+        };
     }
 }

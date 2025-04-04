@@ -82,7 +82,7 @@ public class APIAdminReembolsoController {
         }
     }
 
-    @PostMapping("/profile/reembolso/pedir")
+    @PostMapping("/admin/profile/reembolso/pedir")
     public ResponseEntity<?> reembolsoAPI(@RequestBody String id) throws Exception, PedidosException {
 
         try {
@@ -105,7 +105,7 @@ public class APIAdminReembolsoController {
         }
     }
 
-    @PutMapping("/profile/reembolso/editar")
+    @PutMapping("/admin/profile/reembolso/editar")
     public ResponseEntity<?> updateReembolsoAPI(@RequestBody UpdateStatusDTO updateReembolso) throws Exception, PedidosException {
 
         try {

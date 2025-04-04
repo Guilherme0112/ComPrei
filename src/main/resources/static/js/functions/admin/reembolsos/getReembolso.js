@@ -38,7 +38,7 @@ async function eventButtonsReembolso() {
         save.addEventListener("click", async () => {
 
             // Faz a requisição para atualizar o status do pedido
-            const res = await fetch("/profile/reembolso/editar", {
+            const res = await fetch("/admin/profile/reembolso/editar", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"

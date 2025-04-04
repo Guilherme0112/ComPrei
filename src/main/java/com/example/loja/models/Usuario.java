@@ -1,6 +1,12 @@
 package com.example.loja.models;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.loja.enums.Cargo;
 
@@ -18,8 +24,8 @@ import jakarta.validation.constraints.Size;
 
 @Table(name = "usuarios")
 @Entity
-public class Usuario {
-    
+public class Usuario implements UserDetails{
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -46,8 +52,29 @@ public class Usuario {
 
     @Column(updatable = false)
     private LocalDate create_in = LocalDate.now();
-    
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if(this.role == Cargo.ROLE_ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_CLIENTE"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"));
+        
+    }
+
+    @Override
+    public String getUsername() { return email; }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() { return active; }
 
     public Cargo getRole() {
         return role;
@@ -113,5 +140,4 @@ public class Usuario {
         this.telefone = telefone;
     }
 
-   
 }

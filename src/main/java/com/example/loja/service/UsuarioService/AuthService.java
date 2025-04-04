@@ -80,8 +80,11 @@ public class AuthService {
             }
 
             // Cria a sessão caso passe por toda a validação
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null,
-                    new ArrayList<>());
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    user,
+        null,
+                    user.getAuthorities());
+
             SecurityContextHolder.getContext().setAuthentication(authToken);
             HttpSession http = request.getSession(true);
             http.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
@@ -162,6 +165,8 @@ public class AuthService {
 
             // Obtém a autenticação do SecurityContextHolder
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            System.out.println(authentication.getAuthorities());
 
             // Verifica se o usuário está autenticado corretamente
             if (authentication == null || !authentication.isAuthenticated()

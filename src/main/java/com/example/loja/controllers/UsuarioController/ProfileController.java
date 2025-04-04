@@ -47,27 +47,28 @@ public class ProfileController {
             // Tenta buscar o usuário da sessão
             Usuario user = authService.buscarSessaUsuario();
 
+            // Verifica se é admin, se sim, adiciona o atributo
+            if(user.getRole().equals(Cargo.ROLE_ADMIN)){
+                mv.addObject("admin", true);
+            }
+
             if(!usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
 
                 UsuarioAddress verifyUserAddress = usuarioAddressRepository.findByEmail(user.getEmail()).get(0);
-
-                // Verifica se é admin, se sim, adiciona o atributo
-                if(user.getRole().equals(Cargo.ROLE_ADMIN)){
-                    mv.addObject("admin", true);
-                }
-
+          
                 mv.addObject("address", verifyUserAddress);
                 mv.setViewName("views/profile/profile");
                 return mv;
             }
+            
             
             mv.addObject("address", new UsuarioAddress());
             mv.setViewName("views/profile/profile");
 
         } catch (SessionException e) {
 
-            mv.setViewName("redirect:/auth/login");
             System.out.println("session_exception: " + e.getMessage());
+            mv.setViewName("redirect:/auth/login");
 
         } catch (Exception e) {
 
