@@ -36,8 +36,10 @@ public class UsuarioAddressController {
 
         try {
 
+            // Busca a sessão do usuárop
             Usuario user = authService.buscarSessaUsuario();
 
+            // Caso não existe algum endereço cadastrado
             if(usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
 
                 mv.addObject(new UsuarioAddress());
@@ -45,8 +47,7 @@ public class UsuarioAddressController {
                 return mv;
             }
             
-
-
+            // Se existir, ele o retorna
             mv.addObject("usuarioAddress", usuarioAddressRepository.findByEmail(user.getEmail()).get(0));
             mv.setViewName("views/profile/edit/address");
             

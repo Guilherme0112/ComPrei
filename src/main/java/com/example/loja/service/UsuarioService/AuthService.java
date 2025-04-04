@@ -1,6 +1,5 @@
 package com.example.loja.service.UsuarioService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.loja.exceptions.UsuarioException;
@@ -165,8 +164,6 @@ public class AuthService {
 
             // Obtém a autenticação do SecurityContextHolder
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-            System.out.println(authentication.getAuthorities());
 
             // Verifica se o usuário está autenticado corretamente
             if (authentication == null || !authentication.isAuthenticated()

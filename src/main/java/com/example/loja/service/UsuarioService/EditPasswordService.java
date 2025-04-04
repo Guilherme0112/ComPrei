@@ -37,14 +37,11 @@ public class EditPasswordService {
             String antigaSenha = passwordRequest.getSenhaAntiga();
             String novaSenha = passwordRequest.getSenhaNova();
 
-            if(antigaSenha.length() == 0){
-                throw new PasswordException("Preencha todos os campos");                
-            }
+            // Verifica se os campos estão vazios
+            if(antigaSenha.isEmpty() || novaSenha.isEmpty()) throw new PasswordException("Preencha todos os campos");                             
 
             // Valida a senha nova
-            if(novaSenha.length() < 6 || novaSenha.length() > 10){
-                throw new PasswordException("A senha deve ter entre 6 e 10");
-            }
+            if(novaSenha.length() < 6 || novaSenha.length() > 10) throw new PasswordException("A senha deve ter entre 6 e 10");
 
             // Criptografando a senha e salvando no banco de dados
             usuario.setPassword(Util.Bcrypt(novaSenha));

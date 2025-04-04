@@ -15,6 +15,7 @@ import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.LoginRequest;
 import com.example.loja.service.EmailsService.EmailRequestService;
 import com.example.loja.service.EmailsService.EmailService;
+import com.example.loja.service.EmailsService.LoadTemplatesService;
 import com.example.loja.service.UsuarioService.AuthService;
 import com.example.loja.util.Util;
 
@@ -27,15 +28,18 @@ public class AuthController {
     private final EmailService emailService;
     private final VerificationEmailRepository verificationEmailRepository;
     private final EmailRequestService emailRequestService;
+    private final LoadTemplatesService loadTemplatesService;
 
     public AuthController(AuthService authService,
                           EmailService emailService,
                           VerificationEmailRepository verificationEmailRepository,
-                          EmailRequestService emailRequestService) {
+                          EmailRequestService emailRequestService,
+                          LoadTemplatesService loadTemplatesService) {
         this.authService = authService;
         this.emailService = emailService;
         this.verificationEmailRepository = verificationEmailRepository;
         this.emailRequestService = emailRequestService;
+        this.loadTemplatesService = loadTemplatesService;
     }
 
     @GetMapping("/auth/login")
@@ -111,58 +115,12 @@ public class AuthController {
             // Verifica se o usuário pediu um email a menos de 1 minuto
             emailRequestService.verifyUserRequest(usuario.getEmail());
 
-            // HTML que será enviado para o usuario
-            String html = """
-                    <!DOCTYPEhtml>
-                    <html>
-                    <head>
-                    <metacharset="UTF-8">
-                    <metaname="viewport"content="width=device-width,initial-scale=1.0">
-                    <title>Confirmação de E-mail</title>
-                    <style>
-                    body{
-                    font-family: Arial ,sans-serif;
-                    background-color: #f4f4f4;
-                    text-align: center;
-                    padding: 20px;
-                    }
-                    .container{
-                    background: #ffffff;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-                    max-width: 500px;
-                    margin: auto;
-                    }
-                    .button{
-                    display: inline-block;
-                    padding: 10px 20px;
-                    color: white;
-                    background-color: #007BFF;
-                    text-decoration: none;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    margin-top: 20px;
-                    }
-                    .footer{
-                    margin-top: 20px;
-                    font-size: 12px;
-                    color: #777;
-                    }
-                    </style>
-                    </head>
-                    <body>
-                    <div class="container">
-                    <h2>Confirme seu e-mail</h2>
-                    <p>Obrigado por se cadastrar! Clique no botão abaixo para confirmar seu e-mail.</p>
-                    <a href="http://127.0.0.1:8080/email/confirmation/%s" class="button">Confirmar E-mail</a>
-                    <p class="footer">Se você não se cadastrou, ignore este e-mail.</p>
-                    </div>
-                    </body>
-                    </html>""".formatted(token);
-
             // Envia o e-mail de verificação
-            emailService.sendEmail(usuario.getEmail(), "Confirmação de e-mail", html);
+            emailService.sendEmail(
+                usuario.getEmail(),
+                "Confirmação de e-mail",
+                loadTemplatesService.welcome(token)    
+            );
 
             // Salva a requisição no banco de dados
             emailRequestService.saveRequestEmail(usuario.getEmail());

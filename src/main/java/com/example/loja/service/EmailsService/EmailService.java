@@ -1,8 +1,12 @@
 package com.example.loja.service.EmailsService;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
 
 import jakarta.mail.internet.MimeMessage;
 
@@ -11,8 +15,10 @@ public class EmailService {
     
     private final JavaMailSender mailSender;
 
-    public EmailService(JavaMailSender mailSender){
+
+    public EmailService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
+
     }
 
 
@@ -47,5 +53,7 @@ public class EmailService {
             throw new Exception(e.getMessage());
         }
     }
+
+    
 
 }
