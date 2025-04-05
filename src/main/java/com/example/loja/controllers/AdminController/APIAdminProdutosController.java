@@ -1,14 +1,9 @@
 package com.example.loja.controllers.AdminController;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.loja.exceptions.ProdutoException;
 import com.example.loja.models.Produto;
-import com.example.loja.models.dto.AmountProducts;
 import com.example.loja.repositories.ProdutoRepository;
+import com.example.loja.service.ProdutoService;
 import com.example.loja.service.AdminService.AdminProdutosService;
 
 import jakarta.validation.Valid;
@@ -33,11 +28,14 @@ public class APIAdminProdutosController {
 
     private final ProdutoRepository produtoRepository;
     private final AdminProdutosService adminProdutosService;
+    private final ProdutoService produtoService;
 
     public APIAdminProdutosController(ProdutoRepository produtoRepository,
-                                      AdminProdutosService adminProdutosService) {
+                                      AdminProdutosService adminProdutosService,
+                                      ProdutoService produtoService) {
         this.produtoRepository = produtoRepository;
         this.adminProdutosService = adminProdutosService;
+        this.produtoService = produtoService;
 
     }
 
@@ -52,20 +50,11 @@ public class APIAdminProdutosController {
 
             // Busca a quantidade de registros que tem no banco de dados
             Long amountP = produtoRepository.countByCodigo(codigo);
-            AmountProducts amount =  new AmountProducts(amountP.toString());
-            
-            // Cria o LIMIT e OFFSET para buscar somente a primeira resposta
-            Pageable pageable = PageRequest.of(0, 1);
-            Produto produtoObj = produtoRepository.findByCodigoDeBarras(codigo, pageable).get(0);
-
-            // Cria o array list dos objetos que serão retornados
-            List<Object> response = new ArrayList<>();
-
-            // Retorna uma array com 2 arrays dentro [0: produto, 1: quantidade]
-            response.add(0, produtoObj);
-            response.add(1, amount);
         
-            return response; 
+            // Retorna uma Lista com o objeto do produto e a quantidade
+            return Arrays.asList(
+                                produtoService.getProduct(codigo),
+                                amountP.toString()); 
 
         } catch (Exception e) {
 
@@ -114,32 +103,18 @@ public class APIAdminProdutosController {
 
 
     @DeleteMapping("/admin/deletar/produtos")
-    public List<?> DeletarProduto(@RequestBody Map<String, String> codigoMap) throws Exception, ProdutoException {
+    public List<?> DeletarProduto(@RequestBody String codigo) throws Exception, ProdutoException {
         try {
 
-            // Válida o codigo para garantir que somente seja composto apenas por números números
-            String codigo = codigoMap.get("codigo");
-            if (!codigo.matches("\\d+")) {
-                return List.of("erro", "O código  é inválido");
-            }
+            // Remove as aspas
+            codigo = codigo.replaceAll("^\"|\"$", "");
 
-            // Pega somente o primeiro resultado da query
-            Pageable pageable = PageRequest.of(0, 1);
+            // Válida o codigo para garantir que omente seja composto apenas por números números
+            if (!codigo.matches("\\d+")) throw new ProdutoException("O código é inválido");
 
-            // Verifica se existe o produto
-            if (produtoRepository.findByCodigoDeBarras(codigo, pageable).isEmpty()) {
-                throw new ProdutoException("Produto não existe");
-            }
+            adminProdutosService.deleteProduct(codigo);
 
-            // Busca a imagem e a deleta caso exista
-            Produto produto = produtoRepository.findByCodigoDeBarras(codigo, pageable).get(0);
-            Path path = Paths.get("/app" + produto.getPhoto());
-            Files.deleteIfExists(path);
-
-            // Deleta do banco de dados
-            produtoRepository.deleteByCodigo(produto.getCodigo());
-
-            return List.of(200, "Produto deletado com sucesso");
+            return List.of(HttpStatus.OK);
 
         } catch (ProdutoException e) {
 

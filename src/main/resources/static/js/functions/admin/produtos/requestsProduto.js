@@ -46,16 +46,14 @@ btn.addEventListener("click", async () => {
     allBtnDel.forEach((btn) => {
         btn.addEventListener("click", async () => {
 
-            var id = document.getElementById("id_produto").value;
+            let codigo = document.getElementById("id_produto").value;
 
             const res = await fetch(`/admin/deletar/produtos`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    codigo: id
-                })
+                body: JSON.stringify(codigo)
             });
 
             const data = await res.json();

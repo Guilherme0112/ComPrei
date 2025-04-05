@@ -4,7 +4,6 @@ public class AmountProducts {
     
     private String amount;
 
-
     public AmountProducts(){}
 
     public AmountProducts(String amount){

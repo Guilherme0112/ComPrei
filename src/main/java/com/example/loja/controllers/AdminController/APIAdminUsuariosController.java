@@ -55,10 +55,12 @@ public class APIAdminUsuariosController {
 
         try {
 
+            // Verifica se existem apenas números na string
             if (!id.matches("\\d+")) {
                 return List.of("erro", "O código  é inválido");
             }
 
+            //  Busca o usuário ou lança uma exceção caso não encontre
             Usuario user = usuarioRepository.findById(Long.parseLong(id)).stream()
                                                                        .findFirst()
                                                                        .orElseThrow(() -> new UsuarioException("Usuário nao encontrado"));
@@ -85,17 +87,20 @@ public class APIAdminUsuariosController {
 
         try {
 
+            // Verifica se existem apenas números na string
             if (!id.matches("\\d+")) {
                 return List.of("erro", "O código  é inválido");
             }
 
-            
+            // Converte para Long
             Long idLong = Long.parseLong(id);
             
+            // Busca o usuário ou lança uma exceção caso não encontre
             Usuario user = usuarioRepository.findById(idLong).stream()
                                                              .findFirst()
                                                              .orElseThrow(() -> new UsuarioException("Usuário nao encontrado"));
 
+            // Se for admin retira o admin e se for cliente, seta o admin
             adminUsuariosService.AdminOuNao(user);
 
             return List.of(HttpStatus.OK);

@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.loja.enums.Reembolso;
 import com.example.loja.exceptions.PedidosException;
+import com.example.loja.exceptions.ReembolsoException;
 import com.example.loja.exceptions.UsuarioException;
 import com.example.loja.models.Reembolsos;
-import com.example.loja.models.Usuario;
 import com.example.loja.models.dto.UpdateStatusDTO;
-import com.example.loja.models.dto.UpdateReembolsoDTO;
 import com.example.loja.repositories.ReembolsosRepository;
-import com.example.loja.repositories.UsuarioRepository;
 import com.example.loja.service.ReembolsoService;
+import com.example.loja.service.AdminService.AdminReembolsoService;
 import com.example.loja.service.UsuarioService.AuthService;
 
 @RestController        
@@ -29,48 +28,29 @@ public class APIAdminReembolsoController {
     private final AuthService authService;
     private final ReembolsoService reembolsoService;
     private final ReembolsosRepository reembolsoRepository;
-    private final UsuarioRepository usuarioRepository;
+    private final AdminReembolsoService adminReembolsoService;
 
     public APIAdminReembolsoController(AuthService authService,
                                        ReembolsoService reembolsoService,
                                        ReembolsosRepository reembolsoRepository,
-                                       UsuarioRepository usuarioRepository) {
+                                       AdminReembolsoService adminReembolsoService) {
         this.reembolsoService = reembolsoService;
         this.authService = authService;
         this.reembolsoRepository = reembolsoRepository;
-        this.usuarioRepository = usuarioRepository;
+        this.adminReembolsoService = adminReembolsoService;
     }
 
-     @GetMapping("/admin/reembolso/{status}")
-    public List<?> AdminAPIPedidosGET(@PathVariable("status") String status)
-            throws Exception, PedidosException, UsuarioException {
+    @GetMapping("/admin/reembolso/{status}")
+    public List<?> AdminAPIPedidosGET(@PathVariable("status") String status) throws Exception, ReembolsoException, UsuarioException {
 
         try {
 
+            // Tenta converter o status (String) para o enum
             Reembolso reembolsoEnum = Reembolso.valueOf(status.toUpperCase());
-            List<Reembolsos> reembolsoObj = reembolsoRepository.findByStatus(reembolsoEnum);
 
-            reembolsoObj.stream()
-                        .findFirst()
-                        .orElseThrow(() -> new PedidosException("Reembolso nao encontrado"));
+            return adminReembolsoService.getReembolsoByStatus(reembolsoEnum);
 
-            List<Usuario> usuario = usuarioRepository.findByEmail(reembolsoObj.get(0).getEmail(), true);
-
-            usuario.stream()
-                   .findFirst()
-                   .orElseThrow(() -> new UsuarioException("Usuario nao encontrado"));
-
-            UpdateReembolsoDTO updateReembolsoDTO = new UpdateReembolsoDTO(
-                    reembolsoObj.get(0).getId(),
-                    reembolsoObj.get(0).getIdPedido(),
-                    usuario.get(0).getName(),
-                    usuario.get(0).getTelefone(),
-                    reembolsoObj.get(0).getQuando()
-            );
-
-            return List.of(updateReembolsoDTO);
-
-        } catch (PedidosException | UsuarioException e) {
+        } catch (ReembolsoException | UsuarioException e) {
 
             return List.of("erro", e.getMessage());
 
@@ -100,7 +80,6 @@ public class APIAdminReembolsoController {
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
-
             return ResponseEntity.badRequest().body("Ocorreu algum erro. Tente novamente mais tarde");
         }
     }

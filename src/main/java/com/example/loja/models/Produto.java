@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -19,9 +20,11 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "O código de barras é obrigatório")
     @Size(max = 13, min = 13, message = "O código de barras deve ter 13 caracteres")
     private String codigo;
 
+    @NotBlank(message = "O nome de barras é obrigatório")
     @Size(min = 3, max = 40, message = "O nome do produto deve ter entre 3 e 40 caracteres")
     private String name;
 
@@ -33,6 +36,15 @@ public class Produto {
 
     private String photo;
 
+    public Produto() {}
+
+    public Produto(String codigo, String name, String description, BigDecimal price, String photo) {
+        this.codigo = codigo;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.photo = photo;
+    }
 
     public Long getId() {
         return id;

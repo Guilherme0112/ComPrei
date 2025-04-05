@@ -32,8 +32,6 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 
-import jakarta.servlet.http.HttpSession;
-
 @RestController
 public class PagamentosController {
 
@@ -125,8 +123,7 @@ public class PagamentosController {
         }
 
         @GetMapping("/payment/success")
-        public ModelAndView PaymentSucces(@RequestParam("preference_id") String preference_id,
-                        @RequestParam("payment_id") String payment_id, HttpSession http)
+        public ModelAndView PaymentSucces(@RequestParam("preference_id") String preference_id, @RequestParam("payment_id") String payment_id)
                         throws Exception, PagamentoException {
 
                 ModelAndView mv = new ModelAndView();
@@ -140,8 +137,10 @@ public class PagamentosController {
                         String emailUser = authService.buscarSessaUsuario().getEmail();
 
                         // Verifica a autenticidade do do pagamento
-                        Pagamentos objPreference = MpApiPreferencesService.verifyPreferencePayment(preference_id,
-                                        emailUser);
+                        Pagamentos objPreference = MpApiPreferencesService.verifyPreferencePayment(
+                                preference_id,
+                                emailUser
+                        );
 
                         // Verifica se a transação foi aprovada
                         JsonNode jsonNode = pagamentosService.verifyPayment(payment_id, KEY_MP);
