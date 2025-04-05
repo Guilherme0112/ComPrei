@@ -68,7 +68,7 @@ public class APIAdminReembolsoController {
         try {
 
             // Pega o email da sessão e tenta criar o reeembolso
-            String email = authService.buscarSessaUsuario().getEmail();
+            String email = authService.buscarSessaoUsuario().getEmail();
             reembolsoService.createReembolso(id, email);
 
             return ResponseEntity.ok().body(HttpStatus.ACCEPTED);

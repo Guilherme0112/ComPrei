@@ -38,9 +38,6 @@ public class EmailService {
 
             mailSender.send(message);
 
-            System.out.println("Email para " + destinatario + " enviado com sucesso");
-
-
         } catch (Exception e) {
 
             System.out.println(e.getMessage());

@@ -75,7 +75,7 @@ public class PagamentosController {
                 try {
 
                         // Verifica se o usuário tem algum endereço cadastrado
-                        usuarioAddressService.verifyAddress(authService.buscarSessaUsuario().getEmail());
+                        usuarioAddressService.verifyAddress(authService.buscarSessaoUsuario().getEmail());
 
                         // Token de acesso para as requisições
                         MercadoPagoConfig.setAccessToken(KEY_MP);
@@ -90,7 +90,7 @@ public class PagamentosController {
                         // Salva os dados do pagamento
                         pagamentosRepository.save(
                                 new Pagamentos(
-                                        authService.buscarSessaUsuario().getEmail(),
+                                        authService.buscarSessaoUsuario().getEmail(),
                                         preference.getId().toString(),
                                         "pending",
                                         total
@@ -134,7 +134,7 @@ public class PagamentosController {
                         if (preference_id.isEmpty()) throw new PagamentoException("O id da preferência é obrigatório");                       
 
                         // Busca o email do usuário da sessão
-                        String emailUser = authService.buscarSessaUsuario().getEmail();
+                        String emailUser = authService.buscarSessaoUsuario().getEmail();
 
                         // Verifica a autenticidade do do pagamento
                         Pagamentos objPreference = MpApiPreferencesService.verifyPreferencePayment(
@@ -159,7 +159,7 @@ public class PagamentosController {
                                 new Pedidos(preference_id,
                                         new BigDecimal(jsonNode.get("transaction_amount").asText()),
                                         jsonNode.get("additional_info").get("items").toString(),
-                                        authService.buscarSessaUsuario().getEmail(),
+                                        authService.buscarSessaoUsuario().getEmail(),
                                         Pedido.PEDIDO
                                 )
                         );

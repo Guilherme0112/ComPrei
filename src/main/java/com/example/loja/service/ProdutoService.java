@@ -28,24 +28,29 @@ public class ProdutoService {
 
         try {
 
-            if(produto == null){
-                throw new ProdutoException("Ocorreu algum erro. Tente novamente mais tarde");
-            }
-
+            // Verifica se o produto é nulo
+            if(produto == null) throw new ProdutoException("Ocorreu algum erro. Tente novamente mais tarde");
+            
+            // Pega o codigo de barras do produto
             String codigo = produto.getCodigo();
 
-            if(!codigo.matches("\\d+")){
-                throw new ProdutoException("Somente números são válidos");
-            }
+            // Verifica se o código de barras contém apenas números
+            if(!codigo.matches("\\d+")) throw new ProdutoException("Somente números são válidos");
+            
+            // Verifica se o produto ja foi cadastrado com o mesmo codigo
             Pageable pageable = PageRequest.of(0, 1);
             if(!produtoRepository.findByCodigoDeBarras(codigo, pageable).isEmpty()){
 
-                if(!produto.getName().equals(produtoRepository.findByCodigoDeBarras(codigo, pageable ).get(0).getName())){
+                // Verifica se o produto tem a mesma rota da foto, pois o método que faz o build do produto sempre coloca
+                // um nome aleatório na foto (Se for igual é porque é o sistema que ta salvando mais registros do produto, se não é um 
+                // registro novo)
+                if(!produto.getPhoto().equals(produtoRepository.findByCodigoDeBarras(codigo, pageable).get(0).getPhoto())){
+
                     throw new ProdutoException("Este código já está cadastrado");
                 }
-
             }
 
+            // Salva o produto
             produtoRepository.save(produto);
 
         } catch(ProdutoException e){
@@ -86,31 +91,5 @@ public class ProdutoService {
 
             throw new Exception(e.getMessage());
         }
-    }
-
-    /**
-     * Deleta um produto do banco de dados
-     * 
-     * @param produto Objeto do produto que será deletado
-     * @throws Exception Erros genéricos
-     * @throws ProdutoException Erros referente ao produto
-     */
-    public void deleteProduct(Produto produto) throws Exception, ProdutoException{
-
-        try {
-
-            if(produto == null){
-                throw new ProdutoException("Produto não existe");
-            }
-            
-            produtoRepository.delete(produto);
-
-        } catch (ProdutoException e) {
-            throw new ProdutoException(e.getMessage());
-    
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-
     }
 }

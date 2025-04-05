@@ -20,29 +20,36 @@ public class EmailRequestService {
         this.emailRequestRepository = emailRequestRepository;
     }
 
-    public void saveRequestEmail(String email) throws Exception {
+    public void saveRequestEmail(String email) throws Exception, EmailRequestException {
 
         try {
+
+            // Verifica se já existe alguma requisição feita pelo usuário
+            this.verifyUserRequest(email);
 
             // Busca alguma requisição feita pelo o usuário
             List<EmailRequests> findEmail = emailRequestRepository.findByEmail(email);
 
-            // Se tiver vazia, ela salva no banco de dados
+            // Se tiver vazia ele cria um novo registro
             if (findEmail.isEmpty()) {
 
-                EmailRequests email_request = new EmailRequests();
-                email_request.setEmail(email);
-                emailRequestRepository.save(email_request);
+                emailRequestRepository.save(
+                    new EmailRequests(
+                        email
+                    )
+                );
+
                 return;
             }
 
+            // Se já existir, ele apaga as requisições anteriores
             for (EmailRequests i : findEmail) {
                 emailRequestRepository.delete(i);
             }
 
-            EmailRequests email_request = new EmailRequests();
-            email_request.setEmail(email);
-            emailRequestRepository.save(email_request);
+        } catch (EmailRequestException e) {
+            
+            throw e;
 
         } catch (Exception e) {
 
@@ -93,16 +100,13 @@ public class EmailRequestService {
             // Verifica todos as requisições
             verifyAllRequests();
 
-            // Busca as requisições de email do usuário
-            List<EmailRequests> emailRequests = emailRequestRepository.findByEmail(email);
-
-            // Se não houver requisições, o usuário pode fazer a requisição
-            if (emailRequests.isEmpty()) {
-                return;
-            }
+            // Busca as requisições de email do usuário e verifica se está vazia
+            EmailRequests emailRequests = emailRequestRepository.findByEmail(email).stream()
+                                                                                   .findFirst()
+                                                                                   .orElse(null);
 
             // Se tiver mais de 1 minutos de diferença, ele apaga o registro
-            if (emailRequests.get(0).getQuando().until(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")),
+            if (emailRequests.getQuando().until(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")),
                     ChronoUnit.MINUTES) < 1) {
 
                 throw new EmailRequestException("Já enviamos seu e-mail, espere um pouco para pedir outro");

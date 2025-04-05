@@ -35,9 +35,8 @@ public class ResetPasswordService {
 
             for (ResetPassword token : allTokens){
 
-                if(this.isExpired(token.getToken())){
-                    resetPasswordRepository.delete(token);
-                }
+                if(this.isExpired(token.getToken())) resetPasswordRepository.delete(token);
+                
             }
 
         } catch (Exception e) {
@@ -56,25 +55,17 @@ public class ResetPasswordService {
      * @return TRUE caso esteja expirado e FALSE caso não esteja expirado
      * @throws Exception Erros genéricos
      */
-    public boolean isExpired(String token) throws Exception{
+    public boolean isExpired(String token) throws Exception, TokenException{
 
        try {
 
-           // Busca o token passdo no banco de dados
-           List<ResetPassword> tokenList = resetPasswordRepository.findByToken(token);
+            // Busca o token passdo no banco de dados
+            ResetPassword tokenObj = resetPasswordRepository.findByToken(token).stream()
+                                                                               .findFirst()
+                                                                               .orElseThrow(() -> new TokenException("Token não encontrado"));
 
-           // Verifica se o token existe
-           if (tokenList.isEmpty()) {
-                return true;
-           }
-
-           // Transforma o token que era em formato List para Object
-           // Busca o valor de expire_in (LocalDateTime que informa quando o token expira)
-           ResetPassword tokenObj = tokenList.get(0);
-           LocalDateTime expire_in = tokenObj.getExpire_in();
-
-           // Verifica se a expiração é antes da data atual
-            if(expire_in.isBefore(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))){
+            // Verifica se a expiração é antes da data atual
+            if(tokenObj.getExpire_in().isBefore(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")))){
 
                 resetPasswordRepository.delete(tokenObj);
                 return  true;
@@ -82,10 +73,14 @@ public class ResetPasswordService {
 
            return false;
 
-       } catch (Exception e) {
+        } catch (TokenException e) {
 
-           throw new Exception(e.getMessage());
-       }
+            throw new TokenException(e.getMessage());        
+    
+        } catch (Exception e) {
+
+            throw new Exception(e.getMessage());
+        }
 
     }
 }

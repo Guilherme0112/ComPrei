@@ -36,4 +36,12 @@ public class LoadTemplatesService {
 
         return templateEngine.process("emails/welcome", context);
     }
+
+    public String confirmacaoDeEmail(String token){
+
+        Context context = new Context();
+        context.setVariable("token", token);
+
+        return templateEngine.process("emails/confirmacaoEmail", context);
+    }
 }

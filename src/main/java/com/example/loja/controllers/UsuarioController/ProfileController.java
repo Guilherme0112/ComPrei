@@ -45,7 +45,7 @@ public class ProfileController {
         try {
 
             // Tenta buscar o usuário da sessão
-            Usuario user = authService.buscarSessaUsuario();
+            Usuario user = authService.buscarSessaoUsuario();
 
             // Verifica se é admin, se sim, adiciona o atributo
             if(user.getRole().equals(Cargo.ROLE_ADMIN)){
@@ -88,7 +88,7 @@ public class ProfileController {
             String senha = senhaRequest.get("senha");
             
             // Verifica a autenticação do usuário
-            Usuario user = authService.buscarSessaUsuario();
+            Usuario user = authService.buscarSessaoUsuario();
             if(user == null){
                 throw new UsuarioException("Ocorreu algum erro. Tente novamente mais tarde");                
             }

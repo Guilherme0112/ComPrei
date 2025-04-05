@@ -57,7 +57,7 @@ public class APIAdminPedidosController {
             // Recebe os dados do DTO
             Long id = updateStatusDTO.getId();
             String status = updateStatusDTO.getStatus();
-            String email = authService.buscarSessaUsuario().getEmail();
+            String email = authService.buscarSessaoUsuario().getEmail();
 
             // // Atualiza o status do pedido
             adminPedidosService.updatePedido(id, status, email);

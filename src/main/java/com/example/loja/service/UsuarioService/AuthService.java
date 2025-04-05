@@ -1,8 +1,5 @@
 package com.example.loja.service.UsuarioService;
 
-import java.util.List;
-
-import com.example.loja.exceptions.UsuarioException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,13 +20,10 @@ public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
     private final HttpServletRequest request;
-    private final ProfileService profileService;
 
     public AuthService(UsuarioRepository usuarioRepository,
-            HttpServletRequest request,
-            ProfileService profileService) {
+                       HttpServletRequest request) {
         this.usuarioRepository = usuarioRepository;
-        this.profileService = profileService;
         this.request = request;
     }
 
@@ -51,38 +45,28 @@ public class AuthService {
             String senha = loginRequest.getSenha();
 
             // Verifica se estão vazios
-            if (email == null || senha == null) {
-                throw new SessionException("Você deve preencher todos os campos");
-            }
-
+            if (email == null || senha == null) throw new SessionException("Você deve preencher todos os campos");
+            
             // Busca no banco de dados uma conta com o email do usuario e se esta conta
             // está ativa
-            List<Usuario> existEmail = usuarioRepository.findByEmail(email, true);
-
-            // Verifica o resultado do banco de dados
-            if (existEmail.isEmpty()) {
-                throw new SessionException("As credenciais estão incorretas");
-            }
+            Usuario userBD = usuarioRepository.findByEmail(email, true).stream()
+                                                                                  .findFirst()
+                                                                                  .orElseThrow(() -> new SessionException("As credenciais está incorretas"));
 
             // Verifica se está banida
-            if (existEmail.get(0).getRole().equals(Cargo.ROLE_BANIDO)) {
-                throw new SessionException("Esta conta está banida");
-            }
-
-            // Obtém o objeto do usuario e a senha
-            Usuario user = existEmail.get(0);
-            String passwordBD = user.getPassword();
+            if (userBD.getRole().equals(Cargo.ROLE_BANIDO)) throw new SessionException("Esta conta está banida");
 
             // Verifica se as senhas correspondem
-            if (!Util.verifyPass(senha, passwordBD)) {
+            if (!Util.verifyPass(senha, userBD.getPassword())) {
                 throw new SessionException("As credenciais estão incorretas");
             }
 
             // Cria a sessão caso passe por toda a validação
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                    user,
-        null,
-                    user.getAuthorities());
+                                                                                        userBD,
+                                                                            null,
+                                                                                        userBD.getAuthorities()
+                                                                    );
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
             HttpSession http = request.getSession(true);
@@ -101,73 +85,20 @@ public class AuthService {
     }
 
     /***
-     * Cria o registro do usuário no banco de dados
-     * 
-     * @param usuario Objeto do usuário
-     * @throws Exception Erros de execução e etc...
-     */
-    public void createUser(Usuario usuario) throws Exception, UsuarioException {
-
-        try {
-
-            // V alida a senha do usuário
-            if (usuario.getPassword().length() < 6 || usuario.getPassword().length() > 10) {
-
-                throw new UsuarioException("A senha deve ter entre 6 e 10 caracteres");
-            }
-
-            // Verifica se o e-mail está já está sendo usado
-            if (!usuarioRepository.findByEmail(usuario.getEmail(), true).isEmpty()) {
-
-                if (usuarioRepository.findByEmail(usuario.getEmail(), true).get(0).getRole().equals(Cargo.ROLE_BANIDO)) {
-                    throw new UsuarioException("Está conta já existe e está banida");
-                }
-
-                throw new UsuarioException("Este e-mail já está sendo usado");
-            }
-
-            // Caso o usuário já tenha o e-mail registrado, mas a conta está inativa
-            if (!usuarioRepository.findByEmail(usuario.getEmail(), false).isEmpty()) {
-
-                // Método para ativar a conta
-                profileService.activeAccount(usuario);
-                return;
-            }
-
-            // Criptografa a senha do usuário, seta o cargo e coloca o +55 no teledone
-            usuario.setPassword(Util.Bcrypt(usuario.getPassword()));
-            usuario.setTelefone("+55" + usuario.getTelefone());
-            usuario.setRole(Cargo.ROLE_CLIENTE);
-
-            usuarioRepository.save(usuario);
-
-        } catch (UsuarioException e) {
-
-            throw new UsuarioException(e.getMessage());
-
-        } catch (Exception e) {
-
-            System.out.println("auth_service: " + e.getMessage());
-            throw new Exception("Ocorreu algum erro. Tente novamente mais tarde");
-        }
-    }
-
-    /***
      * Método que verifica a existência de uma sessão
      *
      * @param http Onde será verificada se existe a sessão
      * @return Retorna o objeto do usuário caso exista a sessão
      * @throws SessionException Caso não exista sessão
      */
-    public Usuario buscarSessaUsuario() throws Exception, SessionException {
+    public Usuario buscarSessaoUsuario() throws Exception, SessionException {
         try {
 
             // Obtém a autenticação do SecurityContextHolder
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             // Verifica se o usuário está autenticado corretamente
-            if (authentication == null || !authentication.isAuthenticated()
-                    || authentication.getPrincipal().equals("anonymousUser")) {
+            if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
                 throw new SessionException("O usuário não tem permissão");
             }
 

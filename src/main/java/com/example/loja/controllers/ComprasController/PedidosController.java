@@ -27,7 +27,7 @@ public class PedidosController {
     try {
 
       // Busca o email do usuário 
-      String emailUser = authService.buscarSessaUsuario().getEmail();
+      String emailUser = authService.buscarSessaoUsuario().getEmail();
 
       // Retorna os pedidos referente ao email do usuário (Caso não haja email, ele retorna nada)
       mv.addObject("pedidos", pedidosRepository.findByEmail(emailUser));

@@ -1,8 +1,5 @@
 package com.example.loja.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.example.loja.enums.Pedido;
@@ -37,35 +34,28 @@ public class ReembolsoService {
         try {
 
             // Verifica se o pedido existe
-            Optional<Pedidos> pedido = pedidosRepository.findById(Long.parseLong(idPedido));
-
-            // Verifica se o pedido existe
-            pedido.stream()
-            .findFirst()
-            .orElseThrow(() -> new PedidosException("Pedido nao encontrado"));
+            Pedidos pedido = pedidosRepository.findById(Long.parseLong(idPedido)).stream()
+                                                                                 .findFirst()
+                                                                                 .orElseThrow(() -> new PedidosException("Pedido não encontrado"));
 
             // Verifica se o pedido pertence ao usuário
-            if(!pedido.get().getEmail().equals(email)){
-                throw new PedidosException("Pedido nao pertence ao seu email");
-            }
+            if(!pedido.getEmail().equals(email)) throw new PedidosException("Pedido não pertence ao seu email");
             
             // Verifica se o id do pedido já está em um reembolso
-            if (!reembolsoRepository.findByIdPedido(Long.parseLong(idPedido)).isEmpty()) {
-                throw new PedidosException("Pedido ja possui um reembolso");
-            }
-
+            if (!reembolsoRepository.findByIdPedido(Long.parseLong(idPedido)).isEmpty()) throw new PedidosException("O pedido já possui um pedido de reembolso");
+            
             // Salva o pedido de reembolso
             reembolsoRepository.save(
-                new Reembolsos(email,
-                               Long.parseLong(idPedido),
-                               Reembolso.PENDENTE
+                new Reembolsos(
+                    email,
+                    Long.parseLong(idPedido),
+                    Reembolso.PENDENTE
                 )
             );
 
-
             // Atualiza o pedido para cancelado
-            pedido.get().setStatus(Pedido.CANCELADO);
-            pedidosRepository.save(pedido.get());
+            pedido.setStatus(Pedido.CANCELADO);
+            pedidosRepository.save(pedido);
 
         } catch (PedidosException e) {
 
@@ -89,21 +79,14 @@ public class ReembolsoService {
         try {
 
             // Verifica se o pedido existe
-            Optional<Pedidos> pedido = pedidosRepository.findById(Long.parseLong(idPedido));
+           pedidosRepository.findById(Long.parseLong(idPedido)).stream()
+                                                               .findFirst()
+                                                               .orElseThrow(() -> new PedidosException("Pedido não encontrado"));
 
-            pedido.stream()
-            .findFirst()
-            .orElseThrow(() -> new PedidosException("Pedido nao encontrado"));
-
-            // Busca o reembolso
-            List<Reembolsos> reembolso = reembolsoRepository.findByIdPedido(Long.parseLong(idPedido));
-
-            // Verifica se o reembolso foi encontrado
-            reembolso.stream()
-            .findFirst()
-            .orElseThrow(() -> new PedidosException("Reembolso nao encontrado"));
-
-            return reembolso.get(0);
+            // Busca o reembolso e o retorna ou lança uma exceção caso não encontre
+            return reembolsoRepository.findByIdPedido(Long.parseLong(idPedido)).stream()
+                                                                               .findFirst()
+                                                                               .orElseThrow(() -> new PedidosException("Reembolso nao encontrado"));
 
         } catch (PedidosException e) {
 
@@ -115,7 +98,7 @@ public class ReembolsoService {
         }
     }
 
-    /** Atualiza o status de em reembolso
+    /** Atualiza o status de um reembolso
      * 
      * @param reembolso Objeto do reembolso
      * @param status Novo status do reembolso
@@ -127,10 +110,9 @@ public class ReembolsoService {
         try {
 
             // Busca o reembolso            
-            Optional<Reembolsos> reembolsoBusca = reembolsoRepository.findById(reembolso.getId());
-            reembolsoBusca.stream()
-            .findFirst()
-            .orElseThrow(() -> new PedidosException("Reembolso nao encontrado"));
+            reembolsoRepository.findById(reembolso.getId()).stream()
+                                                           .findFirst()
+                                                           .orElseThrow(() -> new PedidosException("Reembolso não encontrado"));
 
             // Atualiza o reembolso
             reembolso.setStatus(Reembolso.valueOf(status.toUpperCase()));

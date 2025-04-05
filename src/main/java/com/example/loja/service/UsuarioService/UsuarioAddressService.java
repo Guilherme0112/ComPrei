@@ -36,8 +36,7 @@ public class UsuarioAddressService {
             if(!verifyUserAddress.isEmpty()){
 
                 // Quando já existe um registro, basta ter o mesmo id que o spring atualiza os valores
-                usuarioAddress.setId(verifyUserAddress.get(0).getId());
-                usuarioAddressRepository.save(usuarioAddress);                
+                usuarioAddress.setId(verifyUserAddress.get(0).getId());      
             }
 
             // Salva no banco de dados com o email do usuario
@@ -63,13 +62,9 @@ public class UsuarioAddressService {
 
         try {
             
-            List<UsuarioAddress> userAddress = usuarioAddressRepository.findByEmail(email);
-
-            if(userAddress.isEmpty()){
-                throw new UsuarioException("É obrigatório ter um endereço cadastrado");
-            }
-
-            return userAddress.get(0);
+            return usuarioAddressRepository.findByEmail(email).stream()
+                                                              .findFirst()
+                                                              .orElseThrow(() -> new UsuarioException("É obrigatório ter um endereço cadastrado"));
 
         } catch(UsuarioException e){
 

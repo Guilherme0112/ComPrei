@@ -17,6 +17,7 @@ import com.example.loja.service.EmailsService.EmailRequestService;
 import com.example.loja.service.EmailsService.EmailService;
 import com.example.loja.service.EmailsService.LoadTemplatesService;
 import com.example.loja.service.UsuarioService.AuthService;
+import com.example.loja.service.UsuarioService.ProfileService;
 import com.example.loja.util.Util;
 
 import jakarta.validation.Valid;
@@ -29,17 +30,20 @@ public class AuthController {
     private final VerificationEmailRepository verificationEmailRepository;
     private final EmailRequestService emailRequestService;
     private final LoadTemplatesService loadTemplatesService;
+    private final ProfileService profileService;
 
     public AuthController(AuthService authService,
                           EmailService emailService,
                           VerificationEmailRepository verificationEmailRepository,
                           EmailRequestService emailRequestService,
-                          LoadTemplatesService loadTemplatesService) {
+                          LoadTemplatesService loadTemplatesService,
+                          ProfileService profileService) {
         this.authService = authService;
         this.emailService = emailService;
         this.verificationEmailRepository = verificationEmailRepository;
         this.emailRequestService = emailRequestService;
         this.loadTemplatesService = loadTemplatesService;
+        this.profileService = profileService;
     }
 
     @GetMapping("/auth/login")
@@ -107,7 +111,7 @@ public class AuthController {
             }
 
             // Tenta criar a conta do usuário
-            authService.createUser(usuario);
+            profileService.createUser(usuario);
 
             // Cria o token
             String token = Util.generateToken();

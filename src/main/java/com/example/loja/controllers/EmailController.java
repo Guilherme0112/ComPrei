@@ -1,6 +1,7 @@
 package com.example.loja.controllers;
 
 import com.example.loja.exceptions.TokenException;
+import com.example.loja.repositories.VerificationEmailRepository;
 import com.example.loja.service.VerificationEmailService;
 
 import org.springframework.stereotype.Controller;
@@ -12,9 +13,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class EmailController {
 
     private final VerificationEmailService verificationEmailService;
+    private final VerificationEmailRepository verificationEmailRepository;
 
-    public EmailController(VerificationEmailService verificationEmailService){
+    public EmailController(VerificationEmailService verificationEmailService,
+                           VerificationEmailRepository verificationEmailRepository) {
         this.verificationEmailService = verificationEmailService;
+        this.verificationEmailRepository = verificationEmailRepository;
     }
 
 
@@ -25,8 +29,13 @@ public class EmailController {
 
         try {
 
-            // Valida o token para ativar a conta do usuário
-            verificationEmailService.validationEmailUser(token);          
+            // Valida o token ou lança uma exceção caso não exista
+            verificationEmailService.validationEmailUser(
+                verificationEmailRepository.findByToken(token).stream()
+                                                              .findFirst()
+                                                              .orElseThrow(() -> new TokenException("Token não encontrado")
+                )
+            );          
 
             // Método que faz a verificação de todos os tokens do banco de dados
             verificationEmailService.verificationTokens();

@@ -27,7 +27,7 @@ public class EditUsuarioService {
     public void save(EditUserRequest editUserRequest, String email) throws Exception, UsuarioException{
 
         try {
-                  
+
             // Busca os dados do usuário
             String nome = editUserRequest.getNome();
             String telefone = editUserRequest.getTelefone();
@@ -38,14 +38,12 @@ public class EditUsuarioService {
                                                                             .orElseThrow(() -> new UsuarioException("Ocorreu algum erro. Tente novamente mais tarde"));
 
             // Válida o nome 
-            if(nome.length() < 3 || nome.length() > 30){
-                throw new UsuarioException("O nome deve conter entre 3 e 30 caracteres");
-            }
+            if(nome.length() < 3 || nome.length() > 30) throw new UsuarioException("O nome deve conter entre 3 e 30 caracteres");
+            
 
             // Valida o telefone
-            if(telefone.length() != 11 || !telefone.matches("\\d+")){
-                throw new UsuarioException("O número de telefone é inválido");
-            }
+            if(telefone.length() != 11 || !telefone.matches("\\d+")) throw new UsuarioException("O número de telefone é inválido");
+            
 
             // Atualiza os dados e os salva
             user.setName(nome);

@@ -27,7 +27,7 @@ public class ReembolsoController {
 
         try {
 
-            String email = authService.buscarSessaUsuario().getEmail();
+            String email = authService.buscarSessaoUsuario().getEmail();
 
             mv.setViewName("views/produto/pedido/reembolso");
             mv.addObject("reembolsos", reembolsoRepository.findByEmail(email));

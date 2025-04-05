@@ -85,11 +85,11 @@ public class PagamentosService {
 
             // Mapeia o objeto e converte de string para JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(response.toString());
 
-            return jsonNode;
+            return objectMapper.readTree(response.toString());
 
         } catch (Exception e) {
+
             throw new Exception(e.getMessage());
         }
     }
@@ -106,6 +106,7 @@ public class PagamentosService {
 
         try {
 
+            // Cria a preferência de pagamento e inicializa a var total
             PreferenceClient client = new PreferenceClient();
             BigDecimal total = BigDecimal.ZERO;
 
@@ -119,9 +120,7 @@ public class PagamentosService {
                 Produto p = produtoService.getProduct(codigoProduto.getCodigo());
 
                 // Verifica se tem estoque para o produto
-                if (produtoRepository.countByCodigo(p.getCodigo()) < codigoProduto.getQuantidade()) {
-                    throw new ProdutoException("A quantidade é maior que o estoque atual");
-                }
+                if (produtoRepository.countByCodigo(p.getCodigo()) < codigoProduto.getQuantidade()) throw new ProdutoException("A quantidade é maior que o estoque atual");
 
                 // Cria o objeto para constuir a lista
                 PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
@@ -141,20 +140,20 @@ public class PagamentosService {
 
             // Links para caso o pagamento seja finalizado, falhou ou pendente
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                    .backUrls(
-                            PreferenceBackUrlsRequest.builder()
-                                    .success("http://localhost:8080/payment/success")
-                                    .failure("http://localhost:8080/payment/erro")
-                                    .pending("http://localhost:8080/payment/erro")
-                                    .build())
+                .backUrls(
+                    PreferenceBackUrlsRequest.builder()
+                        .success("http://localhost:8080/payment/success")
+                        .failure("http://localhost:8080/payment/erro")
+                        .pending("http://localhost:8080/payment/erro")
+                        .build())
 
-                    .autoReturn("all")
-                    .items(items)
-                    .build();
+                .autoReturn("all")
+                .items(items)
+                .build();
 
             return new PagamentoInfo(client.create(preferenceRequest), total);
 
-        } catch (ProdutoException e){
+        } catch (ProdutoException | MPException e){
 
             throw new ProdutoException(e.getMessage());
 
@@ -162,11 +161,6 @@ public class PagamentosService {
 
             System.out.println("mpapiexception: " + e.getApiResponse().getContent());
             throw new MPApiException(e.getMessage(), null);
-
-        } catch (MPException e) {
-
-            System.out.println("mpexception: " + e.getMessage());
-            throw new MPException(e.getMessage());
 
         } catch (Exception e) {
 
@@ -193,9 +187,7 @@ public class PagamentosService {
             for(Pagamentos pagamento : pagamentos){
 
                 // Se o pagamento falhou, deletar do banco de dados
-                if(pagamento.getStatus().equals("failure")){
-                    pagamentosRepository.delete(pagamento);
-                }
+                if(pagamento.getStatus().equals("failure")) pagamentosRepository.delete(pagamento);
 
                 // Se tiver mais de 3 dias, é deletado
                 if(ChronoUnit.DAYS.between(pagamento.getCriado_em(), agora) >= 3 && pagamento.getStatus().equals("pending")){
@@ -203,7 +195,6 @@ public class PagamentosService {
                 }
 
             }
-
 
         } catch (Exception e) {
             

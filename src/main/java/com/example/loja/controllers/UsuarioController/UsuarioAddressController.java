@@ -37,7 +37,7 @@ public class UsuarioAddressController {
         try {
 
             // Busca a sessão do usuárop
-            Usuario user = authService.buscarSessaUsuario();
+            Usuario user = authService.buscarSessaoUsuario();
 
             // Caso não existe algum endereço cadastrado
             if(usuarioAddressRepository.findByEmail(user.getEmail()).isEmpty()){
@@ -76,7 +76,7 @@ public class UsuarioAddressController {
             }
 
             // Chama o service pegando o email da sessão
-            usuarioAddressService.saveAddress(usuarioAddress, authService.buscarSessaUsuario().getEmail());
+            usuarioAddressService.saveAddress(usuarioAddress, authService.buscarSessaoUsuario().getEmail());
 
             mv.setViewName("redirect:/profile");
 

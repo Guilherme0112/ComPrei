@@ -32,7 +32,7 @@ public class EditUsuarioController {
 
         try {
 
-            Usuario user = authService.buscarSessaUsuario();
+            Usuario user = authService.buscarSessaoUsuario();
 
             // Envia os dados para as inputs caso já houver os dados
             EditUserRequest editUserRequest = new EditUserRequest();
@@ -58,7 +58,7 @@ public class EditUsuarioController {
         try {
 
             // Busca a sessão do usuário
-            Usuario user = authService.buscarSessaUsuario();
+            Usuario user = authService.buscarSessaoUsuario();
 
             if (!Util.verifyPass(editUserRequest.getSenha(), user.getPassword())) {
                 throw new UsuarioException("A senha está incorreta");

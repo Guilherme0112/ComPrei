@@ -74,7 +74,7 @@ public class EditPasswordController {
         try {
 
             // Pegando o objeto do usuário da sessão
-            Usuario user = authService.buscarSessaUsuario();
+            Usuario user = authService.buscarSessaoUsuario();
 
             // Verifica a sessão do usuário
             if (user == null) {

@@ -24,6 +24,12 @@ public class EmailRequests {
     private LocalDateTime quando = LocalDateTime.now(ZoneId.of("America/Sao_Paulo"));
 
 
+    public EmailRequests() {}
+
+    public EmailRequests(String email){
+        this.email = email;
+    }
+
     public Long getId() {
         return id;
     }
