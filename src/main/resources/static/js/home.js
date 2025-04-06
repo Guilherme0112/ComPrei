@@ -124,3 +124,41 @@ window.addEventListener("scroll", async() =>{
         await loadProducts();
     }
 })
+
+/**
+ * Função que remove todos os produtos da página
+ */
+function removeProduct(){
+    let produtos = document.querySelectorAll(".box_product");
+
+    produtos.forEach(produto => {
+        produto.remove();
+    });
+}
+
+document.querySelector("#btnBuscar").addEventListener("click", async() => {
+
+    // Armazena o valor do campo de busca
+    let search = document.querySelector("#busca").value;
+
+    // Verifica se o campo de busca está vazio
+    if(search == "") {
+        return;
+    }
+
+    // Remove todos os produtos da tela
+    removeProduct();
+
+    // Faz a requisição
+    const res = await fetch(`/produto/get?query=${search}`, {
+        method: "GET"
+    });
+
+    // Converte a resposta em JSON
+    let produtos = await res.json();
+
+    produtos.forEach(produto => {
+        let box = createBox(produto.codigo, produto.photo, produto.name, produto.price);
+        document.getElementById("produtos").appendChild(box);
+     });
+})

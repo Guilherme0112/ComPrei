@@ -24,6 +24,18 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long>{
     @Query(value = "SELECT * FROM produtos p WHERE p.id IN (SELECT MIN(p2.id) FROM produtos p2 GROUP BY p2.codigo) ORDER BY RAND()", nativeQuery = true)
     Page<Produto> findRandom(Pageable pageable);
 
+    @Query(value = """
+        SELECT * FROM produtos p
+        WHERE p.id IN (
+            SELECT MIN(p2.id)
+            FROM produtos p2
+            WHERE LOWER(p2.name) LIKE LOWER(CONCAT('%', :query, '%'))
+            GROUP BY p2.codigo
+        )
+        ORDER BY RAND()
+    """, nativeQuery = true)
+    List<Produto> searchResults(@Param("query") String query);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM Produto p WHERE p.codigo = :codigo")

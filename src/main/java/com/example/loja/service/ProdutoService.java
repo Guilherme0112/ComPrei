@@ -1,5 +1,7 @@
 package com.example.loja.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -89,6 +91,25 @@ public class ProdutoService {
 
         } catch (Exception e) {
 
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    /** Busca produtos pelo nome dele
+     *  
+     * @param nome Nome do produto
+     * @return  Retorna uma lista de produtos
+     * @throws Exception Erro genérico
+     * @throws ProdutoException Erros relacionados ao produto
+     */
+    public List<Produto> searchProduto(String query) throws Exception {
+
+        try {
+            
+            return produtoRepository.searchResults(query);
+
+        } catch (Exception e) {
+            
             throw new Exception(e.getMessage());
         }
     }

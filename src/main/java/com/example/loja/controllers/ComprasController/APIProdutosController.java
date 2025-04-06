@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.loja.exceptions.ProdutoException;
@@ -16,15 +17,19 @@ import com.example.loja.models.Produto;
 import com.example.loja.models.dto.ProdutoDTO;
 import com.example.loja.models.dto.ProdutoPageDTO;
 import com.example.loja.repositories.ProdutoRepository;
+import com.example.loja.service.ProdutoService;
 
 
 @RestController
 public class APIProdutosController {
     
     private final ProdutoRepository produtoRepository;
+    private final ProdutoService produtoService;
 
-    public APIProdutosController(ProdutoRepository produtoRepository){
+    public APIProdutosController(ProdutoRepository produtoRepository,
+                                 ProdutoService produtoService) {
         this.produtoRepository = produtoRepository;
+        this.produtoService = produtoService;
     }
 
     @GetMapping("/produto/get/{i}")
@@ -87,4 +92,17 @@ public class APIProdutosController {
         
     }
 
+    @GetMapping("/produto/get")
+    public List<?> searchProduto(@RequestParam String query) throws Exception {
+
+        try {
+            
+            return produtoService.searchProduto(query);
+
+        } catch (Exception e) {
+            
+            System.out.println(e.getMessage());
+            return List.of("erro", "Ocorreu algum erro. Tente novamente mais tarde");
+        }
+    }
 }
