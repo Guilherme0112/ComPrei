@@ -100,10 +100,13 @@ public class EmailRequestService {
             // Verifica todos as requisições
             verifyAllRequests();
 
+            // Verifica se existe requisição feita pelo usuário
+            if(emailRequestRepository.findByEmail(email).isEmpty()){
+                return;
+            }
+            
             // Busca as requisições de email do usuário e verifica se está vazia
-            EmailRequests emailRequests = emailRequestRepository.findByEmail(email).stream()
-                                                                                   .findFirst()
-                                                                                   .orElse(null);
+            EmailRequests emailRequests = emailRequestRepository.findByEmail(email).get(0);
 
             // Se tiver mais de 1 minutos de diferença, ele apaga o registro
             if (emailRequests.getQuando().until(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")),

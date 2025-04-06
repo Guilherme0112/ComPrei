@@ -3,6 +3,7 @@ package com.example.loja.controllers.ComprasController;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,8 @@ import com.mercadopago.resources.preference.Preference;
 @RestController
 public class PagamentosController {
 
-        private static final String KEY_MP = "TEST-4070014182739433-032109-cbfd04dc5f8fe1d00a9964af62a247b4-611245292";
+        @Value("${TOKEN_MERCADO_PAGO}")
+        private String KEY_MP;
 
         private final PagamentosRepository pagamentosRepository;
         private final AuthService authService;
