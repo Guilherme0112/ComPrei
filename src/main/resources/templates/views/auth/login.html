@@ -15,8 +15,10 @@
     <main>
         <div></div>
         <div class="box-form">
-            <form action="/auth/login" method="post" th:object="${loginRequest}">
-                
+            <form action="/auth/login" method="post" th:object="${loginRequest}" style="margin-top: -50px;">
+                   
+                <h1>Login</h1>
+
                 <label for="email">Email:</label>
                 <input type="email" th:field="*{email}" required>
                 <br>

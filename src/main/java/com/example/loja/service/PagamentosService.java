@@ -126,7 +126,7 @@ public class PagamentosService {
                 // Cria o objeto para constuir a lista
                 PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
                         .id(p.getCodigo())
-                        .title("Carrinho ComPrei")
+                        .title(p.getName())
                         .quantity(codigoProduto.getQuantidade())
                         .currencyId("BRL")
                         .unitPrice(p.getPrice())

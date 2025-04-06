@@ -17,37 +17,40 @@
     <main>
         <div></div>
         <div class="box-form">
+
             <form action="/auth/register" method="post" style="height: auto;" id="form" th:object="${usuario}">
+
+                <h1>Criar Conta</h1>
 
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="name">Nome:</label>
-                    <input type="text" th:field="*{name}">
+                    <input type="text" th:field="*{name}" required>
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                 </div>
 
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="email">Email:</label>
-                    <input type="email" th:field="*{email}">
+                    <input type="email" th:field="*{email}" required>
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
                 </div>
                 
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="telefone">Telefone:</label>
                     <div style="width: 100%;">
-                       +55 <input type="text" th:field="*{telefone}">
+                       +55 <input type="text" th:field="*{telefone}" required>
                     </div>      
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></p>
                 </div>
 
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="password">Senha:</label>
-                    <input type="password" th:field="*{password}">
+                    <input type="password" th:field="*{password}" required>
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
                 </div>
 
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 100%; height: 75px; margin: 10px 0;">
                     <label for="r_password">Repita a Senha:</label>
-                    <input type="password" id="r_password">
+                    <input type="password" id="r_password" required>
                 </div>
 
                 <p th:unless="${erro}" th:text="${erro}" class="erro_msg" id="erro_password"></p>

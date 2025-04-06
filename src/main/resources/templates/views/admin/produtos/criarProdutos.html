@@ -23,26 +23,26 @@
 
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="nome">Nome do produto:</label>
-                    <input type="text" th:field="*{name}">
+                    <input type="text" th:field="*{name}" required>
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="amount">Quantidade de produtos:</label>
-                    <input type="number" name="amount">
+                    <input type="number" name="amount" required>
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="codigo">Código de barras:</label>
-                    <input type="text" th:field="*{codigo}" maxlength="13">
+                    <input type="text" th:field="*{codigo}" maxlength="13" required>
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></p>
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="price">Preço:</label>
-                   <span>R$</span> <input type="text" th:field="*{price}">
+                   <span>R$</span> <input type="text" th:field="*{price}" required>
                     <p class="erro_msg" style="margin: -10px;" th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></p>
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; margin: 10px 0;">
                     <label for="foto" style="text-align: center; padding-right: 60px; cursor: pointer;">Enviar foto</label>
-                    <input type="file" id="foto" style="display: none;" name="file">
+                    <input type="file" id="foto" style="display: none;" name="file" required>
                 </div>
                 <div style="display:flex; justify-content: center; flex-wrap: wrap; width: 70%; height: 75px; margin: 10px 0;">
                     <label for="descricao">Descrição</label>
