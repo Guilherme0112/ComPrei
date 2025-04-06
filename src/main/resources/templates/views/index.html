@@ -14,9 +14,11 @@
 
     <header th:replace="~{components/component :: header}"></header>
 
-    <div style="width: 100%; display: flex; justify-content: center; margin-top: 60px;">
+    <div style="width: 100%; display: flex; justify-content: center; margin-top: 90px;">
         <input type="search" id="busca" class="busca" placeholder="O que deseja buscar?"> 
-        <button id="btnBuscar">Buscar</button>
+        <button id="btnBuscar" style="background-color: var(--box-form); margin-left: -27px; padding-top: 3px; cursor: pointer;">
+            <img src="icons/magnifying-glass-solid.png" width="20" style="filter: brightness(0) invert(1); ">
+        </button>
     </div>
 
     <main id="main" style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap; padding-top: 50px;">

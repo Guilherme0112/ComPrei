@@ -40,19 +40,23 @@ function createBox(img, nome, quantidadeP, preco, codigo){
     quantidade.textContent = quantidadeP;
     divPai.appendChild(quantidade);
 
+    const divBtn = document.createElement("div");
+    divBtn.className = "box_btn_carrinho";
+    divPai.appendChild(divBtn);
+
     // Cria e adiciona o botão de adicionar mais produtos ao carrinho ao container
     const buttonMais = document.createElement("button")
     buttonMais.id = "mais";
     buttonMais.style.width = "40px";
     buttonMais.textContent = "+"
-    divPai.appendChild(buttonMais);
+    divBtn.appendChild(buttonMais);
 
     // Cria e adiciona o botão de remover produtos do carrinho ao container
     const buttonMenos = document.createElement("button")
     buttonMenos.id = "menos"
     buttonMenos.style.width = "40px";
     buttonMenos.textContent = "-"
-    divPai.appendChild(buttonMenos);
+    divBtn.appendChild(buttonMenos);
 
     // Retorna a div pai construída
     return divPai;
@@ -132,12 +136,12 @@ document.addEventListener("DOMContentLoaded", async() => {
         button.addEventListener("click", function(){
 
             // Adiciona mais um produto ao carrinho (LocalStorage)
-            setItemCarrinho(button.parentElement.id);   
+            setItemCarrinho(button.parentElement.parentElement.id);   
 
             // Pega a quantidade que está no front
-            let amount = button.parentElement.querySelector("#quantidade");
+            let amount = button.parentElement.parentElement.querySelector("#quantidade");
             // Busca o valor do produto formata retirando tudo o que não for número
-            let precoProduto = parseFloat(button.parentElement.querySelector("#preco").textContent.replace(/[^\d,]/g, '').replace(',', '.'));
+            let precoProduto = parseFloat(button.parentElement.parentElement.querySelector("#preco").textContent.replace(/[^\d,]/g, '').replace(',', '.'));
             // Busca o valor total formata retirando tudo o que não for número
             let total = document.getElementById("total").textContent.replace(/[^\d,]/g, '').replace(',', '.');
             // Converte o valor para Float e soma com o valor do produto
@@ -156,18 +160,18 @@ document.addEventListener("DOMContentLoaded", async() => {
         button.addEventListener("click", function(){
 
             // Remove o produto do localStorage
-            dropItemCarrinho(button.parentElement.id);
+            dropItemCarrinho(button.parentElement.parentElement.id);
             
             // Pega a div que tem a quantidade de produtos que o usuário colocou no carrinho
-            let amount = button.parentElement.querySelector("#quantidade");
+            let amount = button.parentElement.parentElement.querySelector("#quantidade");
 
             // Se no localsotage não existir algum produto com um determinado código, o deleta
-            if(!getItemCarrinho(button.parentElement.id)){
-                button.parentElement.remove();
+            if(!getItemCarrinho(button.parentElement.parentElement.id)){
+                button.parentElement.parentElement.remove();
             }
 
             // Pega o preço do produto que está sendo exibida para o usuário
-            let precoProduto = parseFloat(button.parentElement.querySelector("#preco").textContent.replace(/[^\d,]/g, '').replace(',', '.'));
+            let precoProduto = parseFloat(button.parentElement.parentElement.querySelector("#preco").textContent.replace(/[^\d,]/g, '').replace(',', '.'));
             // Busca o valor total que está sendo exibido para o usuário
             let total = document.getElementById("total").textContent.replace(/[^\d,]/g, '').replace(',', '.');
             // Subtraí pelo valor do produto

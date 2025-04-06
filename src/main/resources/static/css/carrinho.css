@@ -23,11 +23,12 @@
     width: 90%;
     margin: 5px 0;
 }
-.box_quantidade_produto{
-
-}
-.box_nome_produto{
-
+.box_quantidade_produto, .box_nome_produto, .box_btn_carrinho, .box_preco_produto{
+    
+    height: 80px;
+    display: flex;  
+    align-items: center;
+    width: auto;
 }
 .box_img_carrinho{
     width: 80px;

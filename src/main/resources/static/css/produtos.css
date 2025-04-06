@@ -16,9 +16,8 @@ main{
     border-top-left-radius: 10px;
     height: 600px;
 }   
-
 .div_produto{
-    width: 500px;
+    max-width: 600px;
     background-color: var(--box-form);
     padding: 10px;
     border-top-right-radius: 10px;
