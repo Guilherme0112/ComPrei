@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/globals.css">
     <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/mobile/components.css">
     <link rel="stylesheet" href="css/home.css">
     <link th:replace="~{components/component :: icon}">
     <title>Início</title>
@@ -13,8 +14,8 @@
 
     <header th:replace="~{components/component :: header}"></header>
 
-    <div style="width: 100%; display: flex; justify-content: center;">
-        <input type="search" id="busca" placeholder="O que deseja buscar?"> 
+    <div style="width: 100%; display: flex; justify-content: center; margin-top: 60px;">
+        <input type="search" id="busca" class="busca" placeholder="O que deseja buscar?"> 
         <button id="btnBuscar">Buscar</button>
     </div>
 

@@ -195,7 +195,7 @@ public class EditPasswordController {
                                                                                         .orElseThrow(() -> new UsuarioException("Usuário não encotrado"));
 
             // Gera uma nova senha
-            String novaSenha = Util.generateSenha();
+            String novaSenha = Util.generateSenha(8);
             
             // Atualiza a senha
             user.setPassword(Util.Bcrypt(novaSenha));

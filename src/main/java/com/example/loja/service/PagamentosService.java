@@ -20,6 +20,7 @@ import com.example.loja.models.dto.PagamentoInfo;
 import com.example.loja.models.dto.ProdutoQuantidade;
 import com.example.loja.repositories.PagamentosRepository;
 import com.example.loja.repositories.ProdutoRepository;
+import com.example.loja.util.Util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -149,6 +150,7 @@ public class PagamentosService {
 
                 .autoReturn("all")
                 .items(items)
+                .externalReference(Util.generateSenha(12))
                 .build();
 
             return new PagamentoInfo(client.create(preferenceRequest), total);

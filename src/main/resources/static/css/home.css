@@ -8,10 +8,22 @@ header{
     height: auto;
     border-radius: 5px;
     padding: 10px;
-    margin: 30px 0;
 
     display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;    
+}
+.busca{
+    background-color: var(--box-form);
+    padding: 5px;
+    border-radius: 10px;
+    width: 70%;
+    min-width: 250px;
+    height: 40px;
+}
+.busca::placeholder{
+    color: rgba(255, 255, 255, 0.4);
+    text-shadow: none;
+    font-size: 15px;
 }

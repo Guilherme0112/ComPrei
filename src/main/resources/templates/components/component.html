@@ -12,14 +12,14 @@
         <div style="display: flex;"> 
             <a th:href="@{/}">Início</a>
             <a th:href="@{/carrinho}">Carrinho</a>
-            <div sec:authorize="isAuthenticated()">
+            <div sec:authorize="isAuthenticated()" style="display: flex;">
                 <a th:href="@{/profile/pedidos}">Pedidos</a>
                 <a th:href="@{/profile/reembolsos}">Reembolsos</a>
             </div>
         </div>
         
         <div>
-            <div sec:authorize="isAuthenticated()">
+            <div sec:authorize="isAuthenticated()" style="display: flex;">
                 <a th:href="@{/profile}">Perfil</a>
                 <a th:href="@{/logout}">Sair</a>
             </div>

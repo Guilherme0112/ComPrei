@@ -1,0 +1,14 @@
+@media (max-width: 600px) {
+
+    .box-form,
+    .car_2 {
+        width: 100%;
+    }
+    .car_1{
+        display: none;
+    }
+
+    main div {
+        width: 0;
+    }
+}

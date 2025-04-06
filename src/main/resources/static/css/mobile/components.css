@@ -1,0 +1,35 @@
+@media (max-width: 600px) {
+    body{
+        height: auto !important;
+    }
+    header a{
+        font-size: 13px;
+    }
+
+    #main{
+        padding-top: 0 !important;
+    }
+    .msg_erro{
+        font-size: 17px;
+    }
+    .container_destaques{
+        margin: 15px 0 !important;
+    }
+    .box_product{
+        width: 100px;
+        height: 150px;
+        margin: 5px;
+        padding: 4px;
+    }
+    .box_product_img{
+        height: 80px;
+    }
+    .box_product_name{
+        font-size: 11px;
+        margin: 5px 0;
+    }
+    .box_product_buy{
+        height: 23px;
+        font-size: 13px;
+    }
+}

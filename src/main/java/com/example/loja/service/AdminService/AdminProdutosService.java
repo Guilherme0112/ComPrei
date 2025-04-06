@@ -60,7 +60,7 @@ public class AdminProdutosService {
             
             // Formata o nome do arquivo
             File serverFile = new File(
-                    "/app/" + dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + Util.generateSenha()
+                    "/app/" + dir.getAbsolutePath() + File.separator + Util.generateToken() + "_" + Util.generateSenha(8)
             );
 
             // Inicia a escrita do arquivo
