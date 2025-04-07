@@ -23,6 +23,7 @@ import com.example.loja.repositories.ProdutoRepository;
 import com.example.loja.util.Util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
@@ -108,6 +109,7 @@ public class PagamentosService {
         try {
 
             // Cria a preferência de pagamento e inicializa a var total
+            MercadoPagoConfig.setAccessToken(KEY_MP);
             PreferenceClient client = new PreferenceClient();
             BigDecimal total = BigDecimal.ZERO;
 
@@ -151,7 +153,9 @@ public class PagamentosService {
                 .autoReturn("all")
                 .items(items)
                 .externalReference(Util.generateSenha(12))
-                .build();
+                .build();;
+
+                
 
             return new PagamentoInfo(client.create(preferenceRequest), total);
 
@@ -162,7 +166,7 @@ public class PagamentosService {
         } catch (MPApiException e) {
 
             System.out.println("mpapiexception: " + e.getApiResponse().getContent());
-            throw new MPApiException(e.getMessage(), null);
+            throw new MPApiException(e.getApiResponse().getContent(), null);
 
         } catch (Exception e) {
 

@@ -28,7 +28,6 @@ import com.example.loja.service.PagamentosService;
 import com.example.loja.service.UsuarioService.AuthService;
 import com.example.loja.service.UsuarioService.UsuarioAddressService;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
@@ -78,9 +77,6 @@ public class PagamentosController {
 
                         // Verifica se o usuário tem algum endereço cadastrado
                         usuarioAddressService.verifyAddress(authService.buscarSessaoUsuario().getEmail());
-
-                        // Token de acesso para as requisições
-                        MercadoPagoConfig.setAccessToken(KEY_MP);
 
                         // Cria o pagamento para o cliente
                         PagamentoInfo pagamentoInfo = pagamentosService.createPayment(produtos, KEY_MP);
