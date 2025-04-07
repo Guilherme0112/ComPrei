@@ -31,6 +31,11 @@ function createBox(codigo, foto, nome, preco){
     price.textContent = preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });;
     divPai.appendChild(price);
 
+    const msgParcelamento = document.createElement("p");
+    msgParcelamento.className = "box_product_parcelamento";
+    msgParcelamento.textContent = "em até 12x no cartão";
+    divPai.appendChild(msgParcelamento);
+
     // Retorna a div construída
     return divPai;
 }

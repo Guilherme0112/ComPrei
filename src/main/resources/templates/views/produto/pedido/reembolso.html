@@ -28,6 +28,9 @@
                     <th style="text-align: center;">Status</th>
                     <th style="text-align: center;">Quando</th>
                 </thead>
+                <tbody th:if="${reembolsos.isEmpty()}">
+                    <td colspan="4" style="text-align: center; padding-top: 30px;">Não há reembolsos por agora</td>
+                </tbody>
                 <tbody th:each="reembolso : ${reembolsos}">
                     <td th:text="${reembolso.id}" style="text-align: center;"></td>
                     <td th:text="${reembolso.idPedido}" style="text-align: center;"></td>
