@@ -12,36 +12,36 @@ err.className = "erro_msg";
 // Evento ao botão que vai buscar o usuário
 btn.addEventListener("click", async () => {
 
-    // Id do usuário que está na input
-    var id = document.getElementById("id_produto").value;
+    // Pega a credencial do usuário que está na div pai
+    let usuario = document.getElementById("usuario").value;
 
     // Busca os dados do usuário
-    const res = await fetch(`/admin/usuarios/${id}`, {
+    const res = await fetch(`/admin/usuarios/${usuario}`, {
         method: "GET"
     });
+    
+    // Verifica se ocorreu algum erro
+    if(!res.ok){
+        
+        err.textContent = "Nenhum usuario encontrado com este email ou id: " + usuario;
+        document.querySelector(".box_search").appendChild(err);
+        
+        // Se estiver algum usuário sendo exibido, é deletado a exibição
+        document.querySelector(".box") ? document.querySelector(".box").remove() : document.querySelector(".box");
+        return;
+    }
+    
 
     // Retorna a resposta em JSON
     const data = await res.json();
 
-    // Se existir algum erro, o remove
+    // Se existir alguma mensagem erro, o remove
     if (document.querySelector(".erro_msg")) {
         document.querySelector(".erro_msg").remove();
     }
 
     // Busca o div pai
     const divPai = document.getElementById("resposta");
-
-    // Se não houver dados, exibe a mensagem de erro
-    if (data.length == 0) {
-        
-        err.textContent = "Nenhum usuario encontrado com este id: " + id;
-        document.querySelector(".box_search").appendChild(err);
-        
-        // Se estiver algum usuário sendo exibido, é deletado a exibição
-        document.querySelector(".box") ? document.querySelector(".box").remove() : document.querySelector(".box");
-
-        return;
-    }
 
     // Remove se houver algum usuário que estava sendo exibido anteriormente
     if (document.querySelector(".box")) {
@@ -60,20 +60,26 @@ btn.addEventListener("click", async () => {
     allBtnDel.forEach((btn) => {
 
         btn.addEventListener("click", async () => {
-
-            // Busca o id que está na input
-            var id = document.getElementById("id_produto").value;
+ 
+            // Pega a credencial do usuário que está na div pai
+            let usuario = btn.parentElement.parentElement.dataset.id;
 
             // Faz a requisição
-            const res = await fetch(`/admin/usuarios/banir/${id}`, {
-                method: "GET"
+            const res = await fetch(`/admin/usuarios/banir`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(usuario)
             });
 
             // Retorna a resposta
             const data = await res.json();
 
+            console.log(data);
+
             // Se der erro, para o fluxo
-            if (!data) {
+            if (!res.ok) {
                 return;
             }
 
@@ -86,23 +92,30 @@ btn.addEventListener("click", async () => {
     allBtnAdmin = document.querySelectorAll("#btn_admin");
 
     // Adiciona um evento para cada um
+    // Evento para setar admin para algum usuário
     allBtnAdmin.forEach((btn) => {
 
         btn.addEventListener("click", async () => {
 
-            // Id que está na input
-            var id = document.getElementById("id_produto").value;
+            // Pega a credencial do usuário que está na div pai
+            let usuario = btn.parentElement.parentElement.dataset.id;
 
             // Faz a requisição
-            const res = await fetch(`/admin/usuarios/admin/${id}`, {
-                method: "GET"
+            const res = await fetch(`/admin/usuarios/setar`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(usuario)
             });
 
             // Busca a resposta
             const data = await res.json();
 
+            console.log(data);
+
             // Se houber erro, exibe-o
-            if (data["erro"]) {
+            if (!res.ok) {
                 err.textContent = data["erro"];
                 document.querySelector(".box_search").appendChild(err);
                 return;

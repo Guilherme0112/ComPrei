@@ -1,9 +1,9 @@
 package com.example.loja.controllers.AdminController;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +31,8 @@ public class APIAdminProdutosController {
     private final ProdutoService produtoService;
 
     public APIAdminProdutosController(ProdutoRepository produtoRepository,
-                                      AdminProdutosService adminProdutosService,
-                                      ProdutoService produtoService) {
+            AdminProdutosService adminProdutosService,
+            ProdutoService produtoService) {
         this.produtoRepository = produtoRepository;
         this.adminProdutosService = adminProdutosService;
         this.produtoService = produtoService;
@@ -40,52 +40,58 @@ public class APIAdminProdutosController {
     }
 
     @GetMapping("/admin/produtos/{codigo}")
-    public List<?> AdminAPIProdutosGET(@PathVariable("codigo") String codigo) {
+    public ResponseEntity<?> AdminAPIProdutosGET(@PathVariable("codigo") String codigo)
+            throws Exception, ProdutoException {
 
         try {
 
-            if (!codigo.matches("\\d+")) {
-                return List.of("erro", "O código  é inválido");
-            }
+            if (!codigo.matches("\\d+")) throw new ProdutoException("O código é inválido");
 
             // Busca a quantidade de registros que tem no banco de dados
             Long amountP = produtoRepository.countByCodigo(codigo);
-        
+
             // Retorna uma Lista com o objeto do produto e a quantidade
-            return Arrays.asList(
-                                produtoService.getProduct(codigo),
-                                amountP.toString()); 
+            return ResponseEntity.ok().body(
+                List.of(
+                    produtoService.getProduct(codigo),
+                    amountP.toString()
+                )
+            );
+
+        } catch (ProdutoException e) {
+
+            return ResponseEntity.badRequest().body(e.getMessage());
 
         } catch (Exception e) {
 
             System.out.println(e.getMessage());
-            return List.of("erro", "Ocorreu algum erro. Tente novamente mais tarde");
+            return ResponseEntity.badRequest().body("Ocorreu algum erro. Tente novamente mais tarde");
         }
 
     }
 
     @PostMapping("/admin/produtos/criar")
-    public ModelAndView CriarProduto(@Valid Produto produto,    
-                                     BindingResult br,
-                                     @RequestParam String amount, 
-                                     @RequestParam MultipartFile file) throws Exception, ProdutoException{
+    public ModelAndView CriarProduto(@Valid Produto produto,
+            BindingResult br,
+            @RequestParam String amount,
+            @RequestParam MultipartFile file) throws Exception, ProdutoException {
 
         ModelAndView mv = new ModelAndView();
 
         try {
 
-            if(br.hasErrors()){
+            if (br.hasErrors()) {
                 mv.addObject(produto);
                 mv.setViewName("views/admin/produtos/criarProdutos");
                 return mv;
             }
-            
+
             // Cria o produto
-            adminProdutosService.createProduct(produto, file, amount);      
-          
+            adminProdutosService.createProduct(produto, file, amount);
+
             mv.setViewName("redirect:/admin/produtos");
 
-        } catch(ProdutoException e){
+        } catch (ProdutoException e) {
 
             System.out.println("api_controller: " + e.getMessage());
             mv.addObject("erro", e.getMessage());
@@ -101,7 +107,6 @@ public class APIAdminProdutosController {
         return mv;
     }
 
-
     @DeleteMapping("/admin/deletar/produtos")
     public List<?> DeletarProduto(@RequestBody String codigo) throws Exception, ProdutoException {
         try {
@@ -109,8 +114,10 @@ public class APIAdminProdutosController {
             // Remove as aspas
             codigo = codigo.replaceAll("^\"|\"$", "");
 
-            // Válida o codigo para garantir que omente seja composto apenas por números números
-            if (!codigo.matches("\\d+")) throw new ProdutoException("O código é inválido");
+            // Válida o codigo para garantir que omente seja composto apenas por números
+            // números
+            if (!codigo.matches("\\d+"))
+                throw new ProdutoException("O código é inválido");
 
             adminProdutosService.deleteProduct(codigo);
 

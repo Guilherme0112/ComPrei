@@ -21,27 +21,11 @@
         <label for="id_produto">Insira o código de barras do produto:</label>
         <input type="text" id="id_produto" maxlength="13" required>
         <button id="btnSubmit" style="margin: 10px 0;">Buscar</button>
+        <p class="erro_msg" id="erro"></p>
     </div>
 
     <div id="resposta" class="resposta" style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap;">
 
-        <div class="box" id="box">
-            <div style="width: 100%;">
-                <input type="hidden" value="" id="codigo">
-                <img src="" class="box_image" id="image">
-                <p style="margin: 6px 0">Nome:</p>
-                <p id="nome" style="font-size: 13px;"></p>
-                <p style="margin: 6px 0">Preço:</p>
-                <p id="preco" style="font-size: 13px;"></p>
-                <p style="margin: 6px 0">Quantidade</p>
-                <p id="quantidade" style="font-size: 13px;"></p>
-                <div style="width: 100%; display: flex; justify-content: center; padding-right: 20px;">
-                    <button id="btn_del" class="btn_del" style="width: 50px; padding-top: 5px; margin: 10px 0;">
-                        <img src="../icons/trash-solid.png" width="20" style="filter: brightness(0) invert(1);">
-                    </button>
-                </div>
-            </div>
-        </div>
 
     </div>
 
