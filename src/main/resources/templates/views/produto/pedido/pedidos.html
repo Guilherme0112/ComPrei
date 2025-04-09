@@ -30,7 +30,7 @@
                     <th>Reembolso</th>
                 </thead>
                 <tbody th:if="${pedidos.isEmpty()}">
-                    <td colspan="4" style="text-align: center; padding-top: 30px;">Não há pedidos por agora</td>
+                    <td colspan="5" style="text-align: center; padding-top: 30px;">Não há pedidos por agora</td>
                 </tbody>
                 <tbody th:each="pedidos : ${pedidos}">
                     <td th:text="${pedidos.id}" style="text-align: center;"></td>

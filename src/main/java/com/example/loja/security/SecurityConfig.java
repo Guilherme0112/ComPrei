@@ -23,20 +23,23 @@ public class SecurityConfig {
             )
 
             .exceptionHandling(exception -> exception
-                    .accessDeniedHandler(accessDeniedHandler())
+                .accessDeniedHandler(accessDeniedHandler())
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendRedirect("/auth/login");
+                })
             )
             .formLogin(formLogin -> formLogin.disable())
             .httpBasic(httpBasic -> httpBasic.disable())
             .logout(logout -> logout
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/auth/login")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/auth/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
             )
             .sessionManagement(session -> session
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                    .maximumSessions(1)
-                    .expiredUrl("/")
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(1)
+                .expiredUrl("/")
             );
 
             return http.build();
